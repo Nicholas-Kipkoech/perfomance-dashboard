@@ -18,14 +18,14 @@ const CustomCard = ({ name, total, onClick, active }: IBimaData) => {
 
   return (
     <div
-      className={`h-[120px] w-[280px] cursor-pointer rounded-[18px] p-[20px] ${
+      className={`h-[100px] w-[250px] cursor-pointer rounded-[18px] p-[20px] ${
         active ? "bg-[#cb7529] text-white" : "bg-white"
       } `}
       onClick={handleClick}
     >
-      <div className="flex flex-col gap-3">
-        <p className="text-[20px]">{name}</p>
-        <p className="font-[700] text-slate-500 text-[18px]">
+      <div className="flex flex-col gap-2">
+        <p className="text-[18px]">{name}</p>
+        <p className="font-[700] text-slate-500 text-[16px]">
           KES {total.toLocaleString()}
         </p>
       </div>
