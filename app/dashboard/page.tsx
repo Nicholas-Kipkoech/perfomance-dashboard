@@ -38,14 +38,14 @@ const Dashboard = () => {
         <CustomSelect
           className={"w-[300px]"}
           options={formattedOptions}
-          onChange={() => console.log("hi")}
+          onChange={(value: { value: string }) => console.log(value)}
           name={"Year"}
           placeholder="Select year"
         />
         <CustomSelect
           className={"w-[300px]"}
           options={formattedCompanies}
-          onChange={() => console.log("hi")}
+          onChange={(value: { value: string }) => console.log(value)}
           name={"Company"}
           placeholder="Select company"
         />

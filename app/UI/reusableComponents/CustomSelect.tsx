@@ -6,7 +6,7 @@ interface ISelect {
   options: any;
   name: string;
   placeholder: string;
-  onChange: () => void;
+  onChange: any;
 }
 const CustomSelect = ({
   className,
