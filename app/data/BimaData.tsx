@@ -20,3 +20,15 @@ export const BimaData = [
     year: 2023,
   },
 ];
+
+export const Companies = [
+  {
+    name: "Center Point Branch",
+  },
+  {
+    name: "Eldoret Branch",
+  },
+  {
+    name: "Kisumu Point Branch",
+  },
+];

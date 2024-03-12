@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CustomCard from "../UI/reusableComponents/CustomCard";
-import { BimaData } from "../data/BimaData";
+import { BimaData, Companies } from "../data/BimaData";
 import BarChartComponent from "../UI/charts/Barchart";
 import TableComponent from "../UI/tables/Table";
 import CustomSelect from "../UI/reusableComponents/CustomSelect";
@@ -25,10 +25,31 @@ const Dashboard = () => {
       value: record.year,
     };
   });
+  const formattedCompanies = Companies.map((company) => {
+    return {
+      label: company.name,
+      value: company.name,
+    };
+  });
 
   return (
     <div className="p-[10px] mt-[20px]">
-      <CustomSelect className={"w-[300px]"} options={formattedOptions} />
+      <div className="flex gap-3">
+        <CustomSelect
+          className={"w-[300px]"}
+          options={formattedOptions}
+          onChange={() => console.log("hi")}
+          name={"Year"}
+          placeholder="Select year"
+        />
+        <CustomSelect
+          className={"w-[300px]"}
+          options={formattedCompanies}
+          onChange={() => console.log("hi")}
+          name={"Company"}
+          placeholder="Select company"
+        />
+      </div>
       <div className="divide-y">
         <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
           {BimaData.map((record, key) => (
