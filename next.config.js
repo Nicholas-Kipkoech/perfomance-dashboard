@@ -3,4 +3,4 @@ const nextConfig = {
   transpilePackages: ["@mui/x-charts"],
 };
 
-export default nextConfig;
+module.exports = nextConfig;
