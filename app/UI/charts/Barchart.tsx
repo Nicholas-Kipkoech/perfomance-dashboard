@@ -36,7 +36,7 @@ const BarChartComponent = ({
     };
     generateData();
   }, [title, total]);
-  return <BarChart series={chartData} width={1200} height={600} />;
+  return <BarChart series={chartData} width={1000} height={450} />;
 };
 
 export default BarChartComponent;

@@ -19,6 +19,21 @@ export const BimaData = [
     total: 19000,
     year: 2023,
   },
+  {
+    name: "Intermediary premium",
+    total: 192800,
+    year: 2023,
+  },
+  {
+    name: "Total direct premium",
+    total: 287616,
+    year: 2023,
+  },
+  {
+    name: "Reinsurance this year",
+    total: 288271,
+    year: 2023,
+  },
 ];
 
 export const Companies = [

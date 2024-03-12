@@ -64,7 +64,7 @@ const Dashboard = () => {
         </div>
 
         <div className="flex justify-between items-center">
-          <p className="text-[30px] font-[700] p-[20px]">
+          <p className="text-[25px] font-[700] p-[20px]">
             Monthly Distribution {title}
           </p>
           <div
