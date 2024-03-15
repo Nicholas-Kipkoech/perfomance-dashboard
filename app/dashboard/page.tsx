@@ -5,6 +5,8 @@ import { BimaData, Companies } from "../data/BimaData";
 import BarChartComponent from "../UI/charts/Barchart";
 import TableComponent from "../UI/tables/Table";
 import CustomSelect from "../UI/reusableComponents/CustomSelect";
+import CustomButton from "../UI/reusableComponents/CustomButton";
+import { useRouter } from "next/navigation";
 
 const Dashboard = () => {
   const [title, setTitle] = useState("Total number of clients");
@@ -31,23 +33,36 @@ const Dashboard = () => {
       value: company.name,
     };
   });
+  const router = useRouter();
+  const handleLogout = () => {
+    router.push("/");
+  };
 
   return (
     <div className="p-[10px] mt-[20px]">
-      <div className="flex gap-3">
-        <CustomSelect
-          className={"w-[300px]"}
-          options={formattedOptions}
-          onChange={(value: { value: string }) => console.log(value)}
-          name={"Year"}
-          placeholder="Select year"
-        />
-        <CustomSelect
-          className={"w-[300px]"}
-          options={formattedCompanies}
-          onChange={(value: { value: string }) => console.log(value)}
-          name={"Company"}
-          placeholder="Select company"
+      <div className="flex justify-between items-center mb-2">
+        <div className="flex gap-3">
+          <CustomSelect
+            className={"w-[300px]"}
+            options={formattedOptions}
+            onChange={(value: { value: string }) => console.log(value)}
+            name={"Year"}
+            placeholder="Select year"
+          />
+          <CustomSelect
+            className={"w-[300px]"}
+            options={formattedCompanies}
+            onChange={(value: { value: string }) => console.log(value)}
+            name={"Company"}
+            placeholder="Select company"
+          />
+        </div>
+        <CustomButton
+          name="Logout"
+          className={
+            "h-[50px] border w-[200px] rounded-md text-white bg-[#cb7529]"
+          }
+          onClick={handleLogout}
         />
       </div>
       <div className="divide-y">
