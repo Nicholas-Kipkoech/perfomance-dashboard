@@ -18,7 +18,7 @@ const CustomCard = ({ name, total, onClick, active }: IBimaData) => {
 
   return (
     <div
-      className={`h-[100px] w-[250px] cursor-pointer rounded-[18px] p-[20px] ${
+      className={`h-[120px] w-[280px] cursor-pointer rounded-[14px] p-[20px] ${
         active ? "bg-[#cb7529] text-white" : "bg-white"
       } `}
       onClick={handleClick}

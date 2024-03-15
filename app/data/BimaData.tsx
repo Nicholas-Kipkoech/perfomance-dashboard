@@ -34,6 +34,67 @@ export const BimaData = [
     total: 288271,
     year: 2023,
   },
+  {
+    name: "Registered Claims",
+    total: 171661,
+    year: 2023,
+  },
+  {
+    name: "Outstanding claims",
+    total: 288271,
+    year: 2023,
+  },
+  {
+    name: "Claim Paid",
+    total: 288271,
+    year: 2023,
+  },
+  {
+    name: "Total Recovery",
+    total: 288271,
+    year: 2023,
+  },
+
+  {
+    name: "Total Receipts",
+    total: 288271,
+    year: 2023,
+  },
+  {
+    name: "Claim Credit Notes",
+    total: 288271,
+    year: 2023,
+  },
+  {
+    name: "Motor Premium",
+    total: 288271,
+    year: 2023,
+  },
+  {
+    name: "Non Motor Premium",
+    total: 288271,
+    year: 2023,
+  },
+  {
+    name: "New Business",
+    total: 288271,
+    year: 2023,
+  },
+  {
+    name: "Renewals",
+    total: 288271,
+    year: 2023,
+  },
+  {
+    name: "Product Deficit",
+    total: 288271,
+    year: 2023,
+  },
+  {
+    name: "Budget Deficit",
+    total: 288271,
+    year: 2023,
+  },
 ];
 
 export const Companies = [
@@ -44,6 +105,27 @@ export const Companies = [
     name: "Eldoret Branch",
   },
   {
-    name: "Kisumu Point Branch",
+    name: "Kisumu  Branch",
+  },
+  {
+    name: "Mombasa  Branch",
+  },
+  {
+    name: "Town Office  Branch",
+  },
+  {
+    name: "Nakuru  Branch",
+  },
+  {
+    name: "Meru  Branch",
+  },
+  {
+    name: "Kitui  Branch",
+  },
+  {
+    name: "Nanyuki  Branch",
+  },
+  {
+    name: "Reinsurance  Branch",
   },
 ];
