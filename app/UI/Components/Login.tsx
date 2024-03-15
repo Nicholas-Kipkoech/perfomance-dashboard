@@ -20,7 +20,10 @@ const Login = () => {
     }, 2000);
   };
   return (
-    <div className="border h-[550px] w-full flex flex-col justify-center items-center">
+    <div className="border h-[550px] w-1/3 flex flex-col  justify-center items-center">
+      <p className="font-[600] text-[20px]">
+        Login into the dashboard to view the statistics.
+      </p>
       <div className=" flex flex-col gap-[10px] ">
         <div className="flex justify-center">
           <Image src={iconLogo} alt="" className={"h-[200px] w-[200px]"} />
