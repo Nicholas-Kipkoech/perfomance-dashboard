@@ -1,13 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CustomCard from "../UI/reusableComponents/CustomCard";
-import { Companies, Years } from "../data/BimaData";
-import CustomSelect from "../UI/reusableComponents/CustomSelect";
-import axios from "axios";
+import { Years } from "../data/BimaData";
+import { useContextApi } from "../context/Context";
 
 const Dashboard = () => {
-  const [branchCode, setBranchCode] = useState("");
-  const [year, setYear] = useState(2024);
+  const { _totalPremium, directPremium, intermediaryPremium, setYear }: any =
+    useContextApi();
+  const [active, setActive] = useState(null);
 
   const formattedOptions = Years.map((record) => {
     return {
@@ -15,77 +15,29 @@ const Dashboard = () => {
       value: record.value,
     };
   });
-  const formattedCompanies = Companies.map((company) => {
-    return {
-      label: company.name,
-      value: company.org_code,
-    };
-  });
+  const handleClickYear = (index: any) => {
+    setActive(index);
+  };
 
-  interface IBimaData {
-    totalPremium: number;
-    branchCode: string;
-    intermediaryCode: string;
-  }
-
-  const [bimaData, setBimaData] = useState<IBimaData[]>([]);
-
-  const localUrl = "http://localhost:5002";
-
-  useEffect(() => {
-    const fetchBimaData = async () => {
-      const { data } = await axios.get(
-        `${localUrl}/bima/perfomance/underwriting?year=${year}&branchCode=${branchCode}`
-      );
-      setBimaData(data.result);
-    };
-    fetchBimaData();
-  }, [year, branchCode]);
-
-  function calculatePremiums(bimaData: IBimaData[]) {
-    let directPremium = 0;
-    let intermediaryPremium = 0;
-
-    bimaData.forEach((data) => {
-      const totalPremium = data.totalPremium;
-      if (data.intermediaryCode === "15") {
-        directPremium += totalPremium;
-      } else if (
-        data.intermediaryCode === "25" ||
-        data.intermediaryCode === "70"
-      ) {
-        intermediaryPremium += totalPremium;
-      }
-    });
-    const _totalPremium = bimaData.reduce(
-      (total: number, premium) => total + premium.totalPremium,
-      0
-    );
-
-    return { directPremium, intermediaryPremium, _totalPremium };
-  }
-  const { directPremium, intermediaryPremium, _totalPremium } =
-    calculatePremiums(bimaData);
   return (
     <div className="p-[10px] mt-[20px]">
-      <div className="flex justify-between items-center mb-2">
-        <div className="flex gap-3">
-          <CustomSelect
-            className={"w-[300px]"}
-            options={formattedOptions}
-            onChange={(value: { value: any }) => setYear(value.value)}
-            name={"Year"}
-            placeholder="Select year"
-          />
-          <CustomSelect
-            className={"w-[300px]"}
-            options={formattedCompanies}
-            onChange={(value: { value: string }) => setBranchCode(value.value)}
-            name={"Company"}
-            placeholder="Select company"
-          />
-        </div>
+      <div className="flex justify-end gap-2">
+        {formattedOptions.map((year, key) => (
+          <p
+            onClick={() => {
+              setYear(year.value);
+              handleClickYear(key);
+            }}
+            key={key}
+            className={`border ${
+              active === key ? "bg-[#cb7529] text-white" : ""
+            } h-[40px] flex items-center justify-center rounded-md cursor-pointer  w-[100px] `}
+          >
+            {year.value}
+          </p>
+        ))}
       </div>
+
       <div className="divide-y">
         <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
           <CustomCard name={"Total  Premium"} total={_totalPremium} />

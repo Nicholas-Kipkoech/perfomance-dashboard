@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { FaAngleDown, FaAngleRight } from "react-icons/fa6";
+import { useContextApi } from "../context/Context";
 
 const MenuItems = [
   {
@@ -26,6 +27,8 @@ const Sidebar = () => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const [menuOpened, setMenuOpened] = useState(false);
   const [active, setActive] = useState(null);
+
+  const { setBranchCode }: any = useContextApi();
 
   const handleSubMenuClick = (index: any) => {
     setOpenSubMenu(openSubMenu === index ? null : index);
@@ -63,6 +66,7 @@ const Sidebar = () => {
                     }  rounded-sm h-[40px] items-center pl-[20%] flex cursor-pointer`}
                     onClick={() => {
                       handleOpenMenu(subIndex);
+                      setBranchCode(item.org_code);
                     }}
                   >
                     {item.name}
