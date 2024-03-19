@@ -1,43 +1,71 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CustomCard from "../UI/reusableComponents/CustomCard";
-import { BimaData, Companies } from "../data/BimaData";
-import BarChartComponent from "../UI/charts/Barchart";
-import TableComponent from "../UI/tables/Table";
+import { Companies, Years } from "../data/BimaData";
 import CustomSelect from "../UI/reusableComponents/CustomSelect";
-import CustomButton from "../UI/reusableComponents/CustomButton";
-import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const Dashboard = () => {
-  const [title, setTitle] = useState("Total number of clients");
-  const [totals, setTotals] = useState(0);
+  const [branchCode, setBranchCode] = useState("");
+  const [year, setYear] = useState(2024);
 
-  const [toggleComponent, setToggleComponent] = useState(false);
-
-  useEffect(() => {
-    const currentTotals = BimaData.reduce((acc, total) => {
-      return acc + total.total;
-    }, 0);
-    setTotals(currentTotals);
-  }, []);
-
-  const formattedOptions = BimaData.map((record) => {
+  const formattedOptions = Years.map((record) => {
     return {
-      label: `Year ${record.year}`,
-      value: record.year,
+      label: `Year ${record.name}`,
+      value: record.value,
     };
   });
   const formattedCompanies = Companies.map((company) => {
     return {
       label: company.name,
-      value: company.name,
+      value: company.org_code,
     };
   });
-  const router = useRouter();
-  const handleLogout = () => {
-    router.push("/");
-  };
 
+  interface IBimaData {
+    totalPremium: number;
+    branchCode: string;
+    intermediaryCode: string;
+  }
+
+  const [bimaData, setBimaData] = useState<IBimaData[]>([]);
+
+  const localUrl = "http://localhost:5002";
+
+  useEffect(() => {
+    const fetchBimaData = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/bima/perfomance/underwriting?year=${year}&branchCode=${branchCode}`
+      );
+      setBimaData(data.result);
+    };
+    fetchBimaData();
+  }, [year, branchCode]);
+
+  function calculatePremiums(bimaData: IBimaData[]) {
+    let directPremium = 0;
+    let intermediaryPremium = 0;
+
+    bimaData.forEach((data) => {
+      const totalPremium = data.totalPremium;
+      if (data.intermediaryCode === "15") {
+        directPremium += totalPremium;
+      } else if (
+        data.intermediaryCode === "25" ||
+        data.intermediaryCode === "70"
+      ) {
+        intermediaryPremium += totalPremium;
+      }
+    });
+    const _totalPremium = bimaData.reduce(
+      (total: number, premium) => total + premium.totalPremium,
+      0
+    );
+
+    return { directPremium, intermediaryPremium, _totalPremium };
+  }
+  const { directPremium, intermediaryPremium, _totalPremium } =
+    calculatePremiums(bimaData);
   return (
     <div className="p-[10px] mt-[20px]">
       <div className="flex justify-between items-center mb-2">
@@ -45,40 +73,30 @@ const Dashboard = () => {
           <CustomSelect
             className={"w-[300px]"}
             options={formattedOptions}
-            onChange={(value: { value: string }) => console.log(value)}
+            onChange={(value: { value: any }) => setYear(value.value)}
             name={"Year"}
             placeholder="Select year"
           />
           <CustomSelect
             className={"w-[300px]"}
             options={formattedCompanies}
-            onChange={(value: { value: string }) => console.log(value)}
+            onChange={(value: { value: string }) => setBranchCode(value.value)}
             name={"Company"}
             placeholder="Select company"
           />
         </div>
-        <CustomButton
-          name="Logout"
-          className={
-            "h-[50px] border w-[200px] rounded-md text-white bg-[#cb7529]"
-          }
-          onClick={handleLogout}
-        />
       </div>
       <div className="divide-y">
         <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
-          {BimaData.map((record, key) => (
-            <CustomCard
-              key={key}
-              name={record.name}
-              total={record.total}
-              active={title === record.name}
-              onClick={() => setTitle(record.name)}
-            />
-          ))}
+          <CustomCard name={"Total  Premium"} total={_totalPremium} />
+          <CustomCard name={"Total Direct Premium"} total={directPremium} />
+          <CustomCard
+            name={"Intermediary Premium"}
+            total={intermediaryPremium}
+          />
         </div>
 
-        <div className="flex justify-between items-center">
+        {/* <div className="flex justify-between items-center">
           <p className="text-[25px] font-[700] p-[20px]">
             Monthly Distribution {title}
           </p>
@@ -93,7 +111,7 @@ const Dashboard = () => {
           <TableComponent total={totals} />
         ) : (
           <BarChartComponent title={title} total={totals} />
-        )}
+        )} */}
       </div>
     </div>
   );
