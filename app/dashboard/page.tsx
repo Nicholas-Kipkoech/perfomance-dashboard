@@ -5,8 +5,18 @@ import { Years } from "../data/BimaData";
 import { useContextApi } from "../context/Context";
 
 const Dashboard = () => {
-  const { _totalPremium, directPremium, intermediaryPremium, setYear }: any =
-    useContextApi();
+  const {
+    _totalPremium: totalPremium,
+    directPremium,
+    intermediaryPremium,
+    setYear,
+    directClients,
+    _totalClients: totalClients,
+    intermediaryClients,
+    registeredClaims,
+    outStandingClaims,
+    claimPaid,
+  }: any = useContextApi();
   const [active, setActive] = useState(null);
 
   const formattedOptions = Years.map((record) => {
@@ -40,12 +50,26 @@ const Dashboard = () => {
 
       <div className="divide-y">
         <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
-          <CustomCard name={"Total  Premium"} total={_totalPremium} />
-          <CustomCard name={"Total Direct Premium"} total={directPremium} />
+          <CustomCard name={"Total  Premium"} total={totalPremium} currency />
+          <CustomCard
+            name={"Total Direct Premium"}
+            total={directPremium}
+            currency
+          />
           <CustomCard
             name={"Intermediary Premium"}
             total={intermediaryPremium}
+            currency
           />
+          <CustomCard name={"Total number of clients"} total={totalClients} />
+          <CustomCard name={"Number of direct clients"} total={directClients} />
+          <CustomCard
+            name={"Number of intermediary"}
+            total={intermediaryClients}
+          />
+          <CustomCard name={"Registered Claims"} total={registeredClaims} />
+          <CustomCard name={"Outstanding claims"} total={outStandingClaims} />
+          <CustomCard name={"Claim Paid"} total={claimPaid} />
         </div>
 
         {/* <div className="flex justify-between items-center">

@@ -10,11 +10,11 @@ const Navbar = () => {
   };
   return (
     <div className="w-full border h-[5rem] bg-[#092332] text-white">
-      <div className="flex justify-end mt-2">
+      <div className="flex items-center  justify-end mt-2 mr-2">
         <CustomButton
           name="Logout"
           className={
-            "h-[50px] border w-[200px] rounded-md text-white bg-[#cb7529]"
+            "h-[40px] border w-[200px] rounded-md text-white bg-[#cb7529]"
           }
           onClick={handleLogout}
         />

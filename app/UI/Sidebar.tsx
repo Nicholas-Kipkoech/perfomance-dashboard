@@ -26,7 +26,7 @@ const MenuItems = [
 const Sidebar = () => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const [menuOpened, setMenuOpened] = useState(false);
-  const [active, setActive] = useState(null);
+  const [active, setActive] = useState(0);
 
   const { setBranchCode }: any = useContextApi();
 
@@ -63,7 +63,7 @@ const Sidebar = () => {
                     key={subIndex}
                     className={`${
                       active === subIndex ? "bg-[#cb7529]" : ""
-                    }  rounded-sm h-[40px] items-center pl-[20%] flex cursor-pointer`}
+                    }  rounded-sm h-[40px] items-center pl-[20%] border border-slate-500 flex cursor-pointer`}
                     onClick={() => {
                       handleOpenMenu(subIndex);
                       setBranchCode(item.org_code);
