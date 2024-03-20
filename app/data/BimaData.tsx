@@ -4,21 +4,7 @@ export const BimaData = [
     total: 288271,
     year: 2023,
   },
-  {
-    name: "Registered Claims",
-    total: 171661,
-    year: 2023,
-  },
-  {
-    name: "Outstanding claims",
-    total: 288271,
-    year: 2023,
-  },
-  {
-    name: "Claim Paid",
-    total: 288271,
-    year: 2023,
-  },
+
   {
     name: "Total Recovery",
     total: 288271,

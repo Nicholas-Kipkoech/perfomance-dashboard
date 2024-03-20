@@ -6,7 +6,7 @@ import { useContextApi } from "../context/Context";
 
 const Dashboard = () => {
   const {
-    _totalPremium: totalPremium,
+    _totalPremium,
     directPremium,
     intermediaryPremium,
     year: _year,
@@ -17,6 +17,7 @@ const Dashboard = () => {
     registeredClaims,
     outStandingClaims,
     claimPaid,
+    reinsurance,
   }: any = useContextApi();
   const [active, setActive] = useState(null);
 
@@ -53,7 +54,7 @@ const Dashboard = () => {
 
       <div className="divide-y">
         <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
-          <CustomCard name={"Total  Premium"} total={totalPremium} currency />
+          <CustomCard name={"Total  Premium"} total={_totalPremium} currency />
           <CustomCard
             name={"Total Direct Premium"}
             total={directPremium}
@@ -62,6 +63,11 @@ const Dashboard = () => {
           <CustomCard
             name={"Intermediary Premium"}
             total={intermediaryPremium}
+            currency
+          />
+          <CustomCard
+            name={"Reinsurance This Year"}
+            total={reinsurance}
             currency
           />
           <CustomCard name={"Total number of clients"} total={totalClients} />

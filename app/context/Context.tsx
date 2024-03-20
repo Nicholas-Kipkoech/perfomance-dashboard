@@ -9,6 +9,7 @@ interface IBimaData {
   branchCode: string;
   intermediaryCode: string;
   noOfClients: number;
+  motorCode: string;
 }
 interface IClaimsData {
   claimsCount: number;
@@ -49,6 +50,7 @@ const ContextProvider = ({ children }: any) => {
     let intermediaryPremium = 0;
     let directClients = 0;
     let intermediaryClients = 0;
+    let reinsurance = 0;
 
     bimaData.forEach((data) => {
       const totalPremium = data.totalPremium;
@@ -62,6 +64,8 @@ const ContextProvider = ({ children }: any) => {
       ) {
         intermediaryPremium += totalPremium;
         intermediaryClients += totalClients;
+      } else if (data.intermediaryCode === "100") {
+        reinsurance += totalPremium;
       }
     });
 
@@ -73,7 +77,6 @@ const ContextProvider = ({ children }: any) => {
       (total: number, clients) => total + clients.noOfClients,
       0
     );
-
     return {
       directPremium,
       intermediaryPremium,
@@ -81,6 +84,7 @@ const ContextProvider = ({ children }: any) => {
       _totalClients,
       directClients,
       intermediaryClients,
+      reinsurance,
     };
   }
   const {
@@ -90,6 +94,7 @@ const ContextProvider = ({ children }: any) => {
     _totalClients,
     directClients,
     intermediaryClients,
+    reinsurance,
   } = calculatePremiums(bimaData);
 
   const calculateClaimsData = (claimsData: IClaimsData[]) => {
@@ -129,6 +134,7 @@ const ContextProvider = ({ children }: any) => {
         setYear,
         directPremium,
         intermediaryPremium,
+        reinsurance,
         _totalPremium,
         _totalClients,
         directClients,
