@@ -22,6 +22,7 @@ const ContextProvider = ({ children }: any) => {
   const [year, setYear] = useState(2024);
   const [bimaData, setBimaData] = useState<IBimaData[]>([]);
   const [claimsData, setClaimsData] = useState<IClaimsData[]>([]);
+  const [company, setCompany] = useState("Entire Company");
 
   useEffect(() => {
     const fetchBimaData = async () => {
@@ -124,6 +125,7 @@ const ContextProvider = ({ children }: any) => {
     <Context.Provider
       value={{
         setBranchCode,
+        year,
         setYear,
         directPremium,
         intermediaryPremium,
@@ -134,6 +136,8 @@ const ContextProvider = ({ children }: any) => {
         registeredClaims,
         outStandingClaims,
         claimPaid,
+        company,
+        setCompany,
       }}
     >
       {children}

@@ -9,6 +9,7 @@ const Dashboard = () => {
     _totalPremium: totalPremium,
     directPremium,
     intermediaryPremium,
+    year: _year,
     setYear,
     directClients,
     _totalClients: totalClients,
@@ -40,7 +41,9 @@ const Dashboard = () => {
             }}
             key={key}
             className={`border ${
-              active === key ? "bg-[#cb7529] text-white" : ""
+              active === key || year.value === _year
+                ? "bg-[#cb7529] text-white"
+                : ""
             } h-[40px] flex items-center justify-center rounded-md cursor-pointer  w-[100px] `}
           >
             {year.value}

@@ -28,7 +28,7 @@ const Sidebar = () => {
   const [menuOpened, setMenuOpened] = useState(false);
   const [active, setActive] = useState(0);
 
-  const { setBranchCode }: any = useContextApi();
+  const { setBranchCode, setCompany }: any = useContextApi();
 
   const handleSubMenuClick = (index: any) => {
     setOpenSubMenu(openSubMenu === index ? null : index);
@@ -67,6 +67,7 @@ const Sidebar = () => {
                     onClick={() => {
                       handleOpenMenu(subIndex);
                       setBranchCode(item.org_code);
+                      setCompany(item.name);
                     }}
                   >
                     {item.name}

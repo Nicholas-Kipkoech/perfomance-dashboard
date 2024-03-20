@@ -2,22 +2,27 @@
 import React from "react";
 import CustomButton from "../UI/reusableComponents/CustomButton";
 import { useRouter } from "next/navigation";
+import { useContextApi } from "../context/Context";
 
 const Navbar = () => {
+  const { company } = useContextApi();
   const router = useRouter();
   const handleLogout = () => {
     router.push("/");
   };
   return (
     <div className="w-full border h-[5rem] bg-[#092332] text-white">
-      <div className="flex items-center  justify-end mt-2 mr-2">
-        <CustomButton
-          name="Logout"
-          className={
-            "h-[40px] border w-[200px] rounded-md text-white bg-[#cb7529]"
-          }
-          onClick={handleLogout}
-        />
+      <div className="flex justify-between items-center m-2">
+        <span className="justify-start font-[700] text-[25px]">{company}</span>
+        <div className="flex items-center ">
+          <CustomButton
+            name="Logout"
+            className={
+              "h-[40px] border w-[200px]   rounded-md text-white bg-[#cb7529]"
+            }
+            onClick={handleLogout}
+          />
+        </div>
       </div>
     </div>
   );
