@@ -23,7 +23,7 @@ const ContextProvider = ({ children }: any) => {
   const [year, setYear] = useState(2024);
   const [bimaData, setBimaData] = useState<IBimaData[]>([]);
   const [claimsData, setClaimsData] = useState<IClaimsData[]>([]);
-  const [company, setCompany] = useState("Entire Company");
+  const [company, setCompany] = useState("Entire Company (INTRA)");
 
   useEffect(() => {
     const fetchBimaData = async () => {

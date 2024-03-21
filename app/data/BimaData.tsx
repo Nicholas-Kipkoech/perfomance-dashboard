@@ -78,7 +78,7 @@ export const Years = [
 
 export const Companies = [
   {
-    name: "All",
+    name: "Entire Company (INTRA)",
     org_code: "",
   },
   {

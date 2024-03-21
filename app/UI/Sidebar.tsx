@@ -8,7 +8,7 @@ const MenuItems = [
     title: "Company Branches",
     icon: "",
     items: [
-      { name: "All", org_code: "" },
+      { name: "Entire Company (INTRA)", org_code: "" },
       { name: "Center Point Branch", org_code: "02" },
       { name: "Eldoret Branch", org_code: "03" },
       { name: "Kisumu  Branch", org_code: "04" },
