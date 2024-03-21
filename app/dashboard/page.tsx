@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import CustomCard from "../UI/reusableComponents/CustomCard";
-import { Years } from "../data/BimaData";
 import { useContextApi } from "../context/Context";
+import CustomSelect from "../UI/reusableComponents/CustomSelect";
+import { IBranches } from "../assets/interfaces";
 
 const Dashboard = () => {
   const {
@@ -18,38 +19,48 @@ const Dashboard = () => {
     outStandingClaims,
     claimPaid,
     reinsurance,
+    companys,
+    setBranchCode,
+    setCompany,
+    years,
   }: any = useContextApi();
-  const [active, setActive] = useState(null);
 
-  const formattedOptions = Years.map((record) => {
+  const formattedOptions = years.map((year: any) => {
     return {
-      label: `Year ${record.name}`,
-      value: record.value,
+      label: `Year ${year.year}`,
+      value: year.year,
     };
   });
-  const handleClickYear = (index: any) => {
-    setActive(index);
-  };
+
+  const formattedCompanys: [] = companys.map((company: IBranches) => {
+    return {
+      label: company.organization_name,
+      value: company.organization_code,
+    };
+  });
 
   return (
     <div className="p-[10px] mt-[20px]">
-      <div className="flex justify-end gap-2">
-        {formattedOptions.map((year, key) => (
-          <p
-            onClick={() => {
-              setYear(year.value);
-              handleClickYear(key);
-            }}
-            key={key}
-            className={`border ${
-              active === key || year.value === _year
-                ? "bg-[#cb7529] text-white"
-                : ""
-            } h-[40px] flex items-center justify-center rounded-md cursor-pointer  w-[100px] `}
-          >
-            {year.value}
-          </p>
-        ))}
+      <div className="flex gap-2">
+        <CustomSelect
+          defaultValue={{ label: "Entire Company", value: "" }}
+          options={formattedCompanys}
+          onChange={(value: { value: string; label: string }) => {
+            setBranchCode(value.value);
+            setCompany(value.label);
+          }}
+          className="w-[330px]"
+          name="Company"
+        />
+        <CustomSelect
+          defaultValue={{ label: "Year 2024", value: 2024 }}
+          options={formattedOptions}
+          onChange={(value: { value: string; label: string }) => {
+            setYear(value.value);
+          }}
+          className="w-[330px]"
+          name="Year"
+        />
       </div>
 
       <div className="divide-y">
@@ -80,23 +91,6 @@ const Dashboard = () => {
           <CustomCard name={"Outstanding claims"} total={outStandingClaims} />
           <CustomCard name={"Claim Paid"} total={claimPaid} />
         </div>
-
-        {/* <div className="flex justify-between items-center">
-          <p className="text-[25px] font-[700] p-[20px]">
-            Monthly Distribution {title}
-          </p>
-          <div
-            className="text-[16px] bg-[#cb7529] border h-[40px] w-[100px] flex justify-center items-center rounded-md text-white font-[700] cursor-pointer"
-            onClick={() => setToggleComponent((prev) => !prev)}
-          >
-            {toggleComponent ? "View Chart" : "View Data"}
-          </div>
-        </div>
-        {toggleComponent ? (
-          <TableComponent total={totals} />
-        ) : (
-          <BarChartComponent title={title} total={totals} />
-        )} */}
       </div>
     </div>
   );

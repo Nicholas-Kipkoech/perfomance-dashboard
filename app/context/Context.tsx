@@ -3,26 +3,17 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { createContext } from "react";
+import { IBimaData, IBranches, IClaimsData } from "../assets/interfaces";
 
-interface IBimaData {
-  totalPremium: number;
-  branchCode: string;
-  intermediaryCode: string;
-  noOfClients: number;
-  motorCode: string;
-}
-interface IClaimsData {
-  claimsCount: number;
-  claimsStatus: string;
-  branchCode: string;
-}
 const Context = createContext({});
 const ContextProvider = ({ children }: any) => {
   const localUrl = "http://localhost:5002/bima/perfomance";
   const [branchCode, setBranchCode] = useState("");
   const [year, setYear] = useState(2024);
+  const [years, setYears] = useState([]);
   const [bimaData, setBimaData] = useState<IBimaData[]>([]);
   const [claimsData, setClaimsData] = useState<IClaimsData[]>([]);
+  const [companys, setCompanys] = useState<IBranches[]>([]);
   const [company, setCompany] = useState("Entire Company (INTRA)");
 
   useEffect(() => {
@@ -34,6 +25,21 @@ const ContextProvider = ({ children }: any) => {
     };
     fetchBimaData();
   }, [year, branchCode]);
+
+  useEffect(() => {
+    const fetchOrgBranches = async () => {
+      const { data } = await axios.get(`${localUrl}/branches`);
+      setCompanys(data.result);
+    };
+    fetchOrgBranches();
+  }, []);
+  useEffect(() => {
+    const fetchYears = async () => {
+      const { data } = await axios.get(`${localUrl}/years`);
+      setYears(data.result);
+    };
+    fetchYears();
+  }, []);
 
   useEffect(() => {
     const fetchClaims = async () => {
@@ -77,6 +83,7 @@ const ContextProvider = ({ children }: any) => {
       (total: number, clients) => total + clients.noOfClients,
       0
     );
+
     return {
       directPremium,
       intermediaryPremium,
@@ -143,7 +150,9 @@ const ContextProvider = ({ children }: any) => {
         outStandingClaims,
         claimPaid,
         company,
+        companys,
         setCompany,
+        years,
       }}
     >
       {children}
