@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 export interface IBimaData {
   name: string;
-  total: number | string;
+  total: number;
   year?: number;
   onClick?: () => void;
   currency?: boolean;
@@ -15,9 +15,9 @@ const CustomCard = ({ name, total, onClick, currency }: IBimaData) => {
       onClick();
     }
   };
-  const displayTotal = currency
-    ? `KES ${total.toLocaleString()}`
-    : total.toLocaleString();
+  const formattedTotal = currency
+    ? `KES ${total?.toLocaleString()}`
+    : Number(total).toLocaleString();
 
   return (
     <div
@@ -26,7 +26,9 @@ const CustomCard = ({ name, total, onClick, currency }: IBimaData) => {
     >
       <div className="flex flex-col gap-2">
         <p className="text-[18px]">{name}</p>
-        <p className="font-[700] text-slate-500 text-[16px]">{displayTotal}</p>
+        <p className="font-[700] text-slate-500 text-[16px]">
+          {formattedTotal}
+        </p>
       </div>
     </div>
   );

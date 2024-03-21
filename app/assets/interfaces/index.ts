@@ -1,10 +1,15 @@
 export interface IBimaData {
-  totalPremium: number;
-  branchCode: string;
-  intermediaryCode: string;
-  noOfClients: number;
+  classCode: string;
+  className: string;
+  newPolicies: number;
+  renewals: number;
+  refund: number;
+  additional: number;
+  facin: number;
+  commision: number;
+  clientCode: string;
+  clientsCount: number;
   motorCode: string;
-  year: number;
 }
 export interface IClaimsData {
   claimsCount: number;

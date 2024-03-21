@@ -7,27 +7,31 @@ import { IBranches } from "../assets/interfaces";
 
 const Dashboard = () => {
   const {
-    _totalPremium,
-    directPremium,
-    intermediaryPremium,
+    totalPremium,
+    newPoliciesPremium,
+    renewals,
+    additionalPremium,
+    refundPremium,
     year: _year,
     setYear,
-    directClients,
-    _totalClients: totalClients,
-    intermediaryClients,
     registeredClaims,
     outStandingClaims,
     claimPaid,
     reinsurance,
+    commision,
+    directClients,
+    intermediaryClients,
     companys,
     setBranchCode,
     setCompany,
     years,
+    nonMotorPremium,
+    motorPremium,
   }: any = useContextApi();
 
   const formattedOptions = years.map((year: any) => {
     return {
-      label: `Year ${year.year}`,
+      label: year.year,
       value: year.year,
     };
   });
@@ -53,7 +57,7 @@ const Dashboard = () => {
           name="Company"
         />
         <CustomSelect
-          defaultValue={{ label: "Year 2024", value: 2024 }}
+          defaultValue={{ label: "2023", value: 2023 }}
           options={formattedOptions}
           onChange={(value: { value: string; label: string }) => {
             setYear(value.value);
@@ -65,23 +69,25 @@ const Dashboard = () => {
 
       <div className="divide-y">
         <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
-          <CustomCard name={"Total  Premium"} total={_totalPremium} currency />
+          <CustomCard name={"Total  Premium"} total={totalPremium} currency />
           <CustomCard
-            name={"Total Direct Premium"}
-            total={directPremium}
+            name={"Additional Premium"}
+            total={additionalPremium}
             currency
           />
+          <CustomCard name={"Refund Premium"} total={refundPremium} currency />
           <CustomCard
-            name={"Intermediary Premium"}
-            total={intermediaryPremium}
+            name={"New Business"}
+            total={newPoliciesPremium}
             currency
           />
+          <CustomCard name={"Renewals"} total={renewals} currency />
           <CustomCard
             name={"Reinsurance This Year"}
             total={reinsurance}
             currency
           />
-          <CustomCard name={"Total number of clients"} total={totalClients} />
+          <CustomCard name={"Commision"} total={commision} />
           <CustomCard name={"Number of direct clients"} total={directClients} />
           <CustomCard
             name={"Number of intermediary"}
@@ -90,6 +96,12 @@ const Dashboard = () => {
           <CustomCard name={"Registered Claims"} total={registeredClaims} />
           <CustomCard name={"Outstanding claims"} total={outStandingClaims} />
           <CustomCard name={"Claim Paid"} total={claimPaid} />
+          <CustomCard name={"Motor Premium"} total={motorPremium} currency />
+          <CustomCard
+            name={"Non Motor Premium"}
+            total={nonMotorPremium}
+            currency
+          />
         </div>
       </div>
     </div>

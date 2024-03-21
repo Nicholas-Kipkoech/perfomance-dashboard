@@ -9,7 +9,7 @@ const Context = createContext({});
 const ContextProvider = ({ children }: any) => {
   const localUrl = "http://localhost:5002/bima/perfomance";
   const [branchCode, setBranchCode] = useState("");
-  const [year, setYear] = useState(2024);
+  const [year, setYear] = useState(2023);
   const [years, setYears] = useState([]);
   const [bimaData, setBimaData] = useState<IBimaData[]>([]);
   const [claimsData, setClaimsData] = useState<IClaimsData[]>([]);
@@ -29,7 +29,10 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchOrgBranches = async () => {
       const { data } = await axios.get(`${localUrl}/branches`);
-      setCompanys(data.result);
+      setCompanys([
+        { organization_name: "Entire Company", organization_code: "" },
+        ...data.result,
+      ]);
     };
     fetchOrgBranches();
   }, []);
@@ -52,56 +55,95 @@ const ContextProvider = ({ children }: any) => {
   }, [year, branchCode]);
 
   function calculatePremiums(bimaData: IBimaData[]) {
-    let directPremium = 0;
-    let intermediaryPremium = 0;
     let directClients = 0;
     let intermediaryClients = 0;
-    let reinsurance = 0;
+    let nonMotorPremium = 0;
+    let motorPremium = 0;
 
     bimaData.forEach((data) => {
-      const totalPremium = data.totalPremium;
-      const totalClients = data.noOfClients;
-      if (data.intermediaryCode === "15") {
-        directPremium += totalPremium;
+      let total = 0;
+      if (data.motorCode === "070" || data.motorCode === "080") {
+        total =
+          data.additional +
+          data.facin +
+          data.refund +
+          data.renewals +
+          data.newPolicies;
+        motorPremium += total;
+      } else {
+        total =
+          data.additional +
+          data.facin +
+          data.refund +
+          data.renewals +
+          data.newPolicies;
+        nonMotorPremium += total;
+      }
+
+      let totalClients = data.clientsCount;
+      if (data.clientCode === "15") {
         directClients += totalClients;
-      } else if (
-        data.intermediaryCode === "25" ||
-        data.intermediaryCode === "70"
-      ) {
-        intermediaryPremium += totalPremium;
+      } else if (data.clientCode === "25" || data.clientCode === "70") {
         intermediaryClients += totalClients;
-      } else if (data.intermediaryCode === "100") {
-        reinsurance += totalPremium;
       }
     });
 
-    const _totalPremium = bimaData.reduce(
-      (total: number, premium) => total + premium.totalPremium,
-      0
-    );
-    const _totalClients = bimaData.reduce(
-      (total: number, clients) => total + clients.noOfClients,
-      0
-    );
+    const totalPremium = bimaData.reduce((total: number, premium) => {
+      return (
+        total +
+        premium.additional +
+        premium.facin +
+        premium.refund +
+        premium.renewals +
+        premium.newPolicies
+      );
+    }, 0);
+
+    const newPoliciesPremium = bimaData.reduce((total: number, premium) => {
+      return total + premium.newPolicies;
+    }, 0);
+    const renewals = bimaData.reduce((total: number, premium) => {
+      return total + premium.renewals;
+    }, 0);
+    const reinsurance = bimaData.reduce((total: number, premium) => {
+      return total + premium.facin;
+    }, 0);
+    const additionalPremium = bimaData.reduce((total: number, premium) => {
+      return total + premium.additional;
+    }, 0);
+    const refundPremium = bimaData.reduce((total: number, premium) => {
+      return total + premium.refund;
+    }, 0);
+    const commision = bimaData.reduce((total: number, premium) => {
+      return total + premium.commision;
+    }, 0);
 
     return {
-      directPremium,
-      intermediaryPremium,
-      _totalPremium,
-      _totalClients,
+      totalPremium,
+      newPoliciesPremium,
+      renewals,
+      reinsurance,
+      additionalPremium,
+      refundPremium,
+      commision,
       directClients,
       intermediaryClients,
-      reinsurance,
+      nonMotorPremium,
+      motorPremium,
     };
   }
   const {
-    directPremium,
-    intermediaryPremium,
-    _totalPremium,
-    _totalClients,
+    totalPremium,
+    newPoliciesPremium,
+    renewals,
+    reinsurance,
+    additionalPremium,
+    refundPremium,
+    commision,
     directClients,
     intermediaryClients,
-    reinsurance,
+    nonMotorPremium,
+    motorPremium,
   } = calculatePremiums(bimaData);
 
   const calculateClaimsData = (claimsData: IClaimsData[]) => {
@@ -139,16 +181,20 @@ const ContextProvider = ({ children }: any) => {
         setBranchCode,
         year,
         setYear,
-        directPremium,
-        intermediaryPremium,
+        newPoliciesPremium,
+        totalPremium,
+        renewals,
         reinsurance,
-        _totalPremium,
-        _totalClients,
-        directClients,
-        intermediaryClients,
         registeredClaims,
         outStandingClaims,
         claimPaid,
+        additionalPremium,
+        refundPremium,
+        commision,
+        directClients,
+        intermediaryClients,
+        nonMotorPremium,
+        motorPremium,
         company,
         companys,
         setCompany,
