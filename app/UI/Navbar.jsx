@@ -11,7 +11,7 @@ const Navbar = () => {
     router.push("/");
   };
   return (
-    <div className="w-full border h-[5rem] bg-[#092332] text-white">
+    <div className="w-full border h-[5rem] bg-[#092332] text-white top-0 sticky">
       <div className="flex justify-between items-center m-2">
         <span className="justify-start font-[700] text-[25px]">{company}</span>
         <span className="justify-start font-[700] text-[25px]">

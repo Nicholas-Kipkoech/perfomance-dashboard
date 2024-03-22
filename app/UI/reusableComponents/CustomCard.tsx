@@ -7,9 +7,16 @@ export interface IBimaData {
   year?: number;
   onClick?: () => void;
   currency?: boolean;
+  totalNumber?: number;
 }
 
-const CustomCard = ({ name, total, onClick, currency }: IBimaData) => {
+const CustomCard = ({
+  name,
+  total,
+  onClick,
+  currency,
+  totalNumber,
+}: IBimaData) => {
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -26,8 +33,9 @@ const CustomCard = ({ name, total, onClick, currency }: IBimaData) => {
     >
       <div className="flex flex-col gap-2">
         <p className="text-[18px]">{name}</p>
-        <p className="font-[700] text-slate-500 text-[16px]">
-          {formattedTotal}
+        <p className="font-[700] text-slate-500 text-[14px] flex justify-between">
+          {totalNumber ? <p>{totalNumber.toLocaleString()}</p> : ""}
+          <p>{formattedTotal}</p>
         </p>
       </div>
     </div>
