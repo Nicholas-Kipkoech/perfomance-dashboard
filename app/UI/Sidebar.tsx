@@ -6,10 +6,10 @@ const Sidebar = () => {
   const { setComponent, component }: any = useContextApi();
   const menuItems = [
     {
-      name: "Pages",
+      name: "Modules",
       items: [
         {
-          name: "Premiums",
+          name: "Underwriting",
         },
         {
           name: "Claims",

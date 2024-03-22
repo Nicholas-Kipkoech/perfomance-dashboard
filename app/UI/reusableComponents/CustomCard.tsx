@@ -33,10 +33,10 @@ const CustomCard = ({
     >
       <div className="flex flex-col gap-2">
         <p className="text-[18px]">{name}</p>
-        <p className="font-[700] text-slate-500 text-[14px] flex justify-between">
+        <div className="font-[700] text-slate-500 text-[14px] flex justify-between">
           {totalNumber ? <p>{totalNumber.toLocaleString()}</p> : ""}
           <p>{formattedTotal}</p>
-        </p>
+        </div>
       </div>
     </div>
   );

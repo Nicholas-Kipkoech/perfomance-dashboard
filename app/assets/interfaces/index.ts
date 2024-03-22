@@ -16,6 +16,10 @@ export interface IClaimsData {
   totalNumber: number;
   amountPaid: number;
 }
+export interface IRegisteredClaims {
+  totalNumber: number;
+  branchCode: number;
+}
 export interface IProduction {
   org_code: string;
   branchCode: string;

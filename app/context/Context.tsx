@@ -9,6 +9,7 @@ import {
   IClaimsData,
   IClients,
   IProduction,
+  IRegisteredClaims,
 } from "../assets/interfaces";
 
 const Context = createContext({});
@@ -19,11 +20,14 @@ const ContextProvider = ({ children }: any) => {
   const [years, setYears] = useState([]);
   const [bimaData, setBimaData] = useState<IBimaData[]>([]);
   const [claimsData, setClaimsData] = useState<IClaimsData[]>([]);
+  const [registeredClaims, setRegisteredClaims] = useState<IRegisteredClaims[]>(
+    []
+  );
   const [productionData, setProductionData] = useState<IProduction[]>([]);
   const [clients, setClients] = useState<IClients[]>([]);
   const [companys, setCompanys] = useState<IBranches[]>([]);
   const [company, setCompany] = useState("Entire Company (INTRA)");
-  const [component, setComponent] = useState("Premiums");
+  const [component, setComponent] = useState("Underwriting");
 
   useEffect(() => {
     const fetchBimaData = async () => {
@@ -56,12 +60,23 @@ const ContextProvider = ({ children }: any) => {
 
   useEffect(() => {
     const fetchClaims = async () => {
-      const { data } = await axios.get(`${localUrl}/claims?year=${year}`);
+      const { data } = await axios.get(
+        `${localUrl}/claims?year=${year}&branchCode=${branchCode}`
+      );
       setClaimsData(data.result);
     };
     fetchClaims();
-  }, [year]);
+  }, [year, branchCode]);
 
+  useEffect(() => {
+    const fetchRegisteredClaims = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/registered-claims?year=${year}&branchCode=${branchCode}`
+      );
+      setRegisteredClaims(data.result);
+    };
+    fetchRegisteredClaims();
+  }, [year, branchCode]);
   useEffect(() => {
     const fetchProductionPerUnit = async () => {
       const { data } = await axios.get(
@@ -258,6 +273,16 @@ const ContextProvider = ({ children }: any) => {
       allClients,
     };
   };
+  const calculateRegisteredClaims = (registeredClaims: IRegisteredClaims[]) => {
+    const totalRegisteredClaims = registeredClaims.reduce(
+      (total: number, claims) => total + claims.totalNumber,
+      0
+    );
+    return {
+      totalRegisteredClaims,
+    };
+  };
+  const { totalRegisteredClaims } = calculateRegisteredClaims(registeredClaims);
 
   const { broker, agents, allClients } = calculateClientsData(clients);
   return (
@@ -289,6 +314,7 @@ const ContextProvider = ({ children }: any) => {
         years,
         component,
         setComponent,
+        totalRegisteredClaims,
       }}
     >
       {children}

@@ -3,7 +3,7 @@ import { useContextApi } from "@/app/context/Context";
 import CustomCard from "@/app/UI/reusableComponents/CustomCard";
 import React from "react";
 
-const Premiums = () => {
+const Underwriting = () => {
   const {
     totalPremium,
     totalNewBusiness,
@@ -51,4 +51,4 @@ const Premiums = () => {
   );
 };
 
-export default Premiums;
+export default Underwriting;

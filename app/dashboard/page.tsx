@@ -1,11 +1,10 @@
 "use client";
 import React from "react";
-import CustomCard from "../UI/reusableComponents/CustomCard";
 import { useContextApi } from "../context/Context";
 import CustomSelect from "../UI/reusableComponents/CustomSelect";
 import { IBranches } from "../assets/interfaces";
-import Premiums from "./premiums/page";
 import Claims from "./claims/page";
+import Underwriting from "./premiums/page";
 
 const Dashboard = () => {
   const {
@@ -34,14 +33,11 @@ const Dashboard = () => {
 
   const renderComponent = () => {
     switch (component) {
-      case "Premiums":
-        return <Premiums />;
-        break;
+      case "Underwriting":
+        return <Underwriting />;
       case "Claims":
         return <Claims />;
-        break;
       default:
-        return <p>Loading....</p>;
         break;
     }
   };
