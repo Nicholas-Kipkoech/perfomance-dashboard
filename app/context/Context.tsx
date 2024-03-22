@@ -48,7 +48,8 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchYears = async () => {
       const { data } = await axios.get(`${localUrl}/years`);
-      setYears(data.result);
+      const sortedData = data.result.sort((a: any, b: any) => b.year - a.year);
+      setYears(sortedData);
     };
     fetchYears();
   }, []);
