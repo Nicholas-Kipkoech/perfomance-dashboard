@@ -8,8 +8,11 @@ import {
   IBranches,
   IClaimsData,
   IClients,
+  IOutstandingClaims,
   IProduction,
   IRegisteredClaims,
+  IUndebitedPolicies,
+  IUnrenewedPolicies,
 } from "../assets/interfaces";
 
 const Context = createContext({});
@@ -23,8 +26,17 @@ const ContextProvider = ({ children }: any) => {
   const [registeredClaims, setRegisteredClaims] = useState<IRegisteredClaims[]>(
     []
   );
+  const [outstandingClaims, setOutstandingClaims] = useState<
+    IOutstandingClaims[]
+  >([]);
   const [productionData, setProductionData] = useState<IProduction[]>([]);
   const [clients, setClients] = useState<IClients[]>([]);
+  const [unrenewedPolicies, setUnrenewedPolicies] = useState<
+    IUnrenewedPolicies[]
+  >([]);
+  const [undebitedPolicies, setUndebitedPolicies] = useState<
+    IUndebitedPolicies[]
+  >([]);
   const [companys, setCompanys] = useState<IBranches[]>([]);
   const [company, setCompany] = useState("Entire Company (INTRA)");
   const [component, setComponent] = useState("Underwriting");
@@ -78,6 +90,17 @@ const ContextProvider = ({ children }: any) => {
     fetchRegisteredClaims();
   }, [year, branchCode]);
   useEffect(() => {
+    const fetchOutStandingClaims = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/outstanding-claims?year=31-Dec-${year}&branchCode=${branchCode}`
+      );
+      setOutstandingClaims(data.result);
+    };
+    fetchOutStandingClaims();
+    const _year = `31-Dec-${year}`;
+    console.log(_year);
+  }, [year, branchCode]);
+  useEffect(() => {
     const fetchProductionPerUnit = async () => {
       const { data } = await axios.get(
         `${localUrl}/production?year=${year}&branchCode=${branchCode}`
@@ -95,6 +118,24 @@ const ContextProvider = ({ children }: any) => {
       setClients(data.result);
     };
     fetchEntityClients();
+  }, [year, branchCode]);
+  useEffect(() => {
+    const fetchUnrenewedPolicies = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/unrenewed-policies?branchCode=${branchCode}&year=${year}`
+      );
+      setUnrenewedPolicies(data.result);
+    };
+    fetchUnrenewedPolicies();
+  }, [year, branchCode]);
+  useEffect(() => {
+    const fetchUndebitedPolicies = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/undebited-policies?branchCode=${branchCode}&year=${year}`
+      );
+      setUndebitedPolicies(data.result);
+    };
+    fetchUndebitedPolicies();
   }, [year, branchCode]);
 
   function calculatePremiums(bimaData: IBimaData[]) {
@@ -285,6 +326,62 @@ const ContextProvider = ({ children }: any) => {
   const { totalRegisteredClaims } = calculateRegisteredClaims(registeredClaims);
 
   const { broker, agents, allClients } = calculateClientsData(clients);
+
+  const calculateOutstandingClaims = (
+    outstandingClaims: IOutstandingClaims[]
+  ) => {
+    const totalOutstanding = outstandingClaims.reduce(
+      (total: number, outstanding) => total + outstanding.totalAmount,
+      0
+    );
+    const totalCount = outstandingClaims.reduce(
+      (total: number, outstanding) => total + outstanding.count,
+      0
+    );
+    return {
+      totalOutstanding,
+      totalCount,
+    };
+  };
+  const calculateUnrenewedPolicies = (
+    unrenewedPolicies: IUnrenewedPolicies[]
+  ) => {
+    const nonMotorUnrenewed = unrenewedPolicies.reduce(
+      (total: number, unrenewed) => total + unrenewed.nonMotorAmount,
+      0
+    );
+    const motorRenewed = unrenewedPolicies.reduce(
+      (total: number, unrenewed) => total + unrenewed.motorAmount,
+      0
+    );
+    return {
+      nonMotorUnrenewed,
+      motorRenewed,
+    };
+  };
+  const calculateUndebitedPolicies = (
+    undebitedPolicies: IUndebitedPolicies[]
+  ) => {
+    let motorUndebited = 0;
+    let nonMotorUndebited = 0;
+    undebitedPolicies.forEach((policy) => {
+      const totalPremium = policy.totalPremium;
+      if (policy.premiumCode === "080" || policy.premiumCode === "070") {
+        motorUndebited += totalPremium;
+      } else {
+        nonMotorUndebited += totalPremium;
+      }
+    });
+    return { nonMotorUndebited, motorUndebited };
+  };
+  const { nonMotorUndebited, motorUndebited } =
+    calculateUndebitedPolicies(undebitedPolicies);
+
+  const { totalOutstanding, totalCount } =
+    calculateOutstandingClaims(outstandingClaims);
+  const { nonMotorUnrenewed, motorRenewed } =
+    calculateUnrenewedPolicies(unrenewedPolicies);
+
   return (
     <Context.Provider
       value={{
@@ -315,6 +412,12 @@ const ContextProvider = ({ children }: any) => {
         component,
         setComponent,
         totalRegisteredClaims,
+        totalOutstanding,
+        totalCount,
+        nonMotorUnrenewed,
+        motorRenewed,
+        nonMotorUndebited,
+        motorUndebited,
       }}
     >
       {children}

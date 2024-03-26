@@ -20,6 +20,11 @@ export interface IRegisteredClaims {
   totalNumber: number;
   branchCode: number;
 }
+export interface IOutstandingClaims {
+  org_code: string;
+  count: number;
+  totalAmount: number;
+}
 export interface IProduction {
   org_code: string;
   branchCode: string;
@@ -35,4 +40,17 @@ export interface IBranches {
 export interface IClients {
   totalClients: number;
   clientCode: string;
+}
+export interface IUnrenewedPolicies {
+  branchName: string;
+  branchCode: string;
+  motorCount: number;
+  nonMotorCount: number;
+  motorAmount: number;
+  nonMotorAmount: number;
+}
+export interface IUndebitedPolicies {
+  branchCode: string;
+  premiumCode: string;
+  totalPremium: number;
 }
