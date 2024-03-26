@@ -44,7 +44,7 @@ const CustomCard = ({
       className={`h-[120px] w-[300px] border cursor-pointer  rounded-md p-[20px]`}
       onClick={handleClick}
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2" style={{ color: textColor }}>
         <p className="text-[18px] flex justify-center font-bold">{name}</p>
         <div className="flex justify-between">
           <p>{title1}</p>

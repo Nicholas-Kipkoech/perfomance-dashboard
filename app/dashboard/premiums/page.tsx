@@ -29,49 +29,49 @@ const Underwriting = () => {
           name={"Total  Premium"}
           total={totalPremium}
           currency
-          color={"#41C9E2"}
+          color={"#6ea4bf"}
         />
         <CustomCard
           name={"Direct Premium"}
           total={directPremium}
           currency
-          color={"#41C9E2"}
+          color={"#6ea4bf"}
         />
         <CustomCard
           name={"Intermediary Premium"}
           total={intermediaryPremium}
           currency
-          color={"#41C9E2"}
+          color={"#6ea4bf"}
         />
         <CustomCard
           name={"Reinsurance"}
           total={reinsurance}
           currency
-          color={"#41C9E2"}
+          color={"#6ea4bf"}
         />
         <CustomCard
           name={"New Business"}
           total={totalNewBusiness}
           currency
-          color={"#D9EDBF"}
+          color={"#FC9e4f"}
         />
         <CustomCard
           name={"Renewals"}
           total={totalRenewals}
           currency
-          color={"#D9EDBF"}
+          color={"#FC9e4f"}
         />
         <CustomCard
           name={"Motor Premium"}
           total={motorPremium}
           currency
-          color={"#D9EDBF"}
+          color={"#FC9e4f"}
         />
         <CustomCard
           name={"Non Motor Premium"}
           total={nonMotorPremium}
           currency
-          color={"#D9EDBF"}
+          color={"#FC9e4f"}
         />
         <CustomCard
           name={"Total Number of clients"}
@@ -100,7 +100,7 @@ const Underwriting = () => {
           title2="Motor"
           total={nonMotorUnrenewed}
           currency
-          color={"#61A3BA"}
+          color={"#17A2B8"}
         />
         <CustomCard
           name={"Undebited Policies"}
@@ -109,7 +109,7 @@ const Underwriting = () => {
           title2="Non motor"
           total={nonMotorUndebited}
           currency
-          color={"#61A3BA"}
+          color={"#17A2B8"}
         />
       </div>
     </div>

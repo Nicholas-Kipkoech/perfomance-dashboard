@@ -6,7 +6,6 @@ import iconLogo from "../assets/iconLogo.png";
 
 const Sidebar = () => {
   const { setComponent, component }: any = useContextApi();
-  const user = localStorage.getItem("user");
   const menuItems = [
     {
       name: "Modules",
@@ -28,9 +27,6 @@ const Sidebar = () => {
         className={"h-[80px] object-contain "}
         style={{ background: "white" }}
       />
-      <div className="h-[100px] justify-center flex items-center text-[20px]">
-        {user?.toUpperCase()}
-      </div>
       <div className="gap-2 flex flex-col">
         {menuItems.map((item, key) => (
           <div key={key} className="text-[16px]">

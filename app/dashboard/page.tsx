@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useContextApi } from "../context/Context";
 import CustomSelect from "../UI/reusableComponents/CustomSelect";
 import { IBranches } from "../assets/interfaces";
@@ -20,6 +20,9 @@ const Dashboard = () => {
     years,
     component,
   }: any = useContextApi();
+
+  const [lastDayOfMonth, setLastDayOfMonth] = useState("");
+  const [today, setToday] = useState("");
 
   const formattedCompanys: [] = companys.map((company: IBranches) => {
     return {
@@ -54,34 +57,60 @@ const Dashboard = () => {
     "Dec",
   ];
 
-  const handleToDate = (event: any) => {
-    const inputDate = event.target.value;
+  const handleToDate = (date: any, dateString: any) => {
+    const [day, month, year] = dateString.split("-");
     let formattedMonth: any = "";
-    const [year, month, day] = inputDate.split("-");
     if (month < 10) {
       formattedMonth = months[month.toString().slice(1) - 1];
     } else {
       formattedMonth = months[Number(month - 1)];
     }
     const formattedToDate = day + "-" + formattedMonth + "-" + year;
-
     setToDate(formattedToDate);
   };
-  const handleFromDate = (event: any) => {
-    const inputDate = event.target.value;
+
+  const handleFromDate = (date: any, dateString: any) => {
+    const [day, month, year] = dateString.split("-");
     let formattedMonth: any = "";
-    const [year, month, day] = inputDate.split("-");
     if (month < 10) {
       formattedMonth = months[month.toString().slice(1) - 1];
     } else {
       formattedMonth = months[Number(month - 1)];
     }
-    const formattedFromDate = day + "-" + formattedMonth + "-" + year;
-    setFromDate(formattedFromDate);
+    const formattedToDate = day + "-" + formattedMonth + "-" + year;
+    setFromDate(formattedToDate);
   };
 
+  useEffect(() => {
+    const today = new Date();
+
+    // Get the current month and year
+    const currentMonth = today.getMonth() + 1; // Month starts from 0
+    const currentYear = today.getFullYear();
+
+    // Create a new Date object for the first day of the next month
+    const nextMonthFirstDay = new Date(currentYear, currentMonth, 1);
+
+    // Subtract one day from the first day of the next month to get the last day of the current month
+    const lastDayOfMonth = new Date(nextMonthFirstDay.getTime() - 1);
+
+    // Get the last day of the month
+    const lastDay = lastDayOfMonth.getDate();
+
+    // Format the date to include day, month, and year
+    const formattedDate = `${lastDay}-${String(currentMonth).padStart(
+      2,
+      "0"
+    )}-${currentYear}`;
+    const formattedToday = `${today.getDate()}-${String(
+      today.getMonth() + 1
+    ).padStart(2, "0")}-${today.getFullYear()}`;
+    setToday(formattedToday);
+    setLastDayOfMonth(formattedDate);
+  }, []);
+
   return (
-    <div className="p-[10px] mt-[20px] ">
+    <div className="mt-[20px] ml-4 ">
       <div className="flex gap-2 items-center">
         <CustomSelect
           defaultValue={{ label: "Entire Company", value: "" }}
@@ -90,21 +119,23 @@ const Dashboard = () => {
             setBranchCode(value.value);
             setCompany(value.label);
           }}
-          className="w-[330px]"
+          className="w-[330px] ml-3"
           name="Company"
         />
         <div className="flex flex-col mt-2">
           <label>From date</label>
-          <input
-            type="date"
+          <DatePicker
+            format={"DD-MM-YYYY"}
+            placeholder={`${today}`}
             className={"w-[330px] h-[40px] border p-2 rounded-md"}
             onChange={handleFromDate}
           />
         </div>
         <div className="flex flex-col mt-2">
           <label>To date</label>
-          <input
-            type="date"
+          <DatePicker
+            format={"DD-MM-YYYY"}
+            placeholder={`${lastDayOfMonth}`}
             className={"w-[330px] h-[40px] border p-2 rounded-md"}
             onChange={handleToDate}
           />

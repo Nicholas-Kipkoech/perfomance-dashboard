@@ -22,7 +22,7 @@ const CustomSelect = ({
 }: ISelect) => {
   return (
     <div className="flex flex-col mt-1">
-      <label className="flex gap-5 mt-2">{name}</label>
+      <label className="flex gap-5 mt-2 ml-3">{name}</label>
       <Select
         defaultValue={defaultValue}
         options={options}
