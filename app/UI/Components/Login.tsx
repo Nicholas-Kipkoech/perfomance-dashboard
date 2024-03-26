@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomInput from "../reusableComponents/CustomInput";
 import CustomButton from "../reusableComponents/CustomButton";
 import Image from "next/image";
@@ -14,10 +14,12 @@ const Login = () => {
 
   const handleLogin = () => {
     setLoading(true);
-    setTimeout(() => {
+    if (username === "icon" && password === "Bima123") {
+      localStorage.setItem("user", "icon admin");
       router.push("/dashboard");
-      setLoading(false);
-    }, 2000);
+    } else {
+      setLoading(false); // Reset loading state
+    }
   };
   return (
     <div className="border h-[550px] w-1/3 flex flex-col  justify-center items-center">
@@ -34,22 +36,23 @@ const Login = () => {
           placeholder="Enter username"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
-          className={"h-[50px] p-[6px] rounded-md border w-[450px]"}
+          className={"h-[55px] p-[8px] rounded-md border w-[450px]"}
         />
+
         <CustomInput
           type={"password"}
           name={"Password"}
           placeholder="Enter password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
-          className={"h-[50px] p-[6px] rounded-md border w-[450px]"}
+          className={"h-[55px] p-[8px] rounded-md border w-[450px]"}
         />
       </div>
       <div>
         <CustomButton
           name={loading ? "Logging in..." : "Login"}
           className={
-            "h-[40px] w-[450px] mt-[20px] rounded-md text-white text-[16px] border bg-[#cb7529]"
+            "h-[55px] w-[450px] mt-[20px] rounded-md text-white text-[16px] border bg-[#cb7529]"
           }
           onClick={handleLogin}
           disabled={loading}
