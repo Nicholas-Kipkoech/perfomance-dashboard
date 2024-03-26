@@ -39,11 +39,11 @@ const Sidebar = () => {
               {item.items.map((item, key) => (
                 <div
                   onClick={() => setComponent(item.name)}
-                  className={`h-[35px] text-[12px] ${
+                  className={`h-[30px] text-[12px] ${
                     component === item.name
-                      ? "bg-[#cb7529] text-white"
-                      : "bg-white text-black"
-                  }   cursor-pointer mt-[5px] flex items-center justify-center`}
+                      ? "bg-white text-black"
+                      : "text-white"
+                  }   cursor-pointer mt-[2px] flex items-center justify-center`}
                   key={key}
                 >
                   {item.name}

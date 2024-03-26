@@ -19,6 +19,8 @@ const Context = createContext({});
 const ContextProvider = ({ children }: any) => {
   const localUrl = "http://localhost:5002/bima/perfomance";
   const [branchCode, setBranchCode] = useState("");
+  const [fromDate, setFromDate] = useState("1-Jan-2023");
+  const [toDate, setToDate] = useState("31-Jan-2023");
   const [year, setYear] = useState(2023);
   const [years, setYears] = useState([]);
   const [bimaData, setBimaData] = useState<IBimaData[]>([]);
@@ -44,12 +46,12 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchBimaData = async () => {
       const { data } = await axios.get(
-        `${localUrl}/underwriting?year=${year}&branchCode=${branchCode}`
+        `${localUrl}/underwriting?fromDate=${fromDate}&toDate=${toDate}`
       );
       setBimaData(data.result);
     };
     fetchBimaData();
-  }, [year, branchCode]);
+  }, [fromDate, toDate, branchCode]);
 
   useEffect(() => {
     const fetchOrgBranches = async () => {
@@ -386,6 +388,8 @@ const ContextProvider = ({ children }: any) => {
     <Context.Provider
       value={{
         setBranchCode,
+        setFromDate,
+        setToDate,
         year,
         setYear,
         totalPremium,

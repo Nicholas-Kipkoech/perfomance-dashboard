@@ -10,6 +10,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleLogin = () => {
@@ -40,13 +41,21 @@ const Login = () => {
         />
 
         <CustomInput
-          type={"password"}
+          type={showPassword ? "text" : "password"}
           name={"Password"}
           placeholder="Enter password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
           className={"h-[55px] p-[8px] rounded-md border w-[450px]"}
         />
+        <div className="flex gap-1">
+          <input
+            type="checkbox"
+            name="check"
+            onClick={() => setShowPassword((prev) => !prev)}
+          />
+          <label htmlFor="check">Show password</label>
+        </div>
       </div>
       <div>
         <CustomButton
