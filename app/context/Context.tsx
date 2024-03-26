@@ -46,7 +46,7 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchBimaData = async () => {
       const { data } = await axios.get(
-        `${localUrl}/underwriting?fromDate=${fromDate}&toDate=${toDate}`
+        `${localUrl}/underwriting?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
       );
       setBimaData(data.result);
     };
@@ -75,70 +75,68 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/claims?year=${year}&branchCode=${branchCode}`
+        `${localUrl}/claims?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
       );
       setClaimsData(data.result);
     };
     fetchClaims();
-  }, [year, branchCode]);
+  }, [fromDate, toDate, branchCode]);
 
   useEffect(() => {
     const fetchRegisteredClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/registered-claims?year=${year}&branchCode=${branchCode}`
+        `${localUrl}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
       );
       setRegisteredClaims(data.result);
     };
     fetchRegisteredClaims();
-  }, [year, branchCode]);
+  }, [fromDate, toDate, branchCode]);
   useEffect(() => {
     const fetchOutStandingClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/outstanding-claims?year=31-Dec-${year}&branchCode=${branchCode}`
+        `${localUrl}/outstanding-claims?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
       );
       setOutstandingClaims(data.result);
     };
     fetchOutStandingClaims();
-    const _year = `31-Dec-${year}`;
-    console.log(_year);
-  }, [year, branchCode]);
+  }, [fromDate, toDate, branchCode]);
   useEffect(() => {
     const fetchProductionPerUnit = async () => {
       const { data } = await axios.get(
-        `${localUrl}/production?year=${year}&branchCode=${branchCode}`
+        `${localUrl}/production?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
       );
       setProductionData(data.result);
     };
     fetchProductionPerUnit();
-  }, [year, branchCode]);
+  }, [fromDate, toDate, branchCode]);
 
   useEffect(() => {
     const fetchEntityClients = async () => {
       const { data } = await axios.get(
-        `${localUrl}/clients?branchCode=${branchCode}&year=${year}`
+        `${localUrl}/clients?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
       );
       setClients(data.result);
     };
     fetchEntityClients();
-  }, [year, branchCode]);
+  }, [fromDate, toDate, branchCode]);
   useEffect(() => {
     const fetchUnrenewedPolicies = async () => {
       const { data } = await axios.get(
-        `${localUrl}/unrenewed-policies?branchCode=${branchCode}&year=${year}`
+        `${localUrl}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
       );
       setUnrenewedPolicies(data.result);
     };
     fetchUnrenewedPolicies();
-  }, [year, branchCode]);
+  }, [fromDate, toDate, branchCode]);
   useEffect(() => {
     const fetchUndebitedPolicies = async () => {
       const { data } = await axios.get(
-        `${localUrl}/undebited-policies?branchCode=${branchCode}&year=${year}`
+        `${localUrl}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
       );
       setUndebitedPolicies(data.result);
     };
     fetchUndebitedPolicies();
-  }, [year, branchCode]);
+  }, [fromDate, toDate, branchCode]);
 
   function calculatePremiums(bimaData: IBimaData[]) {
     let directClients = 0;
