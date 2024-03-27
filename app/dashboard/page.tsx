@@ -9,7 +9,7 @@ import Finance from "./finance/page";
 import { DatePicker, Spin } from "antd";
 import CustomButton from "../UI/reusableComponents/CustomButton";
 
-export const months = [
+const months = [
   "Jan",
   "Feb",
   "Mar",
