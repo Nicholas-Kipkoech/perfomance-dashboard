@@ -10,7 +10,10 @@ import {
   IClients,
   IOutstandingClaims,
   IProduction,
+  IReceipts,
+  IRecovery,
   IRegisteredClaims,
+  ISalvages,
   IUndebitedPolicies,
   IUnrenewedPolicies,
 } from "../assets/interfaces";
@@ -19,9 +22,8 @@ const Context = createContext({});
 const ContextProvider = ({ children }: any) => {
   const localUrl = "http://localhost:5002/bima/perfomance";
   const [branchCode, setBranchCode] = useState("");
-  const [fromDate, setFromDate] = useState("1-Jan-2023");
-  const [toDate, setToDate] = useState("31-Jan-2023");
-  const [year, setYear] = useState(2023);
+  const [fromDate, setFromDate] = useState("1-jan-2023");
+  const [toDate, setToDate] = useState("31-dec-2023");
   const [years, setYears] = useState([]);
   const [bimaData, setBimaData] = useState<IBimaData[]>([]);
   const [claimsData, setClaimsData] = useState<IClaimsData[]>([]);
@@ -39,14 +41,17 @@ const ContextProvider = ({ children }: any) => {
   const [undebitedPolicies, setUndebitedPolicies] = useState<
     IUndebitedPolicies[]
   >([]);
+  const [salvages, setSalvages] = useState<ISalvages[]>([]);
+  const [recovery, setRecovery] = useState<IRecovery[]>([]);
+  const [receipts, setReceipts] = useState<IReceipts[]>([]);
   const [companys, setCompanys] = useState<IBranches[]>([]);
-  const [company, setCompany] = useState("Entire Company (INTRA)");
+  const [company, setCompany] = useState("INTRA");
   const [component, setComponent] = useState("Underwriting");
 
   useEffect(() => {
     const fetchBimaData = async () => {
       const { data } = await axios.get(
-        `${localUrl}/underwriting?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
+        `${localUrl}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       );
       setBimaData(data.result);
     };
@@ -63,19 +68,11 @@ const ContextProvider = ({ children }: any) => {
     };
     fetchOrgBranches();
   }, []);
-  useEffect(() => {
-    const fetchYears = async () => {
-      const { data } = await axios.get(`${localUrl}/years`);
-      const sortedData = data.result.sort((a: any, b: any) => b.year - a.year);
-      setYears(sortedData);
-    };
-    fetchYears();
-  }, []);
 
   useEffect(() => {
     const fetchClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/claims?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
+        `${localUrl}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       );
       setClaimsData(data.result);
     };
@@ -85,7 +82,7 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchRegisteredClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
+        `${localUrl}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       );
       setRegisteredClaims(data.result);
     };
@@ -94,7 +91,7 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchOutStandingClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/outstanding-claims?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
+        `${localUrl}/outstanding-claims?toDate=${toDate}`
       );
       setOutstandingClaims(data.result);
     };
@@ -103,7 +100,7 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchProductionPerUnit = async () => {
       const { data } = await axios.get(
-        `${localUrl}/production?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
+        `${localUrl}/production?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       );
       setProductionData(data.result);
     };
@@ -113,7 +110,7 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchEntityClients = async () => {
       const { data } = await axios.get(
-        `${localUrl}/clients?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
+        `${localUrl}/clients?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       );
       setClients(data.result);
     };
@@ -122,7 +119,7 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchUnrenewedPolicies = async () => {
       const { data } = await axios.get(
-        `${localUrl}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
+        `${localUrl}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       );
       setUnrenewedPolicies(data.result);
     };
@@ -131,11 +128,38 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchUndebitedPolicies = async () => {
       const { data } = await axios.get(
-        `${localUrl}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&{branchCode}=${branchCode}`
+        `${localUrl}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       );
       setUndebitedPolicies(data.result);
     };
     fetchUndebitedPolicies();
+  }, [fromDate, toDate, branchCode]);
+  useEffect(() => {
+    const fetchSalvages = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
+      );
+      setSalvages(data.result);
+    };
+    fetchSalvages();
+  }, [fromDate, toDate, branchCode]);
+  useEffect(() => {
+    const fetchRecoveries = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/recovery?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
+      );
+      setRecovery(data.result);
+    };
+    fetchRecoveries();
+  }, [fromDate, toDate, branchCode]);
+  useEffect(() => {
+    const fetchARreceipts = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
+      );
+      setReceipts(data.result);
+    };
+    fetchARreceipts();
   }, [fromDate, toDate, branchCode]);
 
   function calculatePremiums(bimaData: IBimaData[]) {
@@ -316,7 +340,7 @@ const ContextProvider = ({ children }: any) => {
   };
   const calculateRegisteredClaims = (registeredClaims: IRegisteredClaims[]) => {
     const totalRegisteredClaims = registeredClaims.reduce(
-      (total: number, claims) => total + claims.totalNumber,
+      (total: number, claims) => total + claims.totalProvision,
       0
     );
     return {
@@ -374,6 +398,47 @@ const ContextProvider = ({ children }: any) => {
     });
     return { nonMotorUndebited, motorUndebited };
   };
+
+  const calculateSalvages = (salvages: ISalvages[]) => {
+    const totalSalvages = salvages.reduce(
+      (total: number, salvage) => total + salvage.receiptAmount,
+      0
+    );
+    return { totalSalvages };
+  };
+  const calculateRecovery = (recovery: IRecovery[]) => {
+    const totalRecovery = recovery.reduce(
+      (total: number, recovery) =>
+        total + recovery.treatyAmount + recovery.facAmount + recovery.xolAmount,
+      0
+    );
+    return { totalRecovery };
+  };
+
+  const calculateTotalByCurrency = (receipts: IReceipts[]) => {
+    return receipts.reduce((acc: any, curr) => {
+      const { currencyCode, receiptAmount } = curr;
+      // Check if the currency code already exists in the accumulator object
+      if (acc[currencyCode]) {
+        // If exists, add the current receipt amount to the existing total
+        acc[currencyCode].total += receiptAmount;
+        // Increment the count for the currency code
+        acc[currencyCode].count++;
+      } else {
+        // If currency code doesn't exist, create a new entry
+        acc[currencyCode] = {
+          total: receiptAmount,
+          count: 1,
+        };
+      }
+      return acc;
+    }, {});
+  };
+  const receiptResults = calculateTotalByCurrency(receipts);
+
+  const { totalRecovery } = calculateRecovery(recovery);
+  const { totalSalvages } = calculateSalvages(salvages);
+
   const { nonMotorUndebited, motorUndebited } =
     calculateUndebitedPolicies(undebitedPolicies);
 
@@ -388,8 +453,6 @@ const ContextProvider = ({ children }: any) => {
         setBranchCode,
         setFromDate,
         setToDate,
-        year,
-        setYear,
         totalPremium,
         totalNewBusiness,
         totalRenewals,
@@ -420,6 +483,9 @@ const ContextProvider = ({ children }: any) => {
         motorRenewed,
         nonMotorUndebited,
         motorUndebited,
+        totalSalvages,
+        totalRecovery,
+        receiptResults,
       }}
     >
       {children}

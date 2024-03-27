@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useContextApi } from "../context/Context";
 
 const Navbar = () => {
-  const { company, year } = useContextApi();
+  const { company } = useContextApi();
   const router = useRouter();
   const handleLogout = () => {
     router.push("/");
@@ -15,8 +15,6 @@ const Navbar = () => {
       <span className="justify-start font-[700] text-[25px] ml-3">
         {company}
       </span>
-      <span className="justify-start font-[700] text-[25px]">Year {year}</span>
-
       <div className="flex items-center">
         <CustomButton
           name="Logout"

@@ -10,28 +10,43 @@ const Claims = () => {
     totalRegisteredClaims,
     totalOutstanding,
     totalCount: totalOutstandingCount,
+    totalSalvages,
+    totalRecovery,
   }: any = useContextApi();
   return (
     <div>
       <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
         <CustomCard
           name={"Registered  Claims"}
-          totalNumber={totalRegisteredClaims}
+          total={totalRegisteredClaims}
           currency
-          total={0}
-          color={"#FF8080"}
+          color={"#E178C5"}
         />
         <CustomCard
           name={"Paid  Claims"}
           totalNumber={totalClaims}
           total={totalClaimPaid}
           currency
-          color={"#FF8080"}
+          color={"#E178C5"}
         />
         <CustomCard
           name={"Outstanding Claims"}
           totalNumber={totalOutstandingCount}
           total={totalOutstanding}
+          currency
+          color={"#E178C5"}
+        />
+        <CustomCard
+          name={"Salvages"}
+          totalNumber={0}
+          total={totalSalvages}
+          currency
+          color={"#FF8080"}
+        />
+        <CustomCard
+          name={"RI Recovery"}
+          totalNumber={0}
+          total={totalRecovery}
           currency
           color={"#FF8080"}
         />

@@ -5,24 +5,43 @@ import CustomSelect from "../UI/reusableComponents/CustomSelect";
 import { IBranches } from "../assets/interfaces";
 import Claims from "./claims/page";
 import Underwriting from "./premiums/page";
-import { DatePicker } from "antd";
-import dayjs from "dayjs";
+import Finance from "./finance/page";
+import { DatePicker, Spin } from "antd";
 import CustomButton from "../UI/reusableComponents/CustomButton";
 
+export const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 const Dashboard = () => {
   const {
     year: _year,
     setFromDate,
+    fromDate,
+    toDate: _toDate,
     setToDate,
     companys,
     setBranchCode,
     setCompany,
-    years,
     component,
   }: any = useContextApi();
 
   const [lastDayOfMonth, setLastDayOfMonth] = useState("");
   const [today, setToday] = useState("");
+  const [fmDate, setFmDate] = useState("");
+  const [toDate, setTdDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [timeoutId, setTimeoutId] = useState<any>(null);
 
   const formattedCompanys: [] = companys.map((company: IBranches) => {
     return {
@@ -37,25 +56,12 @@ const Dashboard = () => {
         return <Underwriting />;
       case "Claims":
         return <Claims />;
+      case "Finance":
+        return <Finance />;
       default:
         break;
     }
   };
-
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
 
   const handleToDate = (date: any, dateString: any) => {
     const [day, month, year] = dateString.split("-");
@@ -66,7 +72,7 @@ const Dashboard = () => {
       formattedMonth = months[Number(month - 1)];
     }
     const formattedToDate = day + "-" + formattedMonth + "-" + year;
-    setToDate(formattedToDate);
+    setTdDate(formattedToDate);
   };
 
   const handleFromDate = (date: any, dateString: any) => {
@@ -78,8 +84,27 @@ const Dashboard = () => {
       formattedMonth = months[Number(month - 1)];
     }
     const formattedToDate = day + "-" + formattedMonth + "-" + year;
-    setFromDate(formattedToDate);
+    setFmDate(formattedToDate);
   };
+
+  const handleRunReports = () => {
+    setLoading(true);
+    const id = setTimeout(() => {
+      setLoading(false); // After 2 seconds, set loading to false
+    }, 5000);
+    setTimeoutId(id); // Store the timeout ID
+    setFromDate(fmDate);
+    setToDate(toDate);
+  };
+
+  useEffect(() => {
+    return () => {
+      // Cleanup function to clear timeout when component unmounts
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
 
   useEffect(() => {
     const today = new Date();
@@ -110,8 +135,8 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="mt-[20px] ml-4 ">
-      <div className="flex gap-2 items-center">
+    <div className="mt-[20px] ml-4">
+      <div className="top-0 sticky z-0 flex gap-2 items-center">
         <CustomSelect
           defaultValue={{ label: "Entire Company", value: "" }}
           options={formattedCompanys}
@@ -127,7 +152,7 @@ const Dashboard = () => {
           <DatePicker
             format={"DD-MM-YYYY"}
             placeholder={`${today}`}
-            className={"w-[330px] h-[40px] border p-2 rounded-md"}
+            className={"w-[300px] h-[40px] border p-2 rounded-md"}
             onChange={handleFromDate}
           />
         </div>
@@ -136,13 +161,26 @@ const Dashboard = () => {
           <DatePicker
             format={"DD-MM-YYYY"}
             placeholder={`${lastDayOfMonth}`}
-            className={"w-[330px] h-[40px] border p-2 rounded-md"}
+            className={"w-[300px] h-[40px] border p-2 rounded-md"}
             onChange={handleToDate}
           />
         </div>
+        <CustomButton
+          name={loading ? "Running..." : "Run"}
+          disabled={loading}
+          className={
+            "bg-[#cb7229] text-white h-[40px] w-[200px] flex justify-center items-center mt-8 rounded-md"
+          }
+          onClick={handleRunReports}
+        />
       </div>
-
-      {renderComponent()}
+      {loading ? (
+        <div className="flex items-center justify-center h-screen">
+          <Spin delay={500} size={"large"} />{" "}
+        </div>
+      ) : (
+        renderComponent()
+      )}
     </div>
   );
 };

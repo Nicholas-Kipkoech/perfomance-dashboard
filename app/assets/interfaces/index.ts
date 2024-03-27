@@ -17,8 +17,8 @@ export interface IClaimsData {
   amountPaid: number;
 }
 export interface IRegisteredClaims {
-  totalNumber: number;
-  branchCode: number;
+  branchCode: string;
+  totalProvision: number;
 }
 export interface IOutstandingClaims {
   org_code: string;
@@ -53,4 +53,25 @@ export interface IUndebitedPolicies {
   branchCode: string;
   premiumCode: string;
   totalPremium: number;
+}
+export interface ISalvages {
+  branchCode: string;
+  receiptAmount: number;
+}
+export interface IRecovery {
+  org_code: string;
+  branchCode: string;
+  mc_code: string;
+  class: string;
+  paidAmount: number;
+  retentionAmount: number;
+  treatyAmount: number;
+  comesaAmount: number;
+  facAmount: number;
+  xolAmount: number;
+}
+export interface IReceipts {
+  branchCode: string;
+  currencyCode: string;
+  receiptAmount: number;
 }

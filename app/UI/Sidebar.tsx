@@ -16,6 +16,9 @@ const Sidebar = () => {
         {
           name: "Claims",
         },
+        {
+          name: "Finance",
+        },
       ],
     },
   ];
@@ -27,7 +30,7 @@ const Sidebar = () => {
         className={"h-[80px] object-contain "}
         style={{ background: "white" }}
       />
-      <div className="gap-2 flex flex-col">
+      <div className="gap-2 mt-10 flex flex-col">
         {menuItems.map((item, key) => (
           <div key={key} className="text-[16px]">
             {item.name}
