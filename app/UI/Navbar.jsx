@@ -19,7 +19,7 @@ const Navbar = () => {
         <CustomButton
           name="Logout"
           className={
-            "h-[40px] border w-[200px]   rounded-md text-white bg-[#cb7529]"
+            "h-[40px] border w-[150px]   rounded-md text-white bg-[#cb7529]"
           }
           onClick={handleLogout}
         />

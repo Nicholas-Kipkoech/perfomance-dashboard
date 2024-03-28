@@ -152,7 +152,7 @@ const Dashboard = () => {
           <DatePicker
             format={"DD-MM-YYYY"}
             placeholder={`${today}`}
-            className={"w-[300px] h-[40px] border p-2 rounded-md"}
+            className={"w-[250px] h-[40px] border p-2 rounded-md"}
             onChange={handleFromDate}
           />
         </div>
@@ -161,7 +161,7 @@ const Dashboard = () => {
           <DatePicker
             format={"DD-MM-YYYY"}
             placeholder={`${lastDayOfMonth}`}
-            className={"w-[300px] h-[40px] border p-2 rounded-md"}
+            className={"w-[250px] h-[40px] border p-2 rounded-md"}
             onChange={handleToDate}
           />
         </div>
@@ -169,7 +169,7 @@ const Dashboard = () => {
           name={loading ? "Running..." : "Run"}
           disabled={loading}
           className={
-            "bg-[#cb7229] text-white h-[40px] w-[200px] flex justify-center items-center mt-8 rounded-md"
+            "bg-[#cb7229] text-white h-[40px] w-[152px] flex justify-center items-center mt-8 rounded-md"
           }
           onClick={handleRunReports}
         />

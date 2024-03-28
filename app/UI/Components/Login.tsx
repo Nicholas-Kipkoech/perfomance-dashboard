@@ -24,7 +24,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="border h-[550px] w-1/3 flex flex-col  justify-center items-center">
+    <div className="border h-[500px] w-1/3 flex flex-col  justify-center items-center">
       <p className="font-[600] text-[20px]">
         {"Perfomance dashboard".toUpperCase()}
       </p>
@@ -38,7 +38,7 @@ const Login = () => {
           placeholder="Enter username"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
-          className={"h-[55px] p-[8px] rounded-md border w-[450px]"}
+          className={"h-[50px] p-[8px] rounded-md border w-[400px]"}
         />
 
         <CustomInput
@@ -47,7 +47,7 @@ const Login = () => {
           placeholder="Enter password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
-          className={"h-[55px] p-[8px] rounded-md border w-[450px]"}
+          className={"h-[50px] p-[8px] rounded-md border w-[400px]"}
         />
         <div className="flex gap-1">
           <input
@@ -62,7 +62,7 @@ const Login = () => {
         <CustomButton
           name={loading ? "Logging in..." : "Login"}
           className={
-            "h-[55px] w-[450px] mt-[20px] rounded-md text-white text-[16px] border bg-[#cb7529]"
+            "h-[50px] w-[400px] mt-[20px] rounded-md text-white text-[16px] border bg-[#cb7529]"
           }
           onClick={handleLogin}
           disabled={loading}

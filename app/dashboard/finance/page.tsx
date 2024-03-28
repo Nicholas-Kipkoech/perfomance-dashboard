@@ -13,10 +13,10 @@ const Finance = () => {
     return (
       <div
         style={{ backgroundColor: color }}
-        className={`h-[150px] w-[380px] border cursor-pointer  rounded-md p-[10px]`}
+        className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[10px]`}
         onClick={() => {}}
       >
-        <div className="flex gap-2 flex-col text-[14px] ">
+        <div className="flex gap-1 flex-col text-[14px] ">
           <div className="justify-between flex font-bold">
             <p>Amount</p>
             <p>Count</p>

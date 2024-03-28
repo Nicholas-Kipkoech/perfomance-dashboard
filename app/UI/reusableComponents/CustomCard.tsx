@@ -37,7 +37,7 @@ const CustomCard = ({
   return (
     <div
       style={{ backgroundColor: color }}
-      className={`h-[150px] w-[380px] border cursor-pointer  rounded-md p-[20px]`}
+      className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
       onClick={handleClick}
     >
       <div className="flex flex-col gap-2" style={{ color: textColor }}>

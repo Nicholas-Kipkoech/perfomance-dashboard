@@ -40,7 +40,7 @@ const Underwriting = () => {
     return (
       <div
         style={{ backgroundColor: color }}
-        className={`h-[150px] w-[380px] border cursor-pointer  rounded-md p-[20px]`}
+        className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
       >
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
@@ -135,11 +135,11 @@ const Underwriting = () => {
 
         <div
           style={{ backgroundColor: "#17A2B8" }}
-          className={`h-[150px] w-[380px] border cursor-pointer  rounded-md p-[20px]`}
+          className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => {}}
         >
-          <div className="flex flex-col gap-2">
-            <p className="text-[20px] font-bold flex justify-start items-start">
+          <div className="flex flex-col gap-1">
+            <p className="text-[18px] font-bold flex justify-start items-start">
               {(motorRenewed + nonMotorUnrenewed).toLocaleString()}
             </p>
             <div className="flex justify-between">
@@ -150,18 +150,18 @@ const Underwriting = () => {
               <p className="font-bold">{motorRenewed.toLocaleString()}</p>
               <p className="font-bold">{nonMotorUnrenewed.toLocaleString()}</p>
             </div>
-            <p className="text-[16px] flex justify-center ">
+            <p className="text-[14px] flex justify-center ">
               {"Unrenewed Policies".toUpperCase()}
             </p>
           </div>
         </div>
         <div
           style={{ backgroundColor: "#17A2B8" }}
-          className={`h-[150px] w-[380px] border cursor-pointer  rounded-md p-[20px]`}
+          className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => {}}
         >
-          <div className="flex flex-col gap-2">
-            <p className="text-[20px] font-bold flex justify-start items-start">
+          <div className="flex flex-col gap-1">
+            <p className="text-[18px] font-bold flex justify-start items-start">
               {(motorUndebited + nonMotorUndebited).toLocaleString()}
             </p>
             <div className="flex justify-between">
@@ -172,7 +172,7 @@ const Underwriting = () => {
               <p className="font-bold"> {motorUndebited.toLocaleString()}</p>
               <p className="font-bold">{nonMotorUndebited.toLocaleString()}</p>
             </div>
-            <p className="text-[16px] flex justify-center ">
+            <p className="text-[14px] flex justify-center ">
               {"Undebited Policies".toUpperCase()}
             </p>
           </div>
