@@ -5,6 +5,7 @@ import CustomButton from "../reusableComponents/CustomButton";
 import Image from "next/image";
 import iconLogo from "../../assets/iconLogo.png";
 import { useRouter } from "next/navigation";
+import { dataFetcher } from "@/app/utils/apiLogistics";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
