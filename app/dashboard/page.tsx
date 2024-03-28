@@ -8,6 +8,7 @@ import Underwriting from "./premiums/page";
 import Finance from "./finance/page";
 import { DatePicker, Spin } from "antd";
 import CustomButton from "../UI/reusableComponents/CustomButton";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const months = [
   "Jan",
@@ -91,7 +92,7 @@ const Dashboard = () => {
     setLoading(true);
     const id = setTimeout(() => {
       setLoading(false); // After 2 seconds, set loading to false
-    }, 5000);
+    }, 3000);
     setTimeoutId(id); // Store the timeout ID
     setFromDate(fmDate);
     setToDate(toDate);
@@ -134,6 +135,16 @@ const Dashboard = () => {
     setLastDayOfMonth(formattedDate);
   }, []);
 
+  const antIcon = (
+    <LoadingOutlined
+      style={{
+        fontSize: 60,
+        color: "#cb7229",
+      }}
+      spin
+    />
+  );
+
   return (
     <div className="mt-[20px] ml-4">
       <div className="top-0 sticky z-0 flex gap-2 items-center">
@@ -143,6 +154,7 @@ const Dashboard = () => {
           onChange={(value: { value: string; label: string }) => {
             setBranchCode(value.value);
             setCompany(value.label);
+            handleRunReports();
           }}
           className="w-[330px] ml-3"
           name="Company"
@@ -176,7 +188,10 @@ const Dashboard = () => {
       </div>
       {loading ? (
         <div className="flex items-center justify-center h-screen">
-          <Spin delay={500} size={"large"} />{" "}
+          <div className="flex flex-col gap-2">
+            <Spin indicator={antIcon} />{" "}
+            <p className="text-[#cb7229]">Fetching data.....</p>
+          </div>
         </div>
       ) : (
         renderComponent()

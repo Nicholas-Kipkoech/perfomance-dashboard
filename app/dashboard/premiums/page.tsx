@@ -48,7 +48,7 @@ const Underwriting = () => {
               {Number(total.toFixed(2)).toLocaleString()}
             </p>
             <p className="text-[20px] font-bold flex justify-start items-start">
-              {Math.round((total / cummulativeTotal) * 100)} %
+              {Math.round((total / cummulativeTotal) * 100).toFixed(1)} %
             </p>
           </div>
           <p className="text-[16px] flex justify-center ">
