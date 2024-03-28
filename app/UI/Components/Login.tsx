@@ -30,7 +30,7 @@ const Login = () => {
       </p>
       <div className=" flex flex-col gap-[10px] ">
         <div className="flex justify-center">
-          <Image src={iconLogo} alt="" className={"h-[200px] w-[200px]"} />
+          <Image src={iconLogo} alt="" className={"h-[150px] w-[160px]"} />
         </div>
         <CustomInput
           name={"Username"}
@@ -62,7 +62,7 @@ const Login = () => {
         <CustomButton
           name={loading ? "Logging in..." : "Login"}
           className={
-            "h-[50px] w-[400px] mt-[20px] rounded-md text-white text-[16px] border bg-[#cb7529]"
+            "h-[50px] w-[400px] mt-[10px] rounded-md text-white text-[16px] border bg-[#cb7529]"
           }
           onClick={handleLogin}
           disabled={loading}
