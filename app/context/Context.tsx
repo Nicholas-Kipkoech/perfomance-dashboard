@@ -388,6 +388,7 @@ const ContextProvider = ({ children }: any) => {
   ) => {
     let motorUndebited = 0;
     let nonMotorUndebited = 0;
+
     undebitedPolicies.forEach((policy) => {
       const totalPremium = policy.totalPremium;
       if (policy.premiumCode === "080" || policy.premiumCode === "070") {

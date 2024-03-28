@@ -140,7 +140,7 @@ const Underwriting = () => {
         >
           <div className="flex flex-col gap-1">
             <p className="text-[18px] font-bold flex justify-start items-start">
-              {(motorRenewed + nonMotorUnrenewed).toLocaleString()}
+              TOTAL {(motorRenewed + nonMotorUnrenewed).toLocaleString()}
             </p>
             <div className="flex justify-between">
               <p>{"Motor".toUpperCase()}</p>
@@ -162,7 +162,7 @@ const Underwriting = () => {
         >
           <div className="flex flex-col gap-1">
             <p className="text-[18px] font-bold flex justify-start items-start">
-              {(motorUndebited + nonMotorUndebited).toLocaleString()}
+              TOTAL {(motorUndebited + nonMotorUndebited).toLocaleString()}
             </p>
             <div className="flex justify-between">
               <p>{"Motor".toUpperCase()}</p>

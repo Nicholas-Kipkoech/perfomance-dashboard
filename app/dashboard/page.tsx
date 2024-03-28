@@ -161,7 +161,7 @@ const Dashboard = () => {
           <label>From date</label>
           <DatePicker
             format={"DD-MM-YYYY"}
-            placeholder={`${today}`}
+            placeholder={"DD-MM-YYYY"}
             className={"w-[250px] h-[40px] border p-2 rounded-md"}
             onChange={handleFromDate}
           />
@@ -170,7 +170,7 @@ const Dashboard = () => {
           <label>To date</label>
           <DatePicker
             format={"DD-MM-YYYY"}
-            placeholder={`${lastDayOfMonth}`}
+            placeholder={"DD-MM-YYYY"}
             className={"w-[250px] h-[40px] border p-2 rounded-md"}
             onChange={handleToDate}
           />
