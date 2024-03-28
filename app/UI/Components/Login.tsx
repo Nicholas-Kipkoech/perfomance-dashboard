@@ -1,11 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CustomInput from "../reusableComponents/CustomInput";
 import CustomButton from "../reusableComponents/CustomButton";
 import Image from "next/image";
 import iconLogo from "../../assets/iconLogo.png";
 import { useRouter } from "next/navigation";
-import { dataFetcher } from "@/app/utils/apiLogistics";
+import axios from "axios";
+import { Spin } from "antd";
+import { antIcon } from "@/app/dashboard/page";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -14,13 +16,26 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setLoading(true);
-    if (username === "icon" && password === "Bima123") {
-      localStorage.setItem("user", "icon admin");
-      router.push("/dashboard");
-    } else {
-      setLoading(false); // Reset loading state
+    try {
+      const response = await axios.post(
+        `http://192.168.0.226:5002/bima/perfomance/login`,
+        {
+          un: username,
+          pw: password,
+        }
+      );
+      if (response.data.success === true) {
+        localStorage.setItem("accessToken", response.data.accessToken);
+        setTimeout(() => {
+          router.push("/dashboard");
+          setLoading(false);
+        }, 3000);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
     }
   };
   return (
@@ -32,23 +47,26 @@ const Login = () => {
         <div className="flex justify-center">
           <Image src={iconLogo} alt="" className={"h-[150px] w-[160px]"} />
         </div>
+
         <CustomInput
           name={"Username"}
           type={"text"}
+          disabled={loading}
           placeholder="Enter username"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
           className={"h-[50px] p-[8px] rounded-md border w-[400px]"}
         />
-
         <CustomInput
           type={showPassword ? "text" : "password"}
           name={"Password"}
+          disabled={loading}
           placeholder="Enter password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
           className={"h-[50px] p-[8px] rounded-md border w-[400px]"}
         />
+
         <div className="flex gap-1">
           <input
             type="checkbox"

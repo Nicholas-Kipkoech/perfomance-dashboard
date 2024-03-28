@@ -7,6 +7,7 @@ interface ICustomInput {
   value: string | number;
   className: string;
   type: string;
+  disabled?: boolean;
 }
 
 const CustomInput = ({
@@ -16,6 +17,7 @@ const CustomInput = ({
   value,
   className,
   type,
+  disabled,
 }: ICustomInput) => {
   return (
     <div className="flex flex-col">
@@ -24,6 +26,7 @@ const CustomInput = ({
         type={type}
         placeholder={placeholder}
         onChange={onChange}
+        disabled={disabled}
         value={value}
         className={`outline-[#cb7529] ${className}`}
       />

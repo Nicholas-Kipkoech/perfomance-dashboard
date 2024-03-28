@@ -1,19 +1,26 @@
 "use client";
-import React from "react";
-import CustomButton from "../UI/reusableComponents/CustomButton";
+import React, { useEffect, useState } from "react";
+import CustomButton from "./reusableComponents/CustomButton";
 import { useRouter } from "next/navigation";
-import { useContextApi } from "../context/Context";
+import { jwtDecode } from "jwt-decode";
 
 const Navbar = () => {
-  const { company } = useContextApi();
+  const [user, setUser] = useState<any>({});
+  useEffect(() => {
+    const accessToken: any = localStorage.getItem("accessToken");
+    const decodedToken = jwtDecode(accessToken);
+    setUser(decodedToken);
+  }, []);
+
   const router = useRouter();
   const handleLogout = () => {
+    localStorage.clear();
     router.push("/");
   };
   return (
     <div className="w-full border h-[5rem] bg-[#092332] items-center justify-between p-2 flex text-white top-0 sticky">
       <span className="justify-start font-[700] text-[25px] ml-3">
-        {company}
+        {user?.orgDesc}
       </span>
       <div className="flex items-center">
         <CustomButton

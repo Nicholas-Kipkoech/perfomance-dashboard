@@ -24,6 +24,15 @@ const months = [
   "Nov",
   "Dec",
 ];
+export const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 60,
+      color: "#cb7229",
+    }}
+    spin
+  />
+);
 const Dashboard = () => {
   const {
     year: _year,
@@ -134,16 +143,6 @@ const Dashboard = () => {
     setToday(formattedToday);
     setLastDayOfMonth(formattedDate);
   }, []);
-
-  const antIcon = (
-    <LoadingOutlined
-      style={{
-        fontSize: 60,
-        color: "#cb7229",
-      }}
-      spin
-    />
-  );
 
   return (
     <div className="mt-[20px] ml-4">

@@ -110,7 +110,7 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchEntityClients = async () => {
       const { data } = await axios.get(
-        `${localUrl}/clients?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
+        `${localUrl}/clients?branchCode=${branchCode}`
       );
       setClients(data.result);
     };
