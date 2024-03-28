@@ -153,7 +153,6 @@ const Dashboard = () => {
           onChange={(value: { value: string; label: string }) => {
             setBranchCode(value.value);
             setCompany(value.label);
-            handleRunReports();
           }}
           className="w-[330px] ml-3"
           name="Company"
