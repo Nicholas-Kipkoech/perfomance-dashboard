@@ -20,7 +20,7 @@ import {
 
 const Context = createContext({});
 const ContextProvider = ({ children }: any) => {
-  const localUrl = "http://192.168.0.226:5002/bima/perfomance";
+  const localUrl = "http://192.168.1.112/:5002/bima/perfomance";
   const [branchCode, setBranchCode] = useState("");
   const [fromDate, setFromDate] = useState("1-jan-2023");
   const [toDate, setToDate] = useState("31-dec-2023");

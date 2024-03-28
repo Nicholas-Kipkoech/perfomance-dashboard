@@ -20,7 +20,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `http://192.168.0.226:5002/bima/perfomance/login`,
+        `http://192.168.1.112:5002/bima/perfomance/login`,
         {
           un: username,
           pw: password,
