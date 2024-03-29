@@ -3,18 +3,25 @@ import React, { useEffect, useState } from "react";
 import CustomButton from "./reusableComponents/CustomButton";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
+import { useContextApi } from "../context/Context";
 
 const Navbar = () => {
   const [user, setUser] = useState<any>({});
+  const { logout }: any = useContextApi();
+  const router = useRouter();
+
   useEffect(() => {
-    const accessToken: any = localStorage.getItem("accessToken");
-    const decodedToken = jwtDecode(accessToken);
-    setUser(decodedToken);
+    if (typeof window !== "undefined") {
+      const accessToken: any = localStorage.getItem("accessToken");
+      if (accessToken) {
+        const decodedToken = jwtDecode(accessToken);
+        setUser(decodedToken);
+      }
+    }
   }, []);
 
-  const router = useRouter();
   const handleLogout = () => {
-    localStorage.clear();
+    logout();
     router.push("/");
   };
   return (

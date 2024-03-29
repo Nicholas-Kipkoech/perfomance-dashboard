@@ -4,13 +4,19 @@ import { useContextApi } from "../context/Context";
 import Image from "next/image";
 import iconLogo from "../assets/iconLogo.png";
 import { jwtDecode } from "jwt-decode";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const [user, setUser] = useState<any>({});
+
   useEffect(() => {
-    const accessToken: any = localStorage.getItem("accessToken");
-    const decodedToken = jwtDecode(accessToken);
-    setUser(decodedToken);
+    if (typeof window !== "undefined") {
+      const accessToken: any = localStorage.getItem("accessToken");
+      if (accessToken) {
+        const decodedToken = jwtDecode(accessToken);
+        setUser(decodedToken);
+      }
+    }
   }, []);
 
   const { setComponent, component }: any = useContextApi();

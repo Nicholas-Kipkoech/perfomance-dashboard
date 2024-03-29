@@ -20,7 +20,7 @@ import {
 
 const Context = createContext({});
 const ContextProvider = ({ children }: any) => {
-  const localUrl = "http://192.168.1.112/:5002/bima/perfomance";
+  const localUrl = "http://192.168.1.112:5002/bima/perfomance";
   const [branchCode, setBranchCode] = useState("");
   const [fromDate, setFromDate] = useState("1-jan-2023");
   const [toDate, setToDate] = useState("31-dec-2023");
@@ -47,6 +47,37 @@ const ContextProvider = ({ children }: any) => {
   const [companys, setCompanys] = useState<IBranches[]>([]);
   const [company, setCompany] = useState("INTRA");
   const [component, setComponent] = useState("Underwriting");
+
+  interface Login {
+    username: string;
+    password: string;
+  }
+
+  const login = async (username: any, password: any) => {
+    try {
+      const response = await axios.post(`${localUrl}/login`, {
+        un: username,
+        pw: password,
+      });
+      const newToken = response.data.accessToken;
+      console.log(newToken);
+      localStorage.setItem("accessToken", newToken);
+      return true;
+    } catch (error) {
+      console.error("login error", error);
+      return false;
+    }
+  };
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+  };
+
+  const isAuthenticated = () => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("accessToken");
+      return token !== null;
+    }
+  };
 
   useEffect(() => {
     const fetchBimaData = async () => {
@@ -451,6 +482,9 @@ const ContextProvider = ({ children }: any) => {
   return (
     <Context.Provider
       value={{
+        login,
+        logout,
+        isAuthenticated,
         setBranchCode,
         setFromDate,
         setToDate,

@@ -9,6 +9,7 @@ import Finance from "./finance/page";
 import { DatePicker, Spin } from "antd";
 import CustomButton from "../UI/reusableComponents/CustomButton";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
 
 const months = [
   "Jan",
@@ -34,6 +35,20 @@ export const antIcon = (
   />
 );
 const Dashboard = () => {
+  const { isAuthenticated }: any = useContextApi();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = () => {
+      if (typeof window !== "undefined") {
+        if (!isAuthenticated()) {
+          router.push("/");
+        }
+      }
+    };
+    checkAuth();
+  }, [isAuthenticated, router]);
+
   const {
     year: _year,
     setFromDate,
