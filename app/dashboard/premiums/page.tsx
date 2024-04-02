@@ -1,6 +1,7 @@
 "use client";
 import { useContextApi } from "@/app/context/Context";
 import CustomCard from "@/app/UI/reusableComponents/CustomCard";
+import Link from "next/link";
 import React from "react";
 
 const Underwriting = () => {
@@ -11,7 +12,6 @@ const Underwriting = () => {
     nonMotorUnrenewed,
     reinsurance,
     directClients,
-    allClients,
     nonMotorPremium,
     motorPremium,
     intermediaryPremium,
@@ -22,6 +22,9 @@ const Underwriting = () => {
     nonMotorUndebited,
     motorUndebited,
     commision,
+    fromDate,
+    toDate,
+    branchCode,
   }: any = useContextApi();
 
   interface IPremiumCard {
@@ -58,6 +61,9 @@ const Underwriting = () => {
       </div>
     );
   };
+
+  const undebitedLink = `http://192.168.1.112:8001/icon/reports?p_module_name=UW_UNDEBITED_DOCS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=UW.ADF&p_org_code=50&p_menu_code=UW000203&p_grp_code=UW.ADF&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=UN%20DEBITED%20DOCS&P_ORG_CODE=50&P_BRANCH=${branchCode}&P_CURRENCY=&P_USER=&P_CATEGORY=&P_INTERMEDIARY=&P_CLASS=&P_FM_DT=${fromDate}&P_TO_DT=${toDate}&P_FILTER_BY=2`;
+  const unrenewedLink = `http://192.168.1.112:8001/icon/reports?p_module_name=UW_UNRENEWED_POLICIES&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=UW.ADF&p_org_code=50&p_menu_code=UW000056&p_grp_code=UW.ADF&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=UNRENEWED%20POLICIES%20REPORT&P_ORG_CODE=50&P_BRANCH=${branchCode}&P_BRANCH_GROUP=&P_CLASS=&P_SUBCLASS=&P_CATEGORY=&P_AGENT=&P_CLIENT=&P_CATEGORY_FILTER=&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`;
 
   return (
     <div>
@@ -133,7 +139,9 @@ const Underwriting = () => {
           color={"#FC819E"}
         />
 
-        <div
+        <Link
+          href={unrenewedLink}
+          target="_blank"
           style={{ backgroundColor: "#17A2B8" }}
           className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => {}}
@@ -154,8 +162,10 @@ const Underwriting = () => {
               {"Unrenewed Policies".toUpperCase()}
             </p>
           </div>
-        </div>
-        <div
+        </Link>
+        <Link
+          href={undebitedLink}
+          target="_blank"
           style={{ backgroundColor: "#17A2B8" }}
           className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => {}}
@@ -176,7 +186,7 @@ const Underwriting = () => {
               {"Undebited Policies".toUpperCase()}
             </p>
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   );

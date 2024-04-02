@@ -43,7 +43,6 @@ export interface IClients {
 }
 export interface IUnrenewedPolicies {
   branchName: string;
-  branchCode: string;
   motorCount: number;
   nonMotorCount: number;
   motorAmount: number;

@@ -10,6 +10,7 @@ import { DatePicker, Spin } from "antd";
 import CustomButton from "../UI/reusableComponents/CustomButton";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 const months = [
   "Jan",
@@ -33,7 +34,10 @@ const Dashboard = () => {
   useEffect(() => {
     const checkAuth = () => {
       if (typeof window !== "undefined") {
-        if (!isAuthenticated()) {
+        const currentTime = Math.floor(Date.now() / 1000);
+        const accessToken: string | any = localStorage.getItem("accessToken");
+        const decodedToken: any = jwtDecode(accessToken);
+        if (!isAuthenticated() || currentTime > decodedToken.exp) {
           router.push("/");
         }
       }
