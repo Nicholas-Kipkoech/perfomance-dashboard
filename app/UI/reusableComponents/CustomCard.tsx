@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import React from "react";
 
 export interface IBimaData {
@@ -13,9 +14,17 @@ export interface IBimaData {
   total2?: number;
   color?: string;
   textColor?: string;
+  link?: string;
 }
 
-const CustomCard = ({ name, total, onClick, textColor, color }: IBimaData) => {
+const CustomCard = ({
+  name,
+  total,
+  onClick,
+  textColor,
+  color,
+  link,
+}: IBimaData) => {
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -24,7 +33,9 @@ const CustomCard = ({ name, total, onClick, textColor, color }: IBimaData) => {
   const formattedTotal = Number(total.toFixed(2)).toLocaleString();
 
   return (
-    <div
+    <Link
+      href={`${link}`}
+      target="_blank"
       style={{ backgroundColor: color }}
       className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px] shadow-md`}
       onClick={handleClick}
@@ -35,7 +46,7 @@ const CustomCard = ({ name, total, onClick, textColor, color }: IBimaData) => {
         </p>
         <p className="text-[16px] flex justify-center ">{name.toUpperCase()}</p>
       </div>
-    </div>
+    </Link>
   );
 };
 
