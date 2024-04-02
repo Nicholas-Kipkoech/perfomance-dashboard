@@ -48,7 +48,6 @@ const Dashboard = () => {
   const {
     year: _year,
     setFromDate,
-    fromDate,
     toDate: _toDate,
     setToDate,
     companys,
@@ -109,13 +108,17 @@ const Dashboard = () => {
   };
 
   const handleRunReports = () => {
-    setLoading(true);
-    const id = setTimeout(() => {
-      setLoading(false); // After 2 seconds, set loading to false
-    }, 3000);
-    setTimeoutId(id); // Store the timeout ID
-    setFromDate(fmDate);
-    setToDate(toDate);
+    if (checkDate === true) {
+      alert("Please select from date and to date");
+    } else {
+      setLoading(true);
+      const id = setTimeout(() => {
+        setLoading(false); // After 2 seconds, set loading to false
+      }, 5000);
+      setTimeoutId(id); // Store the timeout ID
+      setFromDate(fmDate);
+      setToDate(toDate);
+    }
   };
 
   useEffect(() => {
@@ -127,33 +130,7 @@ const Dashboard = () => {
     };
   }, [timeoutId]);
 
-  useEffect(() => {
-    const today = new Date();
-
-    // Get the current month and year
-    const currentMonth = today.getMonth() + 1; // Month starts from 0
-    const currentYear = today.getFullYear();
-
-    // Create a new Date object for the first day of the next month
-    const nextMonthFirstDay = new Date(currentYear, currentMonth, 1);
-
-    // Subtract one day from the first day of the next month to get the last day of the current month
-    const lastDayOfMonth = new Date(nextMonthFirstDay.getTime() - 1);
-
-    // Get the last day of the month
-    const lastDay = lastDayOfMonth.getDate();
-
-    // Format the date to include day, month, and year
-    const formattedDate = `${lastDay}-${String(currentMonth).padStart(
-      2,
-      "0"
-    )}-${currentYear}`;
-    const formattedToday = `${today.getDate()}-${String(
-      today.getMonth() + 1
-    ).padStart(2, "0")}-${today.getFullYear()}`;
-    setToday(formattedToday);
-    setLastDayOfMonth(formattedDate);
-  }, []);
+  const checkDate = fmDate.split("-").join("") === "undefinedundefined";
 
   return (
     <div className="mt-[20px] ml-4">

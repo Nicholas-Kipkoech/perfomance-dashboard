@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Urbanist } from "next/font/google";
 import "./globals.css";
 import ContextProvider from "./context/Context";
 
 const inter = Inter({ subsets: ["latin"] });
+const urbanist = Urbanist({
+  subsets: ["latin"],
+  style: ["normal"],
+});
 
 export const metadata: Metadata = {
   title: "ICON PERFOMANCE",
@@ -17,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={urbanist.className}>
         <ContextProvider>{children}</ContextProvider>
       </body>
     </html>

@@ -45,7 +45,7 @@ const Login = () => {
           placeholder="Enter username"
           onChange={(e) => setUsername(e.target.value)}
           value={username}
-          className={"h-[50px] p-[8px] rounded-md border w-[400px]"}
+          className={"h-[45px] p-[8px] rounded-md border w-[400px]"}
         />
         <CustomInput
           type={showPassword ? "text" : "password"}
@@ -54,7 +54,7 @@ const Login = () => {
           placeholder="Enter password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
-          className={"h-[50px] p-[8px] rounded-md border w-[400px]"}
+          className={"h-[45px] p-[8px] rounded-md border w-[400px]"}
         />
 
         <div className="flex gap-1">
@@ -70,7 +70,7 @@ const Login = () => {
         <CustomButton
           name={loading ? "Logging in..." : "Login"}
           className={
-            "h-[50px] w-[400px] mt-[10px] rounded-md text-white text-[16px] border bg-[#cb7529]"
+            "h-[45px] w-[400px] mt-[10px] rounded-md text-white text-[16px] border bg-[#cb7529]"
           }
           onClick={handleLogin}
           disabled={loading}
