@@ -12,6 +12,7 @@ const Underwriting = () => {
     nonMotorUnrenewed,
     reinsurance,
     directClients,
+    allClients,
     nonMotorPremium,
     motorPremium,
     intermediaryPremium,
@@ -129,19 +130,25 @@ const Underwriting = () => {
           currency
         />
         <CustomCard
-          name={"Number of direct clients"}
+          name={"Total number of all clients"}
+          total={allClients}
+          color={"#FC819E"}
+          link=""
+        />
+        <CustomCard
+          name={"Total number of direct clients"}
           total={directClients}
           color={"#FC819E"}
           link=""
         />
         <CustomCard
-          name={"Number of brokers"}
+          name={"Total number of brokers"}
           total={broker}
           link=""
           color={"#FC819E"}
         />
         <CustomCard
-          name={"Number of agents"}
+          name={"Total number of agents"}
           total={agents}
           color={"#FC819E"}
           link=""

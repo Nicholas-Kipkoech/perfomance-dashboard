@@ -262,7 +262,8 @@ const ContextProvider = ({ children }: any) => {
         nonMotorPremium += total;
       }
 
-      let totalClients = data.clientsCount;
+      const totalClients = data.clientsCount;
+
       if (data.clientCode === "15") {
         directClients += totalClients;
       }
