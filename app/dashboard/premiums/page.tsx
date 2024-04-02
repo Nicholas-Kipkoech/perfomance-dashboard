@@ -195,6 +195,28 @@ const Underwriting = () => {
             </p>
           </div>
         </Link>
+        <Link
+          href={""}
+          target="_blank"
+          style={{ backgroundColor: "#17A2B8" }}
+          className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+          onClick={() => {}}
+        >
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between">
+              <p>{"Budget".toUpperCase()}</p>
+              <p>{"Actual".toUpperCase()}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold"> {(1282600).toLocaleString()}</p>
+              <p className="font-bold">{totalPremium.toLocaleString()}</p>
+            </div>
+            <div className="flex justify-between">
+              <p className="font-bold">10%</p>
+              <p className="font-bold">90%</p>
+            </div>
+          </div>
+        </Link>
       </div>
     </div>
   );
