@@ -72,15 +72,18 @@ const Underwriting = () => {
           name={"Total  Premium"}
           total={totalPremium}
           currency
+          link=""
           color={"#6ea4bf"}
         />
         <CustomCard
+          link=""
           name={"Direct Premium"}
           total={directPremium}
           currency
           color={"#6ea4bf"}
         />
         <CustomCard
+          link=""
           name={"Intermediary Premium"}
           total={intermediaryPremium}
           currency
@@ -91,6 +94,7 @@ const Underwriting = () => {
           total={reinsurance}
           currency
           color={"#FC9e4f"}
+          link=""
         />
 
         <CustomPremiumCard
@@ -119,6 +123,7 @@ const Underwriting = () => {
         />
         <CustomCard
           name={"Commision"}
+          link=""
           total={commision}
           color={"#FFDD95"}
           currency
@@ -127,16 +132,19 @@ const Underwriting = () => {
           name={"Number of direct clients"}
           total={directClients}
           color={"#FC819E"}
+          link=""
         />
         <CustomCard
           name={"Number of brokers"}
           total={broker}
+          link=""
           color={"#FC819E"}
         />
         <CustomCard
           name={"Number of agents"}
           total={agents}
           color={"#FC819E"}
+          link=""
         />
 
         <Link

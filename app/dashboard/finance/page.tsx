@@ -56,6 +56,7 @@ const Finance = () => {
         <CustomCard
           name={"Bank Balances"}
           totalNumber={0}
+          link=""
           currency
           total={0}
           color={"#B4B4B3"}
