@@ -84,7 +84,7 @@ const Underwriting = () => {
           name={"Reinsurance"}
           total={reinsurance}
           currency
-          color={"#6ea4bf"}
+          color={"#FC9e4f"}
         />
 
         <CustomPremiumCard
@@ -103,13 +103,13 @@ const Underwriting = () => {
           name={"Motor Premium"}
           total={motorPremium}
           cummulativeTotal={totalPremium}
-          color={"#FC9e4f"}
+          color={"#FFDD95"}
         />
         <CustomPremiumCard
           name={"Non Motor Premium"}
           total={nonMotorPremium}
           cummulativeTotal={totalPremium}
-          color={"#FC9e4f"}
+          color={"#FFDD95"}
         />
         <CustomCard
           name={"Commision"}
@@ -120,17 +120,17 @@ const Underwriting = () => {
         <CustomCard
           name={"Number of direct clients"}
           total={directClients}
-          color={"#FFDD95"}
+          color={"#FC819E"}
         />
         <CustomCard
           name={"Number of brokers"}
           total={broker}
-          color={"#FFDD95"}
+          color={"#FC819E"}
         />
         <CustomCard
           name={"Number of agents"}
           total={agents}
-          color={"#FFDD95"}
+          color={"#FC819E"}
         />
 
         <div

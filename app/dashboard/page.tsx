@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, JSX } from "react";
 import { useContextApi } from "../context/Context";
 import CustomSelect from "../UI/reusableComponents/CustomSelect";
 import { IBranches } from "../assets/interfaces";
@@ -25,7 +25,7 @@ const months = [
   "Nov",
   "Dec",
 ];
-export const antIcon = (
+export const antIcon: any = (
   <LoadingOutlined
     style={{
       fontSize: 60,

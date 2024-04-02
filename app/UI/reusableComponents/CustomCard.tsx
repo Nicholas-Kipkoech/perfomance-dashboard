@@ -15,18 +15,7 @@ export interface IBimaData {
   textColor?: string;
 }
 
-const CustomCard = ({
-  name,
-  total,
-  total2,
-  onClick,
-  currency,
-  totalNumber,
-  title1,
-  title2,
-  textColor,
-  color,
-}: IBimaData) => {
+const CustomCard = ({ name, total, onClick, textColor, color }: IBimaData) => {
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -37,7 +26,7 @@ const CustomCard = ({
   return (
     <div
       style={{ backgroundColor: color }}
-      className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+      className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px] shadow-md`}
       onClick={handleClick}
     >
       <div className="flex flex-col gap-2" style={{ color: textColor }}>
