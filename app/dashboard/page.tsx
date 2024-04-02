@@ -25,15 +25,7 @@ const months = [
   "Nov",
   "Dec",
 ];
-export const antIcon: any = (
-  <LoadingOutlined
-    style={{
-      fontSize: 60,
-      color: "#cb7229",
-    }}
-    spin
-  />
-);
+
 const Dashboard = () => {
   const { isAuthenticated }: any = useContextApi();
   const router = useRouter();
@@ -202,7 +194,17 @@ const Dashboard = () => {
       {loading ? (
         <div className="flex items-center justify-center h-screen">
           <div className="flex flex-col gap-2">
-            <Spin indicator={antIcon} />{" "}
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{
+                    fontSize: 60,
+                    color: "#cb7229",
+                  }}
+                  spin
+                />
+              }
+            />{" "}
             <p className="text-[#cb7229]">Fetching data.....</p>
           </div>
         </div>
