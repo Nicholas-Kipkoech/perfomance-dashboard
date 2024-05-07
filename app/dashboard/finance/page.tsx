@@ -17,7 +17,7 @@ const Finance = () => {
         href={`${link}`}
         target="_blank"
         style={{ backgroundColor: color }}
-        className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[10px]`}
+        className={`h-[180px] w-[330px] border cursor-pointer  rounded-md p-[10px]`}
         onClick={() => {}}
       >
         <div className="flex gap-1 flex-col text-[14px] ">

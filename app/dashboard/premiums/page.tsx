@@ -44,7 +44,7 @@ const Underwriting = () => {
     return (
       <div
         style={{ backgroundColor: color }}
-        className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+        className={`md:h-[180px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
       >
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
@@ -158,7 +158,7 @@ const Underwriting = () => {
           href={unrenewedLink}
           target="_blank"
           style={{ backgroundColor: "#17A2B8" }}
-          className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+          className={`md:h-[180px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => {}}
         >
           <div className="flex flex-col gap-1">
@@ -182,7 +182,7 @@ const Underwriting = () => {
           href={undebitedLink}
           target="_blank"
           style={{ backgroundColor: "#17A2B8" }}
-          className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+          className={`md:h-[180px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => {}}
         >
           <div className="flex flex-col gap-1">
@@ -206,7 +206,7 @@ const Underwriting = () => {
           href={""}
           target="_blank"
           style={{ backgroundColor: "#17A2B8" }}
-          className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+          className={`md:h-[180px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => {}}
         >
           <div className="flex flex-col gap-1">

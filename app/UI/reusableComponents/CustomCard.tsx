@@ -37,7 +37,7 @@ const CustomCard = ({
       href={`${link}`}
       target="_blank"
       style={{ backgroundColor: color }}
-      className={`h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px] shadow-md`}
+      className={`md:h-[180px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px] shadow-md`}
       onClick={handleClick}
     >
       <div className="flex flex-col gap-2" style={{ color: textColor }}>

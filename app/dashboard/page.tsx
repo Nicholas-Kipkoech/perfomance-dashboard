@@ -133,8 +133,8 @@ const Dashboard = () => {
   const checkDate = fmDate.split("-").join("") === "undefinedundefined";
 
   return (
-    <div className="mt-[20px] ml-4">
-      <div className="top-0 sticky z-0 flex gap-2 items-center">
+    <div className="mt-[20px] ml-4 flex flex-col justify-center">
+      <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
         <CustomSelect
           defaultValue={{ label: "Entire Company", value: "" }}
           options={formattedCompanys}
@@ -150,7 +150,9 @@ const Dashboard = () => {
           <DatePicker
             format={"DD-MM-YYYY"}
             placeholder={"DD-MM-YYYY"}
-            className={"w-[250px] h-[40px] border p-2 rounded-md"}
+            className={
+              "md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md"
+            }
             onChange={handleFromDate}
           />
         </div>
@@ -159,7 +161,9 @@ const Dashboard = () => {
           <DatePicker
             format={"DD-MM-YYYY"}
             placeholder={"DD-MM-YYYY"}
-            className={"w-[250px] h-[40px] border p-2 rounded-md"}
+            className={
+              "md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md"
+            }
             onChange={handleToDate}
           />
         </div>
@@ -167,31 +171,33 @@ const Dashboard = () => {
           name={loading ? "Running..." : "Run"}
           disabled={loading}
           className={
-            "bg-[#cb7229] text-white h-[40px] w-[152px] flex justify-center items-center mt-8 rounded-md"
+            "bg-[#cb7229] text-white h-[40px] md:w-[152px] sm:w-[20rem] flex justify-center items-center mt-8 rounded-md"
           }
           onClick={handleRunReports}
         />
       </div>
-      {loading ? (
-        <div className="flex items-center justify-center h-screen">
-          <div className="flex flex-col gap-2">
-            <Spin
-              indicator={
-                <LoadingOutlined
-                  style={{
-                    fontSize: 60,
-                    color: "#cb7229",
-                  }}
-                  spin
-                />
-              }
-            />{" "}
-            <p className="text-[#cb7229]">Fetching data.....</p>
+      <div className="flex justify-center">
+        {loading ? (
+          <div className="flex items-center justify-center h-screen">
+            <div className="flex flex-col gap-2">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 60,
+                      color: "#cb7229",
+                    }}
+                    spin
+                  />
+                }
+              />{" "}
+              <p className="text-[#cb7229]">Fetching data.....</p>
+            </div>
           </div>
-        </div>
-      ) : (
-        renderComponent()
-      )}
+        ) : (
+          renderComponent()
+        )}
+      </div>
     </div>
   );
 };
