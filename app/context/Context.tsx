@@ -509,6 +509,7 @@ const ContextProvider = ({ children }: any) => {
         productionData,
         unrenewedPolicies,
         undebitedPolicies,
+        registeredClaims,
       }}
     >
       {children}
