@@ -5,7 +5,7 @@ import CustomButton from "../reusableComponents/CustomButton";
 import Image from "next/image";
 import iconLogo from "../../assets/iconLogo.png";
 import { useRouter } from "next/navigation";
-import { useContextApi } from "@/app/context/Context";
+import axios from "axios";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -15,17 +15,23 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
-  const { login }: any = useContextApi();
-
   const handleLogin = async () => {
     setLoading(true);
-    const success = await login(username, password);
-    if (!success) {
-      setError("Invalid username or password");
-      setLoading(false);
-    } else {
+    try {
+      const response = await axios.post(
+        `http://localhost:5002/bima/perfomance/login`,
+        {
+          un: username,
+          pw: password,
+        }
+      );
+      const newToken = response.data.accessToken;
+      console.log(newToken);
+      localStorage.setItem("accessToken", newToken);
       router.push("/dashboard");
-      setLoading(false);
+    } catch (error) {
+      console.error("login error", error);
+      return false;
     }
   };
   return (

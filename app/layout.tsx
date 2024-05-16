@@ -21,9 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={urbanist.className}>
-        <ContextProvider>{children}</ContextProvider>
-      </body>
+      <body className={urbanist.className}>{children}</body>
     </html>
   );
 }

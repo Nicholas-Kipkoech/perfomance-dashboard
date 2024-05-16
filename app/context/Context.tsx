@@ -200,26 +200,6 @@ const ContextProvider = ({ children }: any) => {
     let motorPremium = 0;
     let directPremium = 0;
     let intermediaryPremium = 0;
-    bimaData.forEach((data) => {
-      let total = 0;
-      if (data.renewalCode === "000") {
-        total =
-          data.additional +
-          data.facin +
-          data.refund +
-          data.renewals +
-          data.newPolicies;
-        intermediaryPremium += total;
-      } else if (data.clientCode === "15") {
-        total =
-          data.additional +
-          data.facin +
-          data.refund +
-          data.renewals +
-          data.newPolicies;
-        directPremium += total;
-      }
-    });
 
     bimaData.forEach((data) => {
       let total = 0;
@@ -525,6 +505,7 @@ const ContextProvider = ({ children }: any) => {
         totalSalvages,
         totalRecovery,
         receiptResults,
+        bimaData,
       }}
     >
       {children}

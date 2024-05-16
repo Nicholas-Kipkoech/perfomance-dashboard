@@ -44,7 +44,7 @@ const Underwriting = () => {
     return (
       <div
         style={{ backgroundColor: color }}
-        className={`md:h-[180px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+        className={`md:h-[130px] sm:h-[130px] w-[330px] border cursor-pointer shadow-2xl  rounded-md p-[20px]`}
       >
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
@@ -73,92 +73,65 @@ const Underwriting = () => {
           name={"Total  Premium"}
           total={totalPremium}
           currency
-          link=""
-          color={"#6ea4bf"}
+          link={"/dashboard/premiums/totalPremiums"}
         />
         <CustomCard
-          link=""
+          link={"/dashboard/premiums/directPremiums"}
           name={"Direct Premium"}
           total={directPremium}
           currency
-          color={"#6ea4bf"}
         />
         <CustomCard
-          link=""
+          link={"/dashboard/premiums/intermediaryPremiums"}
           name={"Intermediary Premium"}
           total={intermediaryPremium}
           currency
-          color={"#6ea4bf"}
         />
         <CustomCard
           name={"Reinsurance"}
           total={reinsurance}
           currency
-          color={"#FC9e4f"}
-          link=""
+          link={"/dashboard/premiums/reinsurance"}
         />
 
         <CustomPremiumCard
           name={"New Business"}
           total={totalNewBusiness}
           cummulativeTotal={totalPremium}
-          color={"#FC9e4f"}
         />
         <CustomPremiumCard
           name={"Renewals"}
           total={totalRenewals}
           cummulativeTotal={totalPremium}
-          color={"#FC9e4f"}
         />
         <CustomPremiumCard
           name={"Motor Premium"}
           total={motorPremium}
           cummulativeTotal={totalPremium}
-          color={"#FFDD95"}
         />
         <CustomPremiumCard
           name={"Non Motor Premium"}
           total={nonMotorPremium}
           cummulativeTotal={totalPremium}
-          color={"#FFDD95"}
         />
-        <CustomCard
-          name={"Commision"}
-          link=""
-          total={commision}
-          color={"#FFDD95"}
-          currency
-        />
+        <CustomCard name={"Commision"} link="" total={commision} currency />
         <CustomCard
           name={"Total number of all clients"}
           total={allClients}
-          color={"#FC819E"}
           link=""
         />
         <CustomCard
           name={"Total number of direct clients"}
           total={directClients}
-          color={"#FC819E"}
           link=""
         />
-        <CustomCard
-          name={"Total number of brokers"}
-          total={broker}
-          link=""
-          color={"#FC819E"}
-        />
-        <CustomCard
-          name={"Total number of agents"}
-          total={agents}
-          color={"#FC819E"}
-          link=""
-        />
+        <CustomCard name={"Total number of brokers"} total={broker} link="" />
+        <CustomCard name={"Total number of agents"} total={agents} link="" />
 
         <Link
           href={unrenewedLink}
           target="_blank"
-          style={{ backgroundColor: "#17A2B8" }}
-          className={`md:h-[180px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+          className={`md:h-[130px] sm:h-[130px] w-[330px] border cursor-pointer shadow-2xl rounded-md p-[20px]`}
           onClick={() => {}}
         >
           <div className="flex flex-col gap-1">
@@ -181,8 +154,7 @@ const Underwriting = () => {
         <Link
           href={undebitedLink}
           target="_blank"
-          style={{ backgroundColor: "#17A2B8" }}
-          className={`md:h-[180px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+          className={`md:h-[130px] sm:h-[130px] w-[330px] border cursor-pointer shadow-2xl  rounded-md p-[20px]`}
           onClick={() => {}}
         >
           <div className="flex flex-col gap-1">
@@ -205,8 +177,7 @@ const Underwriting = () => {
         <Link
           href={""}
           target="_blank"
-          style={{ backgroundColor: "#17A2B8" }}
-          className={`md:h-[180px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
+          className={`md:h-[130px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px] shadow-2xl bg-wh`}
           onClick={() => {}}
         >
           <div className="flex flex-col gap-1">
