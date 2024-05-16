@@ -506,6 +506,7 @@ const ContextProvider = ({ children }: any) => {
         totalRecovery,
         receiptResults,
         bimaData,
+        productionData,
       }}
     >
       {children}

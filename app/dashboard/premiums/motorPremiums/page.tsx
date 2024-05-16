@@ -5,9 +5,12 @@ import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const TotalPremiums = () => {
+const MotorPremiums = () => {
   const { bimaData }: any = useContextApi();
-  console.log(bimaData);
+
+  const filteredMotorPremiums = bimaData.filter(
+    (data: any) => data.motorCode === "070" || data.clientCode === "080"
+  );
 
   const columns = [
     {
@@ -74,7 +77,7 @@ const TotalPremiums = () => {
           className=" bg-[#cb7729]  h-[30px] rounded-md w-[100px]"
           onClick={() => router.back()}
         />
-        <p className="text-[1.6rem] font-bold">Total Premiums Data Table</p>
+        <p className="text-[1.6rem] font-bold">Motor Premiums Data Table</p>
         <p></p>
       </div>
       <ConfigProvider
@@ -89,10 +92,10 @@ const TotalPremiums = () => {
           },
         }}
       >
-        <Table columns={columns} dataSource={bimaData} />
+        <Table columns={columns} dataSource={filteredMotorPremiums} />
       </ConfigProvider>
     </div>
   );
 };
 
-export default TotalPremiums;
+export default MotorPremiums;

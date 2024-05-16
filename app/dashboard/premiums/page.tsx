@@ -33,6 +33,7 @@ const Underwriting = () => {
     cummulativeTotal: number;
     total: number;
     color?: string;
+    link?: string;
   }
 
   const CustomPremiumCard = ({
@@ -40,9 +41,11 @@ const Underwriting = () => {
     cummulativeTotal,
     total,
     color,
+    link,
   }: IPremiumCard) => {
     return (
-      <div
+      <Link
+        href={`${link}`}
         style={{ backgroundColor: color }}
         className={`md:h-[130px] sm:h-[130px] w-[330px] border cursor-pointer shadow-2xl  rounded-md p-[20px]`}
       >
@@ -59,7 +62,7 @@ const Underwriting = () => {
             {name.toUpperCase()}
           </p>
         </div>
-      </div>
+      </Link>
     );
   };
 
@@ -95,22 +98,26 @@ const Underwriting = () => {
         />
 
         <CustomPremiumCard
+          link={"/dashboard/premiums/newBusiness"}
           name={"New Business"}
           total={totalNewBusiness}
           cummulativeTotal={totalPremium}
         />
         <CustomPremiumCard
           name={"Renewals"}
+          link={"/dashboard/premiums/renewals"}
           total={totalRenewals}
           cummulativeTotal={totalPremium}
         />
         <CustomPremiumCard
           name={"Motor Premium"}
+          link={"/dashboard/premiums/motorPremiums"}
           total={motorPremium}
           cummulativeTotal={totalPremium}
         />
         <CustomPremiumCard
           name={"Non Motor Premium"}
+          link={"/dashboard/premiums/nonMotorPremiums"}
           total={nonMotorPremium}
           cummulativeTotal={totalPremium}
         />

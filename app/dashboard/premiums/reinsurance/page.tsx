@@ -77,7 +77,9 @@ const Reinsurance = () => {
           className=" bg-[#cb7729]  h-[30px] rounded-md w-[100px]"
           onClick={() => router.back()}
         />
-        <p>Total Premiums Data Table</p>
+        <p className="text-[1.6rem] font-bold">
+          Reinsurance Premiums Data Table
+        </p>
         <p></p>
       </div>
       <ConfigProvider
