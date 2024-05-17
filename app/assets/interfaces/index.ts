@@ -12,19 +12,12 @@ export interface IBimaData {
   motorCode: string;
   renewalCode: string;
 }
-export interface IClaimsData {
-  totalNumber: number;
-  amountPaid: number;
-}
+
 export interface IRegisteredClaims {
   branchCode: string;
   totalProvision: number;
 }
-export interface IOutstandingClaims {
-  org_code: string;
-  count: number;
-  totalAmount: number;
-}
+
 export interface IProduction {
   org_code: string;
   branchCode: string;

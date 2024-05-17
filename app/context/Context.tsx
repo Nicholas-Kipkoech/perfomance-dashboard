@@ -6,9 +6,7 @@ import { createContext } from "react";
 import {
   IBimaData,
   IBranches,
-  IClaimsData,
   IClients,
-  IOutstandingClaims,
   IProduction,
   IReceipts,
   IRecovery,
@@ -26,13 +24,11 @@ const ContextProvider = ({ children }: any) => {
   const [toDate, setToDate] = useState("31-dec-2023");
   const [years, setYears] = useState([]);
   const [bimaData, setBimaData] = useState<IBimaData[]>([]);
-  const [claimsData, setClaimsData] = useState<IClaimsData[]>([]);
+  const [claimsData, setClaimsData] = useState([]);
   const [registeredClaims, setRegisteredClaims] = useState<IRegisteredClaims[]>(
     []
   );
-  const [outstandingClaims, setOutstandingClaims] = useState<
-    IOutstandingClaims[]
-  >([]);
+  const [outstandingClaims, setOutstandingClaims] = useState([]);
   const [productionData, setProductionData] = useState<IProduction[]>([]);
   const [clients, setClients] = useState<IClients[]>([]);
   const [unrenewedPolicies, setUnrenewedPolicies] = useState<
@@ -41,7 +37,7 @@ const ContextProvider = ({ children }: any) => {
   const [undebitedPolicies, setUndebitedPolicies] = useState<
     IUndebitedPolicies[]
   >([]);
-  const [salvages, setSalvages] = useState<ISalvages[]>([]);
+  const [salvages, setSalvages] = useState([]);
   const [recovery, setRecovery] = useState<IRecovery[]>([]);
   const [receipts, setReceipts] = useState<IReceipts[]>([]);
   const [companys, setCompanys] = useState<IBranches[]>([]);
@@ -299,19 +295,15 @@ const ContextProvider = ({ children }: any) => {
     directPremium,
   } = calculatePremiums(bimaData);
 
-  const calculateClaimsData = (claimsData: IClaimsData[]) => {
+  const calculateClaimsData = (claimsData: any) => {
     const totalClaimPaid = claimsData.reduce(
-      (total: number, claims) => total + claims.amountPaid,
-      0
-    );
-    const totalClaims = claimsData.reduce(
-      (total: number, claims) => total + claims.totalNumber,
+      (total: number, claims: any) => total + claims.paidAmount,
       0
     );
 
-    return { totalClaimPaid, totalClaims };
+    return { totalClaimPaid };
   };
-  const { totalClaimPaid, totalClaims } = calculateClaimsData(claimsData);
+  const { totalClaimPaid } = calculateClaimsData(claimsData);
 
   const calculateProductionData = (productionData: IProduction[]) => {
     const totalRenewals = productionData.reduce(
@@ -363,20 +355,14 @@ const ContextProvider = ({ children }: any) => {
 
   const { broker, agents, allClients } = calculateClientsData(clients);
 
-  const calculateOutstandingClaims = (
-    outstandingClaims: IOutstandingClaims[]
-  ) => {
+  const calculateOutstandingClaims = (outstandingClaims: any) => {
     const totalOutstanding = outstandingClaims.reduce(
-      (total: number, outstanding) => total + outstanding.totalAmount,
+      (total: number, outstanding: any) => total + outstanding.totalProvision,
       0
     );
-    const totalCount = outstandingClaims.reduce(
-      (total: number, outstanding) => total + outstanding.count,
-      0
-    );
+
     return {
       totalOutstanding,
-      totalCount,
     };
   };
   const calculateUnrenewedPolicies = (
@@ -412,9 +398,9 @@ const ContextProvider = ({ children }: any) => {
     return { nonMotorUndebited, motorUndebited };
   };
 
-  const calculateSalvages = (salvages: ISalvages[]) => {
+  const calculateSalvages = (salvages: any) => {
     const totalSalvages = salvages.reduce(
-      (total: number, salvage) => total + salvage.receiptAmount,
+      (total: number, salvage: any) => total + salvage.receiptAmount,
       0
     );
     return { totalSalvages };
@@ -455,8 +441,7 @@ const ContextProvider = ({ children }: any) => {
   const { nonMotorUndebited, motorUndebited } =
     calculateUndebitedPolicies(undebitedPolicies);
 
-  const { totalOutstanding, totalCount } =
-    calculateOutstandingClaims(outstandingClaims);
+  const { totalOutstanding } = calculateOutstandingClaims(outstandingClaims);
   const { nonMotorUnrenewed, motorRenewed } =
     calculateUnrenewedPolicies(unrenewedPolicies);
 
@@ -477,7 +462,7 @@ const ContextProvider = ({ children }: any) => {
         totalRenewals,
         reinsurance,
         totalClaimPaid,
-        totalClaims,
+        claimsData,
         additionalPremium,
         refundPremium,
         commision,
@@ -497,7 +482,6 @@ const ContextProvider = ({ children }: any) => {
         setComponent,
         totalRegisteredClaims,
         totalOutstanding,
-        totalCount,
         nonMotorUnrenewed,
         motorRenewed,
         nonMotorUndebited,
@@ -510,6 +494,9 @@ const ContextProvider = ({ children }: any) => {
         unrenewedPolicies,
         undebitedPolicies,
         registeredClaims,
+        outstandingClaims,
+        salvages,
+        recovery,
       }}
     >
       {children}
