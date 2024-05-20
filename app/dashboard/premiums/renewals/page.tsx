@@ -4,6 +4,7 @@ import CustomButton from "@/app/UI/reusableComponents/CustomButton";
 import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
+import CsvDownload from "react-csv-downloader";
 
 const Renewals = () => {
   const { productionData }: any = useContextApi();
@@ -39,6 +40,22 @@ const Renewals = () => {
       ),
     },
   ];
+
+  const formattedColumns = columns.map((column) => {
+    return {
+      id: column.dataIndex,
+      displayName: column.title,
+    };
+  });
+
+  const formattedData = productionData.map((data: any) => {
+    return {
+      branchName: data.branchName,
+      newBusiness: data.newBusiness,
+      renewals: data.renewals,
+      totals: data.renewals + data.newBusiness,
+    };
+  });
   const router = useRouter();
   return (
     <div className="mx-2 my-2">
@@ -49,7 +66,16 @@ const Renewals = () => {
           onClick={() => router.back()}
         />
         <p className="text-[1.6rem] font-bold">Renewals Data Table</p>
-        <p></p>
+        <CsvDownload
+          text=""
+          datas={formattedData}
+          columns={formattedColumns}
+          filename={`Premium Register data ${new Date(
+            Date.now()
+          ).toLocaleDateString()}`}
+          extension=".csv"
+          className="bg-[#cb7529] h-[2.3rem]  rounded-sm text-white border w-[8rem] p-2 flex justify-center items-center"
+        />
       </div>
       <ConfigProvider
         theme={{

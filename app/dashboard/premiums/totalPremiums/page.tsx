@@ -6,10 +6,10 @@ import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { calculatePercentage } from "../nonMotorPremiums/page";
+import CsvDownload from "react-csv-downloader";
 
 const TotalPremiums = () => {
   const { bimaData }: any = useContextApi();
-  console.log(bimaData);
 
   const columns = [
     {
@@ -34,124 +34,141 @@ const TotalPremiums = () => {
     },
     {
       title: "Issue Date",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "issueDate",
+      key: "issueDate",
       render: (_: any, item: any) => <p> {formatDate(item.issueDate)}</p>,
     },
     {
       title: "Start Date",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "start",
+      key: "start",
       render: (_: any, item: any) => <p> {formatDate(item.start)}</p>,
     },
     {
       title: "Expiry Date",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "expiry",
+      key: "expiry",
       render: (_: any, item: any) => <p> {formatDate(item.expiry)}</p>,
     },
     {
       title: "Premiums",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "premiums",
+      key: "premiums",
       render: (_: any, item: any) => (
         <p>KSH {item.premiums?.toLocaleString()}</p>
       ),
     },
     {
       title: "EarthQuake",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "earthQuake",
+      key: "earthQuake",
       render: (_: any, item: any) => (
         <p>KSH {item.earthQuake?.toLocaleString()}</p>
       ),
     },
     {
       title: "PVT Premium",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "PVTPremium",
+      key: "PVTPremium",
       render: (_: any, item: any) => (
         <p>KSH {item.PVTPremium.toLocaleString()}</p>
       ),
     },
     {
       title: "Stamp Duty",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "stampDuty",
+      key: "stampDuty",
       render: (_: any, item: any) => (
         <p>KSH {item.stampDuty.toLocaleString()}</p>
       ),
     },
     {
       title: "PHC Fund",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "PHCFund",
+      key: "PHCFund",
       render: (_: any, item: any) => <p>KSH {item.PHCFund.toLocaleString()}</p>,
     },
     {
       title: "Training Levt",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "trainingLevy",
+      key: "trainingLevy",
       render: (_: any, item: any) => (
         <p>KSH {item.trainingLevy.toLocaleString()}</p>
       ),
     },
     {
       title: "PTA Charge",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "PTACharge",
+      key: "PTACharge",
       render: (_: any, item: any) => (
         <p>KSH {item.PTACharge.toLocaleString()}</p>
       ),
     },
     {
       title: "AA Charge",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "AACharge",
+      key: "AACharge",
       render: (_: any, item: any) => (
         <p>KSH {item.AACharge.toLocaleString()}</p>
       ),
     },
     {
       title: "Broker Comm",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "brokerComm",
+      key: "brokerComm",
       render: (_: any, item: any) => (
         <p>KSH {item.brokerComm.toLocaleString()}</p>
       ),
     },
     {
       title: "Withholding Tax",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "witholdingTax",
+      key: "witholdingTax",
       render: (_: any, item: any) => (
         <p>KSH {item.witholdingTax.toLocaleString()}</p>
       ),
     },
     {
       title: "Rate",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "rate",
+      key: "rate",
       render: (_: any, item: any) => <p> {calculatePercentage(item)}%</p>,
     },
     {
       title: "Net Premium",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "netPrem",
+      key: "netPrem",
       render: (_: any, item: any) => <p>KSH {item.netPrem.toLocaleString()}</p>,
     },
   ];
+
+  const formattedColumns = columns.map((column) => {
+    return {
+      id: column.dataIndex,
+      displayName: column.title,
+    };
+  });
+
   const router = useRouter();
   return (
     <div className="mx-2 my-2">
       <div className="flex justify-between my-2">
         <CustomButton
-          name={"back"}
-          className=" bg-[#cb7729]  h-[30px] rounded-md w-[100px]"
+          name={"Back"}
+          className=" bg-[#cb7729]  h-[30px] text-white rounded-md w-[100px]"
           onClick={() => router.back()}
         />
         <p className="text-[1.6rem] font-bold">Total Premiums Data Table</p>
-        <p></p>
+        <CsvDownload
+          text=""
+          datas={bimaData}
+          columns={formattedColumns}
+          filename={`Premium Register data ${new Date(
+            Date.now()
+          ).toLocaleDateString()}`}
+          extension=".csv"
+          className="bg-[#cb7529] h-[2.3rem]  rounded-sm text-white border w-[8rem] p-2 flex justify-center items-center"
+        />
       </div>
       <ConfigProvider
         theme={{

@@ -4,6 +4,7 @@ import CustomButton from "@/app/UI/reusableComponents/CustomButton";
 import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
+import CsvDownload from "react-csv-downloader";
 
 const NewBusiness = () => {
   const { productionData }: any = useContextApi();
@@ -16,29 +17,45 @@ const NewBusiness = () => {
     },
     {
       title: "New Business",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "newBusiness",
+      key: "newBusiness",
       render: (_: any, item: any) => (
         <p>KSH {item.newBusiness.toLocaleString()}</p>
       ),
     },
     {
       title: "Renewals",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "renewals",
+      key: "renewals",
       render: (_: any, item: any) => (
         <p>KSH {item.renewals.toLocaleString()}</p>
       ),
     },
     {
       title: "Totals",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "totals",
+      key: "totals",
       render: (_: any, item: any) => (
         <p>KSH {(item.renewals + item.newBusiness).toLocaleString()}</p>
       ),
     },
   ];
+  const formattedColumns = columns.map((column) => {
+    return {
+      id: column.dataIndex,
+      displayName: column.title,
+    };
+  });
+
+  const formattedData = productionData.map((data: any) => {
+    return {
+      branchName: data.branchName,
+      newBusiness: data.newBusiness,
+      renewals: data.renewals,
+      totals: data.renewals + data.newBusiness,
+    };
+  });
+
   const router = useRouter();
   return (
     <div className="mx-2 my-2">
@@ -49,7 +66,16 @@ const NewBusiness = () => {
           onClick={() => router.back()}
         />
         <p className="text-[1.6rem] font-bold">New Business Data Table</p>
-        <p></p>
+        <CsvDownload
+          text=""
+          datas={formattedData}
+          columns={formattedColumns}
+          filename={`Premium Register data ${new Date(
+            Date.now()
+          ).toLocaleDateString()}`}
+          extension=".csv"
+          className="bg-[#cb7529] h-[2.3rem]  rounded-sm text-white border w-[8rem] p-2 flex justify-center items-center"
+        />
       </div>
       <ConfigProvider
         theme={{
