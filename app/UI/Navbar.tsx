@@ -12,8 +12,10 @@ import { MenuFoldOutlined, MenuOutlined } from "@ant-design/icons";
 
 const Navbar = () => {
   const [user, setUser] = useState<any>({});
-  const { logout, setComponent }: any = useContextApi();
+  const { logout, setComponent, fromDate, toDate }: any = useContextApi();
   const router = useRouter();
+
+  console.log(fromDate, toDate);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -64,6 +66,9 @@ const Navbar = () => {
       <span className="justify-start font-[700] md:text-[25px] sm:text-[12px] ml-3">
         {user?.orgDesc}
       </span>
+      <div className="text-[1.5rem]">
+        [{fromDate}] - [{toDate}]
+      </div>
       <div className="flex items-center">
         <CustomButton
           name="Logout"
