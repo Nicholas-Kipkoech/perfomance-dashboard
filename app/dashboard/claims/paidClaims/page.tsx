@@ -5,6 +5,7 @@ import { formatDate } from "@/app/utils/apiLogistics";
 import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
+import CsvDownload from "react-csv-downloader";
 
 const PaidClaims = () => {
   const { claimsData }: any = useContextApi();
@@ -17,14 +18,14 @@ const PaidClaims = () => {
     },
     {
       title: "Intimation Date",
-      dataIndex: "className",
-      key: "className",
+      dataIndex: "intimationDate",
+      key: "intimationDate",
       render: (_: any, item: any) => <p>{formatDate(item.intimationDate)}</p>,
     },
     {
       title: "Loss Date",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "lossDate",
+      key: "lossDate",
       render: (_: any, item: any) => <p>{formatDate(item.lossDate)}</p>,
     },
     {
@@ -44,20 +45,20 @@ const PaidClaims = () => {
     },
     {
       title: "Start",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "start",
+      key: "start",
       render: (_: any, item: any) => <p>{formatDate(item.start)}</p>,
     },
     {
       title: "Expiry",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "expiry",
+      key: "expiry",
       render: (_: any, item: any) => <p>{formatDate(item.expiry)}</p>,
     },
     {
       title: "Sum Insured",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "sumInsured",
+      key: "sumInsured",
       render: (_: any, item: any) => (
         <p>KSH {item.sumInsured?.toLocaleString()}</p>
       ),
@@ -80,8 +81,8 @@ const PaidClaims = () => {
     },
     {
       title: "Paymnt Date",
-      dataIndex: "policyCover",
-      key: "policyCover",
+      dataIndex: "paymentDate",
+      key: "paymentDate",
       render: (_: any, item: any) => <p>{formatDate(item.paymentDate)}</p>,
     },
     {
@@ -116,14 +117,20 @@ const PaidClaims = () => {
     },
     {
       title: "Paid Amount",
-      dataIndex: "totalProvision",
-      key: "totalProvision",
+      dataIndex: "paidAmount",
+      key: "paidAmount",
       render: (_: any, item: any) => (
         <p>KSH {item.paidAmount?.toLocaleString()}</p>
       ),
     },
   ];
   const router = useRouter();
+  const formattedColumns = columns.map((column) => {
+    return {
+      id: column.dataIndex,
+      displayName: column.title,
+    };
+  });
   return (
     <div className="mx-2 my-2">
       <div className="flex justify-between my-2">
@@ -133,7 +140,16 @@ const PaidClaims = () => {
           onClick={() => router.back()}
         />
         <p className="text-[1.6rem] font-bold">Paid Claims Data Table</p>
-        <p></p>
+        <CsvDownload
+          text=""
+          datas={claimsData}
+          columns={formattedColumns}
+          filename={`Paid Claims data ${new Date(
+            Date.now()
+          ).toLocaleDateString()}`}
+          extension=".csv"
+          className="bg-[#cb7529] h-[2.3rem]  rounded-sm text-white border w-[8rem] p-2 flex justify-center items-center"
+        />
       </div>
       <ConfigProvider
         theme={{

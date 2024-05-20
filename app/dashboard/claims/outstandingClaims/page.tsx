@@ -5,6 +5,7 @@ import { formatDate } from "@/app/utils/apiLogistics";
 import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
+import CsvDownload from "react-csv-downloader";
 
 const OutStandingClaims = () => {
   const { outstandingClaims }: any = useContextApi();
@@ -92,6 +93,13 @@ const OutStandingClaims = () => {
     },
   ];
   const router = useRouter();
+
+  const formattedColumns = columns.map((column) => {
+    return {
+      id: column.dataIndex,
+      displayName: column.title,
+    };
+  });
   return (
     <div className="mx-2 my-2">
       <div className="flex justify-between my-2">
@@ -101,7 +109,16 @@ const OutStandingClaims = () => {
           onClick={() => router.back()}
         />
         <p className="text-[1.6rem] font-bold">Outstanding Claims Data Table</p>
-        <p></p>
+        <CsvDownload
+          text=""
+          datas={outstandingClaims}
+          columns={formattedColumns}
+          filename={`Outstanding Claims data ${new Date(
+            Date.now()
+          ).toLocaleDateString()}`}
+          extension=".csv"
+          className="bg-[#cb7529] h-[2.3rem]  rounded-sm text-white border w-[8rem] p-2 flex justify-center items-center"
+        />
       </div>
       <ConfigProvider
         theme={{

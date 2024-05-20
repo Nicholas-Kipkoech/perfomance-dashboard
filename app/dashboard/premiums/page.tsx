@@ -28,6 +28,12 @@ const Underwriting = () => {
     branchCode,
   }: any = useContextApi();
 
+  const totalReinsurance = reinsurance.reduce(
+    (total: number, reinsurance: any) =>
+      Math.floor(total + reinsurance.netPremium),
+    0
+  );
+
   interface IPremiumCard {
     name: string;
     cummulativeTotal: number;
@@ -89,7 +95,7 @@ const Underwriting = () => {
         />
         <CustomCard
           name={"Reinsurance"}
-          total={reinsurance}
+          total={totalReinsurance}
           currency
           link={"/dashboard/premiums/reinsurance"}
         />

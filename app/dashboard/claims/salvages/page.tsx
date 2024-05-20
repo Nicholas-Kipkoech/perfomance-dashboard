@@ -5,6 +5,7 @@ import { formatDate } from "@/app/utils/apiLogistics";
 import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
+import CsvDownload from "react-csv-downloader";
 
 const Salvages = () => {
   const { salvages }: any = useContextApi();
@@ -22,8 +23,8 @@ const Salvages = () => {
     },
     {
       title: "Date",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "date",
+      key: "date",
       render: (_: any, item: any) => <p>{formatDate(item.date)}</p>,
     },
     {
@@ -65,37 +66,52 @@ const Salvages = () => {
     },
     {
       title: "Commence",
-      dataIndex: "subClass",
-      key: "subClass",
+      dataIndex: "commence",
+      key: "commence",
       render: (_: any, item: any) => <p>{formatDate(item.commence)}</p>,
     },
     {
       title: "Expiry",
-      dataIndex: "branch",
-      key: "branch",
+      dataIndex: "expiry",
+      key: "expiry",
       render: (_: any, item: any) => <p>{formatDate(item.expiry)}</p>,
     },
 
     {
       title: "Receipt Amount",
-      dataIndex: "policyCover",
-      key: "policyCover",
+      dataIndex: "receiptAmount",
+      key: "receiptAmount",
       render: (_: any, item: any) => (
         <p>KSH {item.receiptAmount.toLocaleString()}</p>
       ),
     },
   ];
   const router = useRouter();
+  const formattedColumns = columns.map((column) => {
+    return {
+      id: column.dataIndex,
+      displayName: column.title,
+    };
+  });
   return (
     <div className="mx-2 my-2">
       <div className="flex justify-between my-2">
         <CustomButton
-          name={"back"}
-          className=" bg-[#cb7729]  h-[30px] rounded-md w-[100px]"
+          name={"Back"}
+          className=" bg-[#cb7729] text-white  h-[30px] rounded-md w-[100px]"
           onClick={() => router.back()}
         />
         <p className="text-[1.6rem] font-bold">Salvages Data Table</p>
-        <p></p>
+        <CsvDownload
+          text=""
+          datas={salvages}
+          columns={formattedColumns}
+          filename={`Salvages data ${new Date(
+            Date.now()
+          ).toLocaleDateString()}`}
+          extension=".csv"
+          className="bg-[#cb7529] h-[2.3rem]  rounded-sm text-white border w-[8rem] p-2 flex justify-center items-center"
+        />
       </div>
       <ConfigProvider
         theme={{

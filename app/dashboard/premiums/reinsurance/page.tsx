@@ -1,74 +1,108 @@
 "use client";
 import { useContextApi } from "@/app/context/Context";
 import CustomButton from "@/app/UI/reusableComponents/CustomButton";
+import { formatDate } from "@/app/utils/apiLogistics";
 import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
+import CsvDownload from "react-csv-downloader";
 
 const Reinsurance = () => {
-  const { bimaData }: any = useContextApi();
-
-  const filteredReinsurancePremiums = bimaData.filter(
-    (data: any) => data.clientCode === "100"
-  );
+  const { reinsurance }: any = useContextApi();
 
   const columns = [
     {
-      title: "Branch Name",
-      dataIndex: "branchName",
-      key: "branchName",
+      title: "Policy No",
+      dataIndex: "policyNo",
+      key: "policyNo",
     },
     {
-      title: "Class Name",
-      dataIndex: "className",
-      key: "className",
+      title: "Endorsment No",
+      dataIndex: "endNo",
+      key: "endNo",
     },
     {
-      title: "New Business",
-      dataIndex: "name",
-      key: "name",
-      render: (_: any, item: any) => (
-        <p>KSH {item.newPolicies.toLocaleString()}</p>
-      ),
+      title: "Slip No",
+      dataIndex: "slipNo",
+      key: "slipNo",
     },
     {
-      title: "Renewals",
-      dataIndex: "name",
-      key: "name",
-      render: (_: any, item: any) => (
-        <p>KSH {item.renewals.toLocaleString()}</p>
-      ),
+      title: "Insured",
+      dataIndex: "insured",
+      key: "insured",
     },
     {
-      title: "Refund",
-      dataIndex: "name",
-      key: "name",
-      render: (_: any, item: any) => <p>KSH {item.refund.toLocaleString()}</p>,
+      title: "Class",
+      dataIndex: "class",
+      key: "class",
     },
     {
-      title: "Additional",
-      dataIndex: "name",
-      key: "name",
-      render: (_: any, item: any) => (
-        <p>KSH {item.additional.toLocaleString()}</p>
-      ),
+      title: "Issue Date",
+      dataIndex: "issueDate",
+      key: "issueDate",
+      render: (_: any, item: any) => <p> {formatDate(item.issueDate)}</p>,
     },
     {
-      title: "Facin",
-      dataIndex: "name",
-      key: "name",
-      render: (_: any, item: any) => <p>KSH {item.facin.toLocaleString()}</p>,
+      title: "Commence",
+      dataIndex: "commence",
+      key: "commence",
+      render: (_: any, item: any) => <p> {formatDate(item.commence)}</p>,
     },
     {
-      title: "Commission",
-      dataIndex: "name",
-      key: "name",
-      render: (_: any, item: any) => (
-        <p>KSH {item.commision.toLocaleString()}</p>
-      ),
+      title: "Expiry",
+      dataIndex: "expiry",
+      key: "expiry",
+      render: (_: any, item: any) => <p> {formatDate(item.expiry)}</p>,
+    },
+    {
+      title: "Ceding Company",
+      dataIndex: "cedingCompany",
+      key: "cedingCompany",
+    },
+    {
+      title: "Cedant Company",
+      dataIndex: "cedantCompany",
+      key: "cedantCompany",
+    },
+    {
+      title: "Original SI",
+      dataIndex: "originalSI",
+      key: "originalSI",
+    },
+    {
+      title: "Premium",
+      dataIndex: "premium",
+      key: "premium",
+    },
+    {
+      title: "Share",
+      dataIndex: "share",
+      key: "share",
+    },
+    {
+      title: "Gross Premium",
+      dataIndex: "grossPremium",
+      key: "grossPremium",
+    },
+    {
+      title: "FAC Re Comm",
+      dataIndex: "FACrecomm",
+      key: "FACrecomm",
+    },
+    {
+      title: "Net Premim",
+      dataIndex: "netPremium",
+      key: "netPremium",
     },
   ];
   const router = useRouter();
+
+  const formattedColumns = columns.map((column) => {
+    return {
+      id: column.dataIndex,
+      displayName: column.title,
+    };
+  });
   return (
     <div className="mx-2 my-2">
       <div className="flex justify-between my-2">
@@ -80,7 +114,16 @@ const Reinsurance = () => {
         <p className="text-[1.6rem] font-bold">
           Reinsurance Premiums Data Table
         </p>
-        <p></p>
+        <CsvDownload
+          text=""
+          datas={reinsurance}
+          columns={formattedColumns}
+          filename={`Premium Register data ${new Date(
+            Date.now()
+          ).toLocaleDateString()}`}
+          extension=".csv"
+          className="bg-[#cb7529] h-[2.3rem]  rounded-sm text-white border w-[8rem] p-2 flex justify-center items-center"
+        />
       </div>
       <ConfigProvider
         theme={{
@@ -90,11 +133,16 @@ const Reinsurance = () => {
               headerColor: "white",
               colorBgContainer: "whitesmoke",
               rowHoverBg: "#cb7529",
+              padding: 5,
             },
           },
         }}
       >
-        <Table columns={columns} dataSource={filteredReinsurancePremiums} />
+        <Table
+          columns={columns}
+          dataSource={reinsurance}
+          scroll={{ x: 3000 }}
+        />
       </ConfigProvider>
     </div>
   );

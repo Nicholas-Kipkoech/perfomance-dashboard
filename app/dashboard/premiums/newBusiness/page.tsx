@@ -61,8 +61,8 @@ const NewBusiness = () => {
     <div className="mx-2 my-2">
       <div className="flex justify-between my-2">
         <CustomButton
-          name={"back"}
-          className=" bg-[#cb7729]  h-[30px] rounded-md w-[100px]"
+          name={"Back"}
+          className=" bg-[#cb7729] text-white h-[30px] rounded-md w-[100px]"
           onClick={() => router.back()}
         />
         <p className="text-[1.6rem] font-bold">New Business Data Table</p>

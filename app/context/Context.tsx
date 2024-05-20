@@ -43,6 +43,7 @@ const ContextProvider = ({ children }: any) => {
   const [companys, setCompanys] = useState<IBranches[]>([]);
   const [company, setCompany] = useState("INTRA");
   const [component, setComponent] = useState("Underwriting");
+  const [reinsurance, setReinsurance] = useState([]);
 
   interface Login {
     username: string;
@@ -188,6 +189,15 @@ const ContextProvider = ({ children }: any) => {
     };
     fetchARreceipts();
   }, [fromDate, toDate, branchCode]);
+  useEffect(() => {
+    const fetchReinsurance = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/reinsurance?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
+      );
+      setReinsurance(data.result);
+    };
+    fetchReinsurance();
+  }, [fromDate, toDate, branchCode]);
 
   function calculatePremiums(bimaData: any) {
     let directClients = 0;
@@ -229,17 +239,12 @@ const ContextProvider = ({ children }: any) => {
       return total + premium.premiums + premium.earthQuake + premium.PVTPremium;
     }, 0);
 
-    const reinsurance = bimaData.reduce((total: number, premium: any) => {
-      return total + premium.facin;
-    }, 0);
-
     const commision = bimaData.reduce((total: number, premium: any) => {
       return total + premium.brokerComm;
     }, 0);
 
     return {
       totalPremium,
-      reinsurance,
       commision,
       directClients,
       nonMotorPremium,
@@ -250,8 +255,6 @@ const ContextProvider = ({ children }: any) => {
   }
   const {
     totalPremium,
-    reinsurance,
-
     commision,
     directClients,
     nonMotorPremium,
@@ -425,7 +428,6 @@ const ContextProvider = ({ children }: any) => {
         totalPremium,
         totalNewBusiness,
         totalRenewals,
-        reinsurance,
         totalClaimPaid,
         claimsData,
         commision,
@@ -460,6 +462,7 @@ const ContextProvider = ({ children }: any) => {
         outstandingClaims,
         salvages,
         recovery,
+        reinsurance,
       }}
     >
       {children}
