@@ -189,7 +189,7 @@ const ContextProvider = ({ children }: any) => {
     fetchARreceipts();
   }, [fromDate, toDate, branchCode]);
 
-  function calculatePremiums(bimaData: IBimaData[]) {
+  function calculatePremiums(bimaData: any) {
     let directClients = 0;
 
     let nonMotorPremium = 0;
@@ -197,83 +197,49 @@ const ContextProvider = ({ children }: any) => {
     let directPremium = 0;
     let intermediaryPremium = 0;
 
-    bimaData.forEach((data) => {
+    bimaData.forEach((premium: any) => {
       let total = 0;
-      if (data.clientCode === "25" || data.clientCode === "70") {
-        total =
-          data.additional +
-          data.facin +
-          data.refund +
-          data.renewals +
-          data.newPolicies;
+      if (premium.clientCode === "25" || premium.clientCode === "70") {
+        total = premium.premiums + premium.earthQuake + premium.PVTPremium;
         intermediaryPremium += total;
-      } else if (data.clientCode === "15") {
-        total =
-          data.additional +
-          data.facin +
-          data.refund +
-          data.renewals +
-          data.newPolicies;
+      } else if (premium.clientCode === "15") {
+        total = premium.premiums + premium.earthQuake + premium.PVTPremium;
         directPremium += total;
       }
     });
 
-    bimaData.forEach((data) => {
+    bimaData.forEach((premium: any) => {
       let total = 0;
-      if (data.motorCode === "070" || data.motorCode === "080") {
-        total =
-          data.additional +
-          data.facin +
-          data.refund +
-          data.renewals +
-          data.newPolicies;
+      if (premium.motorCode === "070" || premium.motorCode === "080") {
+        total = premium.premiums + premium.earthQuake + premium.PVTPremium;
         motorPremium += total;
       } else {
-        total =
-          data.additional +
-          data.facin +
-          data.refund +
-          data.renewals +
-          data.newPolicies;
+        total = premium.premiums + premium.earthQuake + premium.PVTPremium;
         nonMotorPremium += total;
       }
 
-      const totalClients = data.clientsCount;
+      const totalClients = premium.clientsCount;
 
-      if (data.clientCode === "15") {
+      if (premium.clientCode === "15") {
         directClients += totalClients;
       }
     });
 
-    const totalPremium = bimaData.reduce((total: number, premium) => {
-      return (
-        total +
-        premium.additional +
-        premium.facin +
-        premium.refund +
-        premium.renewals +
-        premium.newPolicies
-      );
+    const totalPremium = bimaData.reduce((total: number, premium: any) => {
+      return total + premium.premiums + premium.earthQuake + premium.PVTPremium;
     }, 0);
 
-    const reinsurance = bimaData.reduce((total: number, premium) => {
+    const reinsurance = bimaData.reduce((total: number, premium: any) => {
       return total + premium.facin;
     }, 0);
-    const additionalPremium = bimaData.reduce((total: number, premium) => {
-      return total + premium.additional;
-    }, 0);
-    const refundPremium = bimaData.reduce((total: number, premium) => {
-      return total + premium.refund;
-    }, 0);
-    const commision = bimaData.reduce((total: number, premium) => {
-      return total + premium.commision;
+
+    const commision = bimaData.reduce((total: number, premium: any) => {
+      return total + premium.brokerComm;
     }, 0);
 
     return {
       totalPremium,
       reinsurance,
-      additionalPremium,
-      refundPremium,
       commision,
       directClients,
       nonMotorPremium,
@@ -285,8 +251,7 @@ const ContextProvider = ({ children }: any) => {
   const {
     totalPremium,
     reinsurance,
-    additionalPremium,
-    refundPremium,
+
     commision,
     directClients,
     nonMotorPremium,
@@ -463,8 +428,6 @@ const ContextProvider = ({ children }: any) => {
         reinsurance,
         totalClaimPaid,
         claimsData,
-        additionalPremium,
-        refundPremium,
         commision,
         directClients,
         allClients,

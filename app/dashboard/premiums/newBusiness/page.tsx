@@ -7,7 +7,6 @@ import React from "react";
 
 const NewBusiness = () => {
   const { productionData }: any = useContextApi();
-  console.log(productionData);
 
   const columns = [
     {
@@ -21,6 +20,22 @@ const NewBusiness = () => {
       key: "name",
       render: (_: any, item: any) => (
         <p>KSH {item.newBusiness.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: "Renewals",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => (
+        <p>KSH {item.renewals.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: "Totals",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => (
+        <p>KSH {(item.renewals + item.newBusiness).toLocaleString()}</p>
       ),
     },
   ];

@@ -1,9 +1,28 @@
 "use client";
 import { useContextApi } from "@/app/context/Context";
 import CustomButton from "@/app/UI/reusableComponents/CustomButton";
+import { formatDate } from "@/app/utils/apiLogistics";
 import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
+
+export const calculatePercentage = (item: any) => {
+  const withholdingTax = item.withholdingTax;
+  const brokerComm = item.brokerComm;
+
+  if (
+    brokerComm === 0 ||
+    brokerComm == null ||
+    withholdingTax == null ||
+    withholdingTax == 0
+  ) {
+    return 0;
+  }
+
+  const result = (withholdingTax / brokerComm) * 100;
+
+  return isNaN(result) ? 0 : result;
+};
 
 const NonMotorPremiums = () => {
   const { bimaData }: any = useContextApi();
@@ -14,58 +33,132 @@ const NonMotorPremiums = () => {
 
   const columns = [
     {
-      title: "Branch Name",
-      dataIndex: "branchName",
-      key: "branchName",
+      title: "Policy No",
+      dataIndex: "policyNo",
+      key: "policyNo",
     },
     {
-      title: "Class Name",
-      dataIndex: "className",
-      key: "className",
+      title: "Endorsement No",
+      dataIndex: "endNo",
+      key: "endNo",
     },
     {
-      title: "New Business",
+      title: "Insured",
+      dataIndex: "insured",
+      key: "insured",
+    },
+    {
+      title: "Sum Insured",
+      dataIndex: "sumInsured",
+      key: "sumInsured",
+    },
+    {
+      title: "Issue Date",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => <p> {formatDate(item.issueDate)}</p>,
+    },
+    {
+      title: "Start Date",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => <p> {formatDate(item.start)}</p>,
+    },
+    {
+      title: "Expiry Date",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => <p> {formatDate(item.expiry)}</p>,
+    },
+    {
+      title: "Premiums",
       dataIndex: "name",
       key: "name",
       render: (_: any, item: any) => (
-        <p>KSH {item.newPolicies.toLocaleString()}</p>
+        <p>KSH {item.premiums?.toLocaleString()}</p>
       ),
     },
     {
-      title: "Renewals",
+      title: "EarthQuake",
       dataIndex: "name",
       key: "name",
       render: (_: any, item: any) => (
-        <p>KSH {item.renewals.toLocaleString()}</p>
+        <p>KSH {item.earthQuake?.toLocaleString()}</p>
       ),
     },
     {
-      title: "Refund",
-      dataIndex: "name",
-      key: "name",
-      render: (_: any, item: any) => <p>KSH {item.refund.toLocaleString()}</p>,
-    },
-    {
-      title: "Additional",
+      title: "PVT Premium",
       dataIndex: "name",
       key: "name",
       render: (_: any, item: any) => (
-        <p>KSH {item.additional.toLocaleString()}</p>
+        <p>KSH {item.PVTPremium.toLocaleString()}</p>
       ),
     },
     {
-      title: "Facin",
-      dataIndex: "name",
-      key: "name",
-      render: (_: any, item: any) => <p>KSH {item.facin.toLocaleString()}</p>,
-    },
-    {
-      title: "Commission",
+      title: "Stamp Duty",
       dataIndex: "name",
       key: "name",
       render: (_: any, item: any) => (
-        <p>KSH {item.commision.toLocaleString()}</p>
+        <p>KSH {item.stampDuty.toLocaleString()}</p>
       ),
+    },
+    {
+      title: "PHC Fund",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => <p>KSH {item.PHCFund.toLocaleString()}</p>,
+    },
+    {
+      title: "Training Levt",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => (
+        <p>KSH {item.trainingLevy.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: "PTA Charge",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => (
+        <p>KSH {item.PTACharge.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: "AA Charge",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => (
+        <p>KSH {item.AACharge.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: "Broker Comm",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => (
+        <p>KSH {item.brokerComm.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: "Withholding Tax",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => (
+        <p>KSH {item.witholdingTax.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: "Rate",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => <p> {calculatePercentage(item)}%</p>,
+    },
+    {
+      title: "Net Premium",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => <p>KSH {item.netPrem.toLocaleString()}</p>,
     },
   ];
   const router = useRouter();
@@ -92,7 +185,11 @@ const NonMotorPremiums = () => {
           },
         }}
       >
-        <Table columns={columns} dataSource={filteredNonMotorPremiums} />
+        <Table
+          columns={columns}
+          dataSource={filteredNonMotorPremiums}
+          scroll={{ x: 2500 }}
+        />
       </ConfigProvider>
     </div>
   );

@@ -19,16 +19,14 @@ const Recoveries = () => {
       title: "100% Amount",
       dataIndex: "paidAmount",
       key: "paidAmount",
-      render: (_: any, item: any) => (
-        <p>KSH {item.paidAmount.toLocaleString()}</p>
-      ),
+      render: (_: any, item: any) => <p> {item.paidAmount.toLocaleString()}</p>,
     },
     {
       title: "Retention Amount",
       dataIndex: "name",
       key: "name",
       render: (_: any, item: any) => (
-        <p>KSH {item.retentionAmount.toLocaleString()}</p>
+        <p> {item.retentionAmount.toLocaleString()}</p>
       ),
     },
     {
@@ -36,24 +34,20 @@ const Recoveries = () => {
       dataIndex: "receievedFrom",
       key: "receievedFrom",
       render: (_: any, item: any) => (
-        <p>KSH {item.treatyAmount.toLocaleString()}</p>
+        <p>{item.treatyAmount.toLocaleString()}</p>
       ),
     },
     {
       title: "Fac Amount",
       dataIndex: "insured",
       key: "insured",
-      render: (_: any, item: any) => (
-        <p>KSH {item.facAmount.toLocaleString()}</p>
-      ),
+      render: (_: any, item: any) => <p> {item.facAmount.toLocaleString()}</p>,
     },
     {
       title: "XOL Amount",
       dataIndex: "intermediary",
       key: "intermediary",
-      render: (_: any, item: any) => (
-        <p>KSH {item.xolAmount.toLocaleString()}</p>
-      ),
+      render: (_: any, item: any) => <p> {item.xolAmount.toLocaleString()}</p>,
     },
   ];
   const router = useRouter();

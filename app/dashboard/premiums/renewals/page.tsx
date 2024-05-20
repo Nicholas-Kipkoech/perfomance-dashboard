@@ -15,11 +15,27 @@ const Renewals = () => {
       key: "branchName",
     },
     {
+      title: "New Business",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => (
+        <p>KSH {item.newBusiness.toLocaleString()}</p>
+      ),
+    },
+    {
       title: "Renewals",
       dataIndex: "name",
       key: "name",
       render: (_: any, item: any) => (
         <p>KSH {item.renewals.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: "Totals",
+      dataIndex: "name",
+      key: "name",
+      render: (_: any, item: any) => (
+        <p>KSH {(item.renewals + item.newBusiness).toLocaleString()}</p>
       ),
     },
   ];

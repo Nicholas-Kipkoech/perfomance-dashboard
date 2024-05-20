@@ -17,7 +17,7 @@ const Finance = () => {
         href={`${link}`}
         target="_blank"
         style={{ backgroundColor: color }}
-        className={`h-[180px] w-[330px] border cursor-pointer  rounded-md p-[10px]`}
+        className={`h-[130px] w-[330px] border cursor-pointer shadow-2xl  rounded-md p-[10px]`}
         onClick={() => {}}
       >
         <div className="flex gap-1 flex-col text-[14px] ">
@@ -50,7 +50,6 @@ const Finance = () => {
       <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
         <CustomFinanceCard
           name={"Receipts Listing"}
-          color={"#B4B4B3"}
           link={receiptListingLink}
         />
         <CustomCard
