@@ -6,24 +6,7 @@ import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
 import CsvDownload from "react-csv-downloader";
-
-export const calculatePercentage = (item: any) => {
-  const withholdingTax = item.withholdingTax;
-  const brokerComm = item.brokerComm;
-
-  if (
-    brokerComm === 0 ||
-    brokerComm == null ||
-    withholdingTax == null ||
-    withholdingTax == 0
-  ) {
-    return 0;
-  }
-
-  const result = (withholdingTax / brokerComm) * 100;
-
-  return isNaN(result) ? 0 : result;
-};
+import { calculatePercentage } from "./helpers";
 
 const NonMotorPremiums = () => {
   const { bimaData }: any = useContextApi();
