@@ -119,7 +119,7 @@ const ContextProvider = ({ children }: any) => {
   useEffect(() => {
     const fetchOutStandingClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/outstanding-claims?toDate=${toDate}`
+        `${localUrl}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`
       );
       setOutstandingClaims(data.result);
     };
