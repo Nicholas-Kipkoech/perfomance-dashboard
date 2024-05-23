@@ -6,7 +6,7 @@ import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
 import CsvDownload from "react-csv-downloader";
-import { calculatePercentage } from "./helpers";
+import { calculatePercentage } from "../helpers";
 
 const NonMotorPremiums = () => {
   const { bimaData }: any = useContextApi();

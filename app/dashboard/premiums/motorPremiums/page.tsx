@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 
 import CsvDownload from "react-csv-downloader";
-import { calculatePercentage } from "../nonMotorPremiums/helpers";
+import { calculatePercentage } from "../helpers";
 
 const MotorPremiums = () => {
   const { bimaData }: any = useContextApi();

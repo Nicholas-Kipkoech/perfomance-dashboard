@@ -5,8 +5,9 @@ import { formatDate } from "@/app/utils/apiLogistics";
 import { ConfigProvider, Table } from "antd";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { calculatePercentage } from "../nonMotorPremiums/page";
+
 import CsvDownload from "react-csv-downloader";
+import { calculatePercentage } from "../helpers";
 
 const DirectPremiums = () => {
   const { bimaData }: any = useContextApi();
