@@ -17,7 +17,7 @@ import {
 } from "../assets/interfaces";
 
 const Context = createContext({});
-const ContextProvider = ({ children }: any) => {
+const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const localUrl = "http://localhost:5002/bima/perfomance";
   const [branchCode, setBranchCode] = useState("");
   const [fromDate, setFromDate] = useState("1-jan-2023");
@@ -44,11 +44,7 @@ const ContextProvider = ({ children }: any) => {
   const [company, setCompany] = useState("INTRA");
   const [component, setComponent] = useState("Underwriting");
   const [reinsurance, setReinsurance] = useState([]);
-
-  interface Login {
-    username: string;
-    password: string;
-  }
+  const [cmLossRatio, setCmLossRatio] = useState([]);
 
   const login = async (username: any, password: any) => {
     try {
@@ -197,6 +193,16 @@ const ContextProvider = ({ children }: any) => {
       setReinsurance(data.result);
     };
     fetchReinsurance();
+  }, [fromDate, toDate, branchCode]);
+
+  useEffect(() => {
+    const fetchLossRatio = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/cm-loss-ratio?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
+      );
+      setCmLossRatio(data.result);
+    };
+    fetchLossRatio();
   }, [fromDate, toDate, branchCode]);
 
   function calculatePremiums(bimaData: any) {
@@ -413,6 +419,11 @@ const ContextProvider = ({ children }: any) => {
   const { nonMotorUnrenewed, motorRenewed } =
     calculateUnrenewedPolicies(unrenewedPolicies);
 
+  const filteredLossRation = cmLossRatio.filter((claim: any) => {
+    return claim.cm_order_no === 10;
+  });
+  console.log(filteredLossRation);
+
   return (
     <Context.Provider
       value={{
@@ -463,6 +474,7 @@ const ContextProvider = ({ children }: any) => {
         salvages,
         recovery,
         reinsurance,
+        filteredLossRation,
       }}
     >
       {children}

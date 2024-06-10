@@ -12,7 +12,16 @@ const Claims = () => {
     totalCount: totalOutstandingCount,
     totalSalvages,
     totalRecovery,
+    filteredLossRation,
   }: any = useContextApi();
+
+  const totalLossRatio = filteredLossRation.reduce(
+    (acc: number, ratio: any) => {
+      return ratio.total !== null ? acc + Number(ratio.total) : acc;
+    },
+    0
+  );
+
   return (
     <div>
       <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
@@ -48,12 +57,11 @@ const Claims = () => {
           color={"#FF8080"}
         />
         <CustomCard
-          name={"RI Recovery"}
+          name={"Loss Ratio"}
           totalNumber={0}
-          total={totalRecovery}
-          currency
+          total={totalLossRatio}
           color={"#FF8080"}
-          link={"/dashboard/claims/recoveries"}
+          link={""}
         />
       </div>
     </div>
