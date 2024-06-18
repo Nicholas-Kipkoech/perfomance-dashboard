@@ -13,6 +13,7 @@ const CustomCard = ({
   name3,
   link,
   cumulativeTotal,
+  perc,
 }: {
   total1: number
   total2?: number
@@ -22,6 +23,7 @@ const CustomCard = ({
   name3?: string
   link: string
   cumulativeTotal?: number
+  perc?: boolean
 }) => {
   return (
     <Link
@@ -36,11 +38,7 @@ const CustomCard = ({
           <p className="text-[13px] font-bold flex justify-start items-start">
             KSH {total1.toLocaleString()}
           </p>
-          <p className="text-[13px] font-bold flex justify-start items-start">
-            {cumulativeTotal &&
-              ((total1 / Math.floor(cumulativeTotal)) * 100).toFixed(2)}
-            %
-          </p>
+          <p className="text-[13px] font-bold flex justify-start items-start"></p>
         </div>
         {name2 && (
           <div className="flex gap-2 items-center justify-between">
@@ -54,7 +52,7 @@ const CustomCard = ({
               {cumulativeTotal &&
                 total2 &&
                 ((total2 / Math.floor(cumulativeTotal)) * 100).toFixed(2)}
-              %
+              {perc && `%`}
             </p>
           </div>
         )}
@@ -70,7 +68,7 @@ const CustomCard = ({
               {cumulativeTotal &&
                 total3 &&
                 ((total3 / Math.floor(cumulativeTotal)) * 100).toFixed(2)}
-              %
+              {perc && `%`}
             </p>
           </div>
         )}
@@ -111,6 +109,45 @@ const Reinsurance = () => {
   )
   return (
     <div className="flex flex-wrap gap-2 mt-2 ml-3">
+      <Link
+        href={'/dashboard/reinsurance/ri-cessions'}
+        className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
+      >
+        <div className="flex gap-2 items-center flex-col">
+          <p className="text-[16px] flex justify-center ">
+            {'Total premium (seeded)'.toUpperCase()}
+          </p>
+          <p className="text-[18px] font-bold flex justify-start items-start">
+            KSH {(treatyPremium + facPremium).toLocaleString()}
+          </p>
+        </div>
+      </Link>
+      <Link
+        href={'/dashboard/reinsurance/ri-cessions'}
+        className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
+      >
+        <div className="flex gap-2 items-center flex-col">
+          <p className="text-[16px] flex justify-center ">
+            {'Total Commission (Earned)'.toUpperCase()}
+          </p>
+          <p className="text-[18px] font-bold flex justify-start items-start">
+            KSH {(treatyCommission + facCommission).toLocaleString()}
+          </p>
+        </div>
+      </Link>
+      <Link
+        href={'/dashboard/reinsurance/ri-paid-cession'}
+        className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
+      >
+        <div className="flex gap-2 items-center flex-col">
+          <p className="text-[16px] flex justify-center ">
+            {'Reinsurance Claim Recovery'.toUpperCase()}
+          </p>
+          <p className="text-[18px] font-bold flex justify-start items-start">
+            KSH {(treatyAmt + facAmt + xolAmt).toLocaleString()}
+          </p>
+        </div>
+      </Link>
       <CustomCard
         name1="Treaty premium"
         total1={treatyPremium}
@@ -118,6 +155,7 @@ const Reinsurance = () => {
         total2={treatyCommission}
         link={'ri-cessions'}
         cumulativeTotal={treatyPremium + treatyCommission}
+        perc
       />
       <CustomCard
         name1="Fac premium"
@@ -126,6 +164,7 @@ const Reinsurance = () => {
         total2={facCommission}
         link={'ri-cessions'}
         cumulativeTotal={facPremium + facCommission}
+        perc
       />
       <CustomCard
         name1="Treaty Amount"
@@ -135,7 +174,6 @@ const Reinsurance = () => {
         name3={'xol amount'}
         total3={xolAmt}
         link={'ri-paid-cession'}
-        cumulativeTotal={treatyAmt + facAmt + xolAmt}
       />
     </div>
   )
