@@ -1,7 +1,7 @@
-"use client";
-import { useContextApi } from "@/app/context/Context";
-import CustomCard from "@/app/UI/reusableComponents/CustomCard";
-import React from "react";
+'use client'
+import { useContextApi } from '@/app/context/Context'
+import CustomCard from '@/app/UI/reusableComponents/CustomCard'
+import React from 'react'
 
 const Claims = () => {
   const {
@@ -13,59 +13,55 @@ const Claims = () => {
     totalSalvages,
     totalRecovery,
     filteredLossRation,
-  }: any = useContextApi();
+  }: any = useContextApi()
 
   const totalLossRatio = filteredLossRation.reduce(
     (acc: number, ratio: any) => {
-      return ratio.total !== null ? acc + Number(ratio.total) : acc;
+      return ratio.total !== null ? acc + Number(ratio.total) : acc
     },
-    0
-  );
+    0,
+  )
 
   return (
     <div>
       <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
         <CustomCard
-          name={"Registered  Claims"}
+          name={'Registered  Claims'}
           total={totalRegisteredClaims}
           currency
-          link={"/dashboard/claims/registeredClaims"}
-          color={"#E178C5"}
+          link={'/dashboard/claims/registeredClaims'}
         />
         <CustomCard
-          link={"/dashboard/claims/paidClaims"}
-          name={"Paid  Claims"}
+          link={'/dashboard/claims/paidClaims'}
+          name={'Paid  Claims'}
           totalNumber={totalClaims}
           total={totalClaimPaid}
           currency
-          color={"#E178C5"}
         />
         <CustomCard
-          name={"Outstanding Claims"}
+          name={'Outstanding Claims'}
           totalNumber={totalOutstandingCount}
           total={totalOutstanding}
           currency
-          color={"#E178C5"}
-          link={"/dashboard/claims/outstandingClaims"}
+          link={'/dashboard/claims/outstandingClaims'}
         />
         <CustomCard
-          link={"/dashboard/claims/salvages"}
-          name={"Salvages"}
+          link={'/dashboard/claims/salvages'}
+          name={'Salvages'}
           totalNumber={0}
           total={totalSalvages}
           currency
-          color={"#FF8080"}
         />
         <CustomCard
-          name={"Loss Ratio"}
+          name={'Loss Ratio'}
           totalNumber={0}
           total={totalLossRatio}
-          color={"#FF8080"}
-          link={""}
+          perc
+          link={''}
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Claims;
+export default Claims

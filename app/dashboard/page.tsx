@@ -179,7 +179,7 @@ const Dashboard = () => {
           onClick={handleRunReports}
         />
       </div>
-      <div className="flex ">
+      <div className="flex flex-wrap ">
         {loading ? (
           <div className="flex items-center justify-center h-screen">
             <div className="flex flex-col gap-2">

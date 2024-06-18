@@ -12,7 +12,7 @@ export interface IBimaData {
   title1?: string
   title2?: string
   total2?: number
-  color?: string
+  perc?: boolean
   textColor?: string
   link?: string
 }
@@ -22,7 +22,7 @@ const CustomCard = ({
   total,
   onClick,
   textColor,
-  color,
+  perc,
   link,
 }: IBimaData) => {
   const handleClick = () => {
@@ -40,7 +40,7 @@ const CustomCard = ({
     >
       <div className="flex flex-col gap-2" style={{ color: textColor }}>
         <p className="text-[20px] font-bold flex justify-start items-start">
-          {formattedTotal}
+          {perc ? `${formattedTotal}%` : formattedTotal}
         </p>
         <p className="text-[16px] flex justify-center ">{name.toUpperCase()}</p>
       </div>

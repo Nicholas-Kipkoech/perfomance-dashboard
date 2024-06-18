@@ -48,6 +48,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [riCession, setRiCession] = useState([])
   const [riPaidCession, setRiPaidCession] = useState([])
   const [riCessionReport, setRiCessionReport] = useState([])
+  const [riPaidCessionReport, setRiPaidCessionReport] = useState([])
 
   const login = async (username: any, password: any) => {
     try {
@@ -74,7 +75,15 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       return token !== null
     }
   }
-
+  useEffect(() => {
+    const fetchRIPaidCessionReports = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/ri-paid-cession-report?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      setRiPaidCessionReport(data.result)
+    }
+    fetchRIPaidCessionReports()
+  }, [fromDate, toDate, branchCode])
   useEffect(() => {
     const fetchRICessionReports = async () => {
       const { data } = await axios.get(
@@ -513,6 +522,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         riCession,
         riPaidCession,
         riCessionReport,
+        riPaidCessionReport,
       }}
     >
       {children}

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import CsvDownload from 'react-csv-downloader'
 
-const RIPaidCessions = () => {
+const RICessions = () => {
   const { riCessionReport }: any = useContextApi()
 
   console.log(riCessionReport)
@@ -216,4 +216,4 @@ const RIPaidCessions = () => {
   )
 }
 
-export default RIPaidCessions
+export default RICessions
