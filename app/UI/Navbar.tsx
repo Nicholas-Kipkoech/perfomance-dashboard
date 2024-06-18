@@ -1,55 +1,55 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import CustomButton from "./reusableComponents/CustomButton";
-import { useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
-import { useContextApi } from "../context/Context";
+'use client'
+import React, { useEffect, useState } from 'react'
+import CustomButton from './reusableComponents/CustomButton'
+import { useRouter } from 'next/navigation'
+import { jwtDecode } from 'jwt-decode'
+import { useContextApi } from '../context/Context'
 
-import { Space, Dropdown } from "antd";
-import type { MenuProps } from "react-select";
-import path from "path/win32";
-import { MenuFoldOutlined, MenuOutlined } from "@ant-design/icons";
+import { Space, Dropdown } from 'antd'
+import type { MenuProps } from 'react-select'
+import path from 'path/win32'
+import { MenuFoldOutlined, MenuOutlined } from '@ant-design/icons'
 
 const Navbar = () => {
-  const [user, setUser] = useState<any>({});
-  const { logout, setComponent, fromDate, toDate }: any = useContextApi();
-  const router = useRouter();
+  const [user, setUser] = useState<any>({})
+  const { logout, setComponent, fromDate, toDate }: any = useContextApi()
+  const router = useRouter()
 
-  console.log(fromDate, toDate);
+  console.log(fromDate, toDate)
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const accessToken: any = localStorage.getItem("accessToken");
+    if (typeof window !== 'undefined') {
+      const accessToken: any = localStorage.getItem('accessToken')
       if (accessToken) {
-        const decodedToken = jwtDecode(accessToken);
-        setUser(decodedToken);
+        const decodedToken = jwtDecode(accessToken)
+        setUser(decodedToken)
       }
     }
-  }, []);
+  }, [])
 
   const handleLogout = () => {
-    logout();
-    router.push("/");
-  };
+    logout()
+    router.push('/')
+  }
 
   const items = [
     {
-      label: "Underwriting",
-      key: "Underwriting",
+      label: 'Underwriting',
+      key: 'Underwriting',
     },
     {
-      label: "Claims",
-      key: "Claims",
+      label: 'Claims',
+      key: 'Claims',
     },
     {
-      label: "Finance",
-      key: "Finance",
+      label: 'Finance',
+      key: 'Finance',
     },
-  ];
+  ]
 
   const handleClick = (e: any) => {
-    setComponent(e.key);
-  };
+    setComponent(e.key)
+  }
 
   return (
     <div className="w-full border h-[5rem] bg-[#092332] items-center justify-between p-2 flex text-white top-0 sticky">
@@ -66,20 +66,17 @@ const Navbar = () => {
       <span className="justify-start font-[700] md:text-[25px] sm:text-[12px] ml-3">
         {user?.orgDesc}
       </span>
-      <div className="text-[1.5rem]">
-        [{fromDate}] - [{toDate}]
-      </div>
       <div className="flex items-center">
         <CustomButton
           name="Logout"
           className={
-            "md:h-[40px] sm:h-[30px] border md:w-[150px] sm:w-[100px]   rounded-md text-white bg-[#cb7529]"
+            'md:h-[40px] sm:h-[30px] border md:w-[150px] sm:w-[100px]   rounded-md text-white bg-[#cb7529]'
           }
           onClick={handleLogout}
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
