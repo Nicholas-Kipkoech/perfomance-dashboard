@@ -115,26 +115,44 @@ const Reinsurance = () => {
       >
         <div className="flex gap-2 items-center flex-col">
           <p className="text-[16px] flex justify-center ">
-            {'Total premium (seeded)'.toUpperCase()}
+            {'Total reinsurance premium (ceeded)'.toUpperCase()}
           </p>
           <p className="text-[18px] font-bold flex justify-start items-start">
             KSH {(treatyPremium + facPremium).toLocaleString()}
           </p>
         </div>
       </Link>
+      <CustomCard
+        name1="Treaty premium"
+        total1={treatyPremium}
+        name2={'Fac premium'}
+        total2={facPremium}
+        link={'ri-cessions'}
+        cumulativeTotal={treatyPremium + treatyCommission}
+        perc
+      />
       <Link
         href={'/dashboard/reinsurance/ri-cessions'}
         className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
       >
         <div className="flex gap-2 items-center flex-col">
           <p className="text-[16px] flex justify-center ">
-            {'Total Commission (Earned)'.toUpperCase()}
+            {'Total Reinsurance Commission (Earned)'.toUpperCase()}
           </p>
           <p className="text-[18px] font-bold flex justify-start items-start">
             KSH {(treatyCommission + facCommission).toLocaleString()}
           </p>
         </div>
       </Link>
+      <CustomCard
+        name1="Treaty Commission"
+        total1={treatyCommission}
+        name2={'Fac Commission'}
+        total2={facCommission}
+        link={'ri-cessions'}
+        cumulativeTotal={facPremium + facCommission}
+        perc
+      />
       <Link
         href={'/dashboard/reinsurance/ri-paid-cession'}
         className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
@@ -148,24 +166,7 @@ const Reinsurance = () => {
           </p>
         </div>
       </Link>
-      <CustomCard
-        name1="Treaty premium"
-        total1={treatyPremium}
-        name2={'Treaty Commission'}
-        total2={treatyCommission}
-        link={'ri-cessions'}
-        cumulativeTotal={treatyPremium + treatyCommission}
-        perc
-      />
-      <CustomCard
-        name1="Fac premium"
-        total1={facPremium}
-        name2={'Fac Commission'}
-        total2={facCommission}
-        link={'ri-cessions'}
-        cumulativeTotal={facPremium + facCommission}
-        perc
-      />
+
       <CustomCard
         name1="Treaty Amount"
         total1={treatyAmt}

@@ -312,14 +312,30 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   } = calculatePremiums(bimaData)
 
   const calculateClaimsData = (claimsData: any) => {
+    let motorPaidClaims = 0
+    let nonMotorPaidClaims = 0
+
+    claimsData.forEach((claims: any) => {
+      let total = claims.paidAmount
+      if (claims.motorCode === '070' || claims.motorCode === '080') {
+        motorPaidClaims += total
+      } else {
+        nonMotorPaidClaims += total
+      }
+    })
+
     const totalClaimPaid = claimsData.reduce(
       (total: number, claims: any) => total + claims.paidAmount,
       0,
     )
 
-    return { totalClaimPaid }
+    return { totalClaimPaid, nonMotorPaidClaims, motorPaidClaims }
   }
-  const { totalClaimPaid } = calculateClaimsData(claimsData)
+  const {
+    totalClaimPaid,
+    motorPaidClaims,
+    nonMotorPaidClaims,
+  } = calculateClaimsData(claimsData)
 
   const calculateProductionData = (productionData: IProduction[]) => {
     const totalRenewals = productionData.reduce(
@@ -360,19 +376,48 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
   const calculateRegisteredClaims = (registeredClaims: IRegisteredClaims[]) => {
+    let motorRegisteredClaims = 0
+    let nonMotorRegisteredClaims = 0
     const totalRegisteredClaims = registeredClaims.reduce(
       (total: number, claims) => total + claims.totalProvision,
       0,
     )
+
+    registeredClaims.forEach((claim: any) => {
+      console.log('claim', claim)
+      let total = claim.totalProvision
+      if (claim.motorCode === '070' || claim.motorCode === '080') {
+        motorRegisteredClaims += total
+      } else {
+        nonMotorRegisteredClaims += total
+      }
+    })
+
     return {
       totalRegisteredClaims,
+      nonMotorRegisteredClaims,
+      motorRegisteredClaims,
     }
   }
-  const { totalRegisteredClaims } = calculateRegisteredClaims(registeredClaims)
+  const {
+    totalRegisteredClaims,
+    nonMotorRegisteredClaims,
+    motorRegisteredClaims,
+  } = calculateRegisteredClaims(registeredClaims)
 
   const { broker, agents, allClients } = calculateClientsData(clients)
 
   const calculateOutstandingClaims = (outstandingClaims: any) => {
+    let motorOutstanding = 0
+    let nonMotorOutstanding = 0
+    outstandingClaims.forEach((outstanding: any) => {
+      let total = outstanding.totalProvision
+      if (outstanding.motorCode === '070' || outstanding.motorCode === '080') {
+        motorOutstanding += total
+      } else {
+        nonMotorOutstanding += total
+      }
+    })
     const totalOutstanding = outstandingClaims.reduce(
       (total: number, outstanding: any) => total + outstanding.totalProvision,
       0,
@@ -380,6 +425,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     return {
       totalOutstanding,
+      motorOutstanding,
+      nonMotorOutstanding,
     }
   }
   const calculateUnrenewedPolicies = (
@@ -459,7 +506,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     undebitedPolicies,
   )
 
-  const { totalOutstanding } = calculateOutstandingClaims(outstandingClaims)
+  const {
+    totalOutstanding,
+    motorOutstanding,
+    nonMotorOutstanding,
+  } = calculateOutstandingClaims(outstandingClaims)
   const { nonMotorUnrenewed, motorRenewed } = calculateUnrenewedPolicies(
     unrenewedPolicies,
   )
@@ -485,6 +536,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         totalRenewals,
         totalClaimPaid,
         claimsData,
+        motorPaidClaims,
+        nonMotorPaidClaims,
         commision,
         directClients,
         allClients,
@@ -501,7 +554,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         component,
         setComponent,
         totalRegisteredClaims,
+        nonMotorRegisteredClaims,
+        motorRegisteredClaims,
         totalOutstanding,
+        motorOutstanding,
+        nonMotorOutstanding,
         nonMotorUnrenewed,
         motorRenewed,
         nonMotorUndebited,
