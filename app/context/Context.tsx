@@ -20,8 +20,8 @@ const Context = createContext({})
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const localUrl = 'http://localhost:5002/bima/perfomance'
   const [branchCode, setBranchCode] = useState('')
-  const [fromDate, setFromDate] = useState('1-jan-2023')
-  const [toDate, setToDate] = useState('31-dec-2023')
+  const [fromDate, setFromDate] = useState('1-jan-2024')
+  const [toDate, setToDate] = useState('31-dec-2024')
   const [years, setYears] = useState([])
   const [bimaData, setBimaData] = useState<IBimaData[]>([])
   const [claimsData, setClaimsData] = useState([])
@@ -49,6 +49,9 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [riPaidCession, setRiPaidCession] = useState([])
   const [riCessionReport, setRiCessionReport] = useState([])
   const [riPaidCessionReport, setRiPaidCessionReport] = useState([])
+  const [riOutstandingCessionReport, setRiOutstandingCessionReport] = useState(
+    [],
+  )
 
   const login = async (username: any, password: any) => {
     try {
@@ -75,6 +78,16 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       return token !== null
     }
   }
+  useEffect(() => {
+    const fetchOutstandingRiCessionReports = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      setRiOutstandingCessionReport(data.result)
+    }
+    fetchOutstandingRiCessionReports()
+  }, [, toDate, branchCode])
+
   useEffect(() => {
     const fetchRIPaidCessionReports = async () => {
       const { data } = await axios.get(
@@ -580,6 +593,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         riPaidCession,
         riCessionReport,
         riPaidCessionReport,
+        riOutstandingCessionReport,
       }}
     >
       {children}

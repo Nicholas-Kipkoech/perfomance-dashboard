@@ -78,7 +78,12 @@ const CustomCard = ({
 }
 
 const Reinsurance = () => {
-  const { riCession, riPaidCession }: any = useContextApi()
+  const {
+    riCession,
+    riPaidCession,
+    riOutstandingCessionReport,
+  }: any = useContextApi()
+  console.log(riOutstandingCessionReport)
   const treatyPremium = riCession.reduce(
     (acc: any, ri: any) => Number(acc + ri.treatyPremium),
     0,
@@ -104,6 +109,34 @@ const Reinsurance = () => {
     0,
   )
   const xolAmt = riPaidCession.reduce(
+    (acc: any, ri: any) => Number(acc + ri.xolAmt),
+    0,
+  )
+
+  const totalOutstandingReinsurance = riOutstandingCessionReport.reduce(
+    (acc: any, ri: any) =>
+      Number(
+        acc +
+          ri.cqsAmt +
+          ri['1stSurpAmt'] +
+          ri['2ndSurpAmt'] +
+          ri.qsAmt +
+          ri.facOutAmt +
+          ri.xolAmt,
+      ),
+    0,
+  )
+
+  const treatyOutstandingAmt = riOutstandingCessionReport.reduce(
+    (acc: any, ri: any) =>
+      Number(acc + ri.cqsAmt + ri['1stSurpAmt'] + ri['2ndSurpAmt'] + ri.qsAmt),
+    0,
+  )
+  const facOutstandingAmt = riOutstandingCessionReport.reduce(
+    (acc: any, ri: any) => Number(acc + ri.facOutAmt),
+    0,
+  )
+  const xolOutstandingAmt = riOutstandingCessionReport.reduce(
     (acc: any, ri: any) => Number(acc + ri.xolAmt),
     0,
   )
@@ -175,6 +208,28 @@ const Reinsurance = () => {
         name3={'xol amount'}
         total3={xolAmt}
         link={'ri-paid-cession'}
+      />
+      <Link
+        href={'/dashboard/reinsurance/ri-cessions'}
+        className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
+      >
+        <div className="flex gap-2 items-center flex-col">
+          <p className="text-[16px] flex justify-center ">
+            {'Total Outstanding Reinsurance'.toUpperCase()}
+          </p>
+          <p className="text-[18px] font-bold flex justify-start items-start">
+            KSH {totalOutstandingReinsurance.toLocaleString()}
+          </p>
+        </div>
+      </Link>
+      <CustomCard
+        name1="Treaty Outstanding Amount"
+        total1={treatyOutstandingAmt}
+        name2={'fac Outstanding amount'}
+        total2={facOutstandingAmt}
+        name3={'xol Outstanding amount'}
+        total3={xolOutstandingAmt}
+        link={''}
       />
     </div>
   )
