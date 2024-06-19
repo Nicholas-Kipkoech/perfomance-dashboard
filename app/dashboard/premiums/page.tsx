@@ -11,7 +11,7 @@ const Underwriting = () => {
     totalRenewals,
     nonMotorUnrenewed,
     reinsurance,
-    directClients,
+    totalDirectClients,
     allClients,
     nonMotorPremium,
     motorPremium,
@@ -23,9 +23,6 @@ const Underwriting = () => {
     nonMotorUndebited,
     motorUndebited,
     commision,
-    fromDate,
-    toDate,
-    branchCode,
   }: any = useContextApi()
 
   const totalReinsurance = reinsurance.reduce(
@@ -132,7 +129,7 @@ const Underwriting = () => {
         />
         <CustomCard
           name={'Total number of direct clients'}
-          total={directClients}
+          total={totalDirectClients}
           link=""
         />
         <CustomCard name={'Total number of brokers'} total={broker} link="" />

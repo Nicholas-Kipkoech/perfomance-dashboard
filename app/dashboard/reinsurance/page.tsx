@@ -32,43 +32,30 @@ const CustomCard = ({
     >
       <div className="flex flex-col gap-2 justify-center">
         <div className="flex gap-2 items-center justify-between">
-          <p className="text-[16px] flex justify-center ">
+          <p className="text-[14px] flex justify-center ">
             {name1.toUpperCase()}
           </p>
           <p className="text-[13px] font-bold flex justify-start items-start">
             KSH {total1.toLocaleString()}
           </p>
-          <p className="text-[13px] font-bold flex justify-start items-start"></p>
         </div>
         {name2 && (
           <div className="flex gap-2 items-center justify-between">
-            <p className="text-[16px] flex justify-center  ">
+            <p className="text-[14px] flex justify-center  ">
               {name2?.toUpperCase()}
             </p>
             <p className="text-[13px] font-bold flex justify-start items-start">
               KSH {total2?.toLocaleString()}
             </p>
-            <p className="text-[13px] font-bold flex justify-start items-start">
-              {cumulativeTotal &&
-                total2 &&
-                ((total2 / Math.floor(cumulativeTotal)) * 100).toFixed(2)}
-              {perc && `%`}
-            </p>
           </div>
         )}
         {name3 && (
           <div className="flex gap-2 items-center justify-between">
-            <p className="text-[16px] flex justify-center ">
+            <p className="text-[14px] flex justify-center ">
               {name3?.toUpperCase()}
             </p>
             <p className="text-[13px] font-bold flex justify-start items-start">
               KSH {total3?.toLocaleString()}
-            </p>
-            <p className="text-[13px] font-bold flex justify-start items-start">
-              {cumulativeTotal &&
-                total3 &&
-                ((total3 / Math.floor(cumulativeTotal)) * 100).toFixed(2)}
-              {perc && `%`}
             </p>
           </div>
         )}
@@ -147,7 +134,7 @@ const Reinsurance = () => {
         className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
       >
         <div className="flex gap-2 items-center flex-col">
-          <p className="text-[16px] flex justify-center ">
+          <p className="text-[14px] flex justify-center ">
             {'Total reinsurance premium (ceeded)'.toUpperCase()}
           </p>
           <p className="text-[18px] font-bold flex justify-start items-start">
@@ -169,7 +156,7 @@ const Reinsurance = () => {
         className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
       >
         <div className="flex gap-2 items-center flex-col">
-          <p className="text-[16px] flex justify-center ">
+          <p className="text-[14px] flex justify-center ">
             {'Total Reinsurance Commission (Earned)'.toUpperCase()}
           </p>
           <p className="text-[18px] font-bold flex justify-start items-start">
@@ -191,8 +178,8 @@ const Reinsurance = () => {
         className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
       >
         <div className="flex gap-2 items-center flex-col">
-          <p className="text-[16px] flex justify-center ">
-            {'Reinsurance Claim Recovery'.toUpperCase()}
+          <p className="text-[14px] flex justify-center ">
+            {'Reinsurance Claim paid Recovery'.toUpperCase()}
           </p>
           <p className="text-[18px] font-bold flex justify-start items-start">
             KSH {(treatyAmt + facAmt + xolAmt).toLocaleString()}
@@ -201,21 +188,21 @@ const Reinsurance = () => {
       </Link>
 
       <CustomCard
-        name1="Treaty Amount"
+        name1="Treaty claim recovery "
         total1={treatyAmt}
-        name2={'fac amount'}
+        name2={'fac claim recovery'}
         total2={facAmt}
-        name3={'xol amount'}
+        name3={'xol claim recovery'}
         total3={xolAmt}
         link={'ri-paid-cession'}
       />
       <Link
-        href={'/dashboard/reinsurance/ri-cessions'}
+        href={'/dashboard/reinsurance/ri-outstanding-cession'}
         className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
       >
         <div className="flex gap-2 items-center flex-col">
-          <p className="text-[16px] flex justify-center ">
-            {'Total Outstanding Reinsurance'.toUpperCase()}
+          <p className="text-[14px] flex justify-center ">
+            {'reinsurance share of claim Outstanding '.toUpperCase()}
           </p>
           <p className="text-[18px] font-bold flex justify-start items-start">
             KSH {totalOutstandingReinsurance.toLocaleString()}
@@ -223,13 +210,13 @@ const Reinsurance = () => {
         </div>
       </Link>
       <CustomCard
-        name1="Treaty Outstanding Amount"
+        name1="Treaty share of claim Outstanding "
         total1={treatyOutstandingAmt}
-        name2={'fac Outstanding amount'}
+        name2={'fac share of claim Outstanding'}
         total2={facOutstandingAmt}
-        name3={'xol Outstanding amount'}
+        name3={'xol share of claim Outstanding'}
         total3={xolOutstandingAmt}
-        link={''}
+        link={'ri-outstanding-cession'}
       />
     </div>
   )

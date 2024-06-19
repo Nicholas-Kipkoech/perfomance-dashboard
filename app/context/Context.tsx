@@ -52,6 +52,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [riOutstandingCessionReport, setRiOutstandingCessionReport] = useState(
     [],
   )
+  const [directClients, setDirectClients] = useState([])
 
   const login = async (username: any, password: any) => {
     try {
@@ -78,6 +79,15 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       return token !== null
     }
   }
+  useEffect(() => {
+    const fetchDirectClients = async () => {
+      const { data } = await axios.get(
+        `${localUrl}/direct-clients?branchCode=${branchCode}`,
+      )
+      setDirectClients(data.result)
+    }
+    fetchDirectClients()
+  }, [branchCode])
   useEffect(() => {
     const fetchOutstandingRiCessionReports = async () => {
       const { data } = await axios.get(
@@ -261,8 +271,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, [fromDate, toDate, branchCode])
 
   function calculatePremiums(bimaData: any) {
-    let directClients = 0
-
     let nonMotorPremium = 0
     let motorPremium = 0
     let directPremium = 0
@@ -288,12 +296,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         total = premium.premiums + premium.earthQuake + premium.PVTPremium
         nonMotorPremium += total
       }
-
-      const totalClients = premium.clientsCount
-
-      if (premium.clientCode === '15') {
-        directClients += totalClients
-      }
     })
 
     const totalPremium = bimaData.reduce((total: number, premium: any) => {
@@ -307,7 +309,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     return {
       totalPremium,
       commision,
-      directClients,
       nonMotorPremium,
       motorPremium,
       intermediaryPremium,
@@ -317,7 +318,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const {
     totalPremium,
     commision,
-    directClients,
+
     nonMotorPremium,
     motorPremium,
     intermediaryPremium,
@@ -531,6 +532,14 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const filteredLossRation = cmLossRatio.filter((claim: any) => {
     return claim.cm_order_no === 10
   })
+  function calculateDirectClients(data: any) {
+    const totalDirectClients = data.reduce(
+      (acc: number, direct: any) => acc + direct.totalClients,
+      0,
+    )
+    return { totalDirectClients }
+  }
+  const { totalDirectClients } = calculateDirectClients(directClients)
 
   return (
     <Context.Provider
@@ -552,7 +561,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         motorPaidClaims,
         nonMotorPaidClaims,
         commision,
-        directClients,
         allClients,
         broker,
         agents,
@@ -594,6 +602,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         riCessionReport,
         riPaidCessionReport,
         riOutstandingCessionReport,
+        totalDirectClients,
       }}
     >
       {children}

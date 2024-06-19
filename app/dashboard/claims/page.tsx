@@ -51,7 +51,7 @@ const Claims = () => {
     <div>
       <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
         <div
-          className={`md:h-[130px] sm:h-[130px] w-[400px] border cursor-pointer rounded-md p-[20px]`}
+          className={`md:h-[130px] sm:h-[130px] w-[450px] border cursor-pointer rounded-md p-[20px]`}
           onClick={() => router.push('/dashboard/claims/registeredClaims')}
         >
           <div className="flex flex-col gap-1">
@@ -78,7 +78,7 @@ const Claims = () => {
           </div>
         </div>
         <div
-          className={`md:h-[130px] sm:h-[130px] w-[400px] border cursor-pointer rounded-md p-[20px]`}
+          className={`md:h-[130px] sm:h-[130px] w-[450px] border cursor-pointer rounded-md p-[20px]`}
           onClick={() => router.push('/dashboard/claims/paidClaims')}
         >
           <div className="flex flex-col gap-1">
@@ -108,7 +108,7 @@ const Claims = () => {
         </div>
 
         <div
-          className={`md:h-[130px] sm:h-[130px] w-[400px] border cursor-pointer  rounded-md p-[20px]`}
+          className={`md:h-[130px] sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => router.push('/dashboard/claims/outstandingClaims')}
         >
           <div className="flex flex-col gap-1">
