@@ -37,7 +37,7 @@ const Dashboard = () => {
       if (typeof window !== 'undefined') {
         const currentTime = Math.floor(Date.now() / 1000)
         const accessToken: string | any = localStorage.getItem('accessToken')
-        const decodedToken: any = jwtDecode(accessToken)
+        const decodedToken: any | string = jwtDecode(accessToken)
         if (!isAuthenticated() || currentTime > decodedToken.exp) {
           router.push('/')
         }
@@ -57,7 +57,6 @@ const Dashboard = () => {
     component,
   }: any = useContextApi()
 
-  const [lastDayOfMonth, setLastDayOfMonth] = useState('')
   const [today, setToday] = useState('')
   const [fmDate, setFmDate] = useState('')
   const [toDate, setTdDate] = useState('')

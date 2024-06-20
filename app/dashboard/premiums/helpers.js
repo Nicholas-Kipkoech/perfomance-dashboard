@@ -15,3 +15,4 @@ export const calculatePercentage = (item) => {
 
   return isNaN(result) ? 0 : result;
 };
+
