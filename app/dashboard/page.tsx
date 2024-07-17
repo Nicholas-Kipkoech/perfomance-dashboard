@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, JSX } from 'react'
+import React, { useEffect, useState, JSX, useContext } from 'react'
 import { useContextApi } from '../context/Context'
 import CustomSelect from '../UI/reusableComponents/CustomSelect'
 import { IBranches } from '../assets/interfaces'
@@ -12,6 +12,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { useRouter } from 'next/navigation'
 import { jwtDecode } from 'jwt-decode'
 import Reinsurance from './reinsurance/page'
+import Statistical from './statistical/page'
 
 const months = [
   'Jan',
@@ -55,11 +56,15 @@ const Dashboard = () => {
     setBranchCode,
     setCompany,
     component,
+    setFromDate23,
+    setToDate23,
   }: any = useContextApi()
 
   const [today, setToday] = useState('')
-  const [fmDate, setFmDate] = useState('')
-  const [toDate, setTdDate] = useState('')
+  const [fmDate23, setFmDate23] = useState('')
+  const [toDate23, setTdDate23] = useState('')
+  const [fmDate24, setFmDate24] = useState('')
+  const [toDate24, setTdDate24] = useState('')
   const [loading, setLoading] = useState(false)
   const [timeoutId, setTimeoutId] = useState<any>(null)
 
@@ -80,6 +85,8 @@ const Dashboard = () => {
         return <Finance />
       case 'Reinsurance':
         return <Reinsurance />
+      case 'Statistical':
+        return <Statistical />
       default:
         break
     }
@@ -94,7 +101,10 @@ const Dashboard = () => {
       formattedMonth = months[Number(month - 1)]
     }
     const formattedToDate = day + '-' + formattedMonth + '-' + year
-    setTdDate(formattedToDate)
+    const formattedToDate23 = day + '-' + formattedMonth + '-' + 2023
+
+    setTdDate23(formattedToDate23)
+    setTdDate24(formattedToDate)
   }
 
   const handleFromDate = (date: any, dateString: any) => {
@@ -106,7 +116,9 @@ const Dashboard = () => {
       formattedMonth = months[Number(month - 1)]
     }
     const formattedToDate = day + '-' + formattedMonth + '-' + year
-    setFmDate(formattedToDate)
+    const formattedToDate23 = day + '-' + formattedMonth + '-' + 2023
+    setFmDate23(formattedToDate23)
+    setFmDate24(formattedToDate)
   }
 
   const handleRunReports = () => {
@@ -118,10 +130,12 @@ const Dashboard = () => {
         setLoading(false) // After 2 seconds, set loading to false
       }, 5000)
       setTimeoutId(id) // Store the timeout ID
-      setFromDate(fmDate)
-      setToDate(toDate)
+      setFromDate(fmDate24)
+      setToDate(toDate24), setFromDate23(fmDate23), setToDate23(toDate23)
     }
   }
+
+  console.log(fmDate23)
 
   useEffect(() => {
     return () => {
@@ -132,7 +146,7 @@ const Dashboard = () => {
     }
   }, [timeoutId])
 
-  const checkDate = fmDate.split('-').join('') === 'undefinedundefined'
+  const checkDate = fmDate24.split('-').join('') === 'undefinedundefined'
 
   return (
     <div className="mt-[20px] ml-4 flex flex-col justify-center">

@@ -1,6 +1,6 @@
 'use client'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { toDate24, useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { createContext } from 'react'
 import {
@@ -22,6 +22,8 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [branchCode, setBranchCode] = useState('')
   const [fromDate, setFromDate] = useState('1-jan-2024')
   const [toDate, setToDate] = useState('31-dec-2024')
+  const [fromDate23, setFromDate23] = useState('1-jan-2023')
+  const [toDate23, setToDate23] = useState('31-dec-2023')
   const [years, setYears] = useState([])
   const [bimaData, setBimaData] = useState<IBimaData[]>([])
   const [claimsData, setClaimsData] = useState([])
@@ -42,7 +44,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [receipts, setReceipts] = useState<IReceipts[]>([])
   const [companys, setCompanys] = useState<IBranches[]>([])
   const [company, setCompany] = useState('INTRA')
-  const [component, setComponent] = useState('Underwriting')
+  const [component, setComponent] = useState('Statistical')
   const [reinsurance, setReinsurance] = useState([])
   const [cmLossRatio, setCmLossRatio] = useState([])
   const [riCession, setRiCession] = useState([])
@@ -318,7 +320,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const {
     totalPremium,
     commision,
-
     nonMotorPremium,
     motorPremium,
     intermediaryPremium,
@@ -345,6 +346,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     return { totalClaimPaid, nonMotorPaidClaims, motorPaidClaims }
   }
+
   const {
     totalClaimPaid,
     motorPaidClaims,
@@ -550,6 +552,10 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setBranchCode,
         fromDate,
         branchCode,
+        fromDate23,
+        setFromDate23,
+        setToDate23,
+        toDate24,
         toDate,
         setFromDate,
         setToDate,

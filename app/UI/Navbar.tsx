@@ -45,6 +45,10 @@ const Navbar = () => {
       label: 'Finance',
       key: 'Finance',
     },
+    {
+      label: 'Statistical',
+      key: 'statistical',
+    },
   ]
 
   const handleClick = (e: any) => {

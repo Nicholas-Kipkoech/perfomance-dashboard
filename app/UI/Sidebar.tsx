@@ -25,6 +25,9 @@ const Sidebar = () => {
       name: 'Modules',
       items: [
         {
+          name: 'Statistical',
+        },
+        {
           name: 'Underwriting',
         },
         {

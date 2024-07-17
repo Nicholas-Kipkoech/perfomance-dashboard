@@ -1,11 +1,11 @@
-import React from "react";
-import Sidebar from "../UI/Sidebar";
-import Navbar from "../UI/Navbar";
-import ContextProvider from "../context/Context";
+import React from 'react'
+import Sidebar from '../UI/Sidebar'
+import Navbar from '../UI/Navbar'
+import AppContextProvider from './providers/AppProviders'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ContextProvider>
+    <AppContextProvider>
       <div className="h-screen flex">
         <div className="w-[250px] h-full bg-[#092332] sm:hidden md:block">
           <Sidebar />
@@ -15,8 +15,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           {children}
         </div>
       </div>
-    </ContextProvider>
-  );
-};
+    </AppContextProvider>
+  )
+}
 
-export default Layout;
+export default Layout
