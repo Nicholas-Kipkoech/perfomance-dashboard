@@ -16,13 +16,13 @@ const CustomCard = ({ total2024, total2023, name }: ICustomCard) => {
         <div className="flex flex-col justify-evenly ">
           <p className="text-[1rem]">2024</p>
           <p className="font-bold text-[1.1rem]">
-            KSH {Number(total2023.toFixed(2)).toLocaleString()}
+            KSH {Number(total2024.toFixed(2)).toLocaleString()}
           </p>
         </div>
         <div className="flex flex-col justify-evenly">
           <p className="text-[1rem]">2023</p>
           <p className="font-bold text-[1.1rem]">
-            KSH {Number(total2024.toFixed(2)).toLocaleString()}
+            KSH {Number(total2023.toFixed(2)).toLocaleString()}
           </p>
         </div>
       </div>
