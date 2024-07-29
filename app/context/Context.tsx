@@ -96,7 +96,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       setRiOutstandingCessionReport(data.result)
     }
     fetchOutstandingRiCessionReports()
-  }, [, toDate, branchCode])
+  }, [toDate, branchCode])
 
   useEffect(() => {
     const fetchRIPaidCessionReports = async () => {

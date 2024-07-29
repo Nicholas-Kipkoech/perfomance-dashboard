@@ -24,6 +24,14 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const [riPaidCession24, setRiPaidCession24] = useState([])
   const [managementExpenses23, setManagementExpenses23] = useState([])
   const [managementExpenses24, setManagementExpenses24] = useState([])
+  const [
+    riOutstandingCessionReport23,
+    setRiOutstandingCessionReport23,
+  ] = useState([])
+  const [
+    riOutstandingCessionReport24,
+    setRiOutstandingCessionReport24,
+  ] = useState([])
 
   useEffect(() => {
     const fetchPremiums2024 = async () => {
@@ -145,6 +153,26 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
     fetchManagementExpenses()
   }, [fromDate, toDate, branchCode])
 
+  useEffect(() => {
+    const fetchOutstandingRiCessionReports = async () => {
+      const { data } = await axios.get(
+        `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      setRiOutstandingCessionReport24(data.result)
+    }
+    fetchOutstandingRiCessionReports()
+  }, [toDate, branchCode])
+
+  useEffect(() => {
+    const fetchOutstandingRiCessionReports = async () => {
+      const { data } = await axios.get(
+        `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate23}&branchCode=${branchCode}`,
+      )
+      setRiOutstandingCessionReport23(data.result)
+    }
+    fetchOutstandingRiCessionReports()
+  }, [toDate23, branchCode])
+
   function calculatePremiums(premiums: any) {
     const totalPremium = premiums.reduce((total: number, premium: any) => {
       return total + premium.premiums + premium.earthQuake + premium.PVTPremium
@@ -223,6 +251,8 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         riPaidCession24,
         managementExpenses23,
         managementExpenses24,
+        riOutstandingCessionReport23,
+        riOutstandingCessionReport24,
       }}
     >
       {children}

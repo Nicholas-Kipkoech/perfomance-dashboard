@@ -70,7 +70,7 @@ const Reinsurance = () => {
     riPaidCession,
     riOutstandingCessionReport,
   }: any = useContextApi()
-  console.log(riOutstandingCessionReport)
+
   const treatyPremium = riCession.reduce(
     (acc: any, ri: any) => Number(acc + ri.treatyPremium),
     0,

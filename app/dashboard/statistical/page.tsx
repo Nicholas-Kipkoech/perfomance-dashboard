@@ -46,6 +46,8 @@ const Statistical = () => {
     riPaidCession24,
     managementExpenses23,
     managementExpenses24,
+    riOutstandingCessionReport23,
+    riOutstandingCessionReport24,
   }: any = useContext(StatisticalContext)
 
   const facCommission23 = riCession23.reduce(
@@ -81,6 +83,34 @@ const Statistical = () => {
     (acc: any, trn: any) => Number(acc + trn.transactionAmt),
     0,
   )
+
+  const totalOutstandingReinsurance23 = riOutstandingCessionReport23.reduce(
+    (acc: any, ri: any) =>
+      Number(
+        acc +
+          ri.cqsAmt +
+          ri['1stSurpAmt'] +
+          ri['2ndSurpAmt'] +
+          ri.qsAmt +
+          ri.facOutAmt +
+          ri.xolAmt,
+      ),
+    0,
+  )
+
+  const totalOutstandingReinsurance24 = riOutstandingCessionReport24.reduce(
+    (acc: any, ri: any) =>
+      Number(
+        acc +
+          ri.cqsAmt +
+          ri['1stSurpAmt'] +
+          ri['2ndSurpAmt'] +
+          ri.qsAmt +
+          ri.facOutAmt +
+          ri.xolAmt,
+      ),
+    0,
+  )
   return (
     <div className="mt-2 ml-3">
       <div className="grid gap-4 grid-cols-2">
@@ -110,12 +140,12 @@ const Statistical = () => {
           total2024={totalME24}
         />
         <CustomCard
-          name="Fac  Out Commision"
+          name="Gross Fac Out Commision"
           total2023={facCommission23}
           total2024={facCommission24}
         />
         <CustomCard
-          name="Outward Fac"
+          name="Gross Fac Premium"
           total2023={facPremium23}
           total2024={facPremium24}
         />
@@ -123,6 +153,11 @@ const Statistical = () => {
           name="Claim Paid Recovery"
           total2023={claimPaidRecovery23}
           total2024={claimPaidRecovery24}
+        />
+        <CustomCard
+          name="Reinsurance share of claim outstanding"
+          total2023={totalOutstandingReinsurance23}
+          total2024={totalOutstandingReinsurance24}
         />
       </div>
     </div>
