@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { jwtDecode } from 'jwt-decode'
 import Reinsurance from './reinsurance/page'
 import Statistical from './statistical/page'
+import { StatisticalContext } from '../context/StatisticalContext'
 
 const months = [
   'Jan',
@@ -56,9 +57,15 @@ const Dashboard = () => {
     setBranchCode,
     setCompany,
     component,
-    setFromDate23,
-    setToDate23,
   }: any = useContextApi()
+
+  const {
+    setFromDate: _setFromDate,
+    setFromDate23: _setFromDate23,
+    setToDate: _setToDate,
+    setToDate23: _setToDate23,
+    setBranchCode: _setBranchCode,
+  }: any = useContext(StatisticalContext)
 
   const [today, setToday] = useState('')
   const [fmDate23, setFmDate23] = useState('')
@@ -131,11 +138,11 @@ const Dashboard = () => {
       }, 5000)
       setTimeoutId(id) // Store the timeout ID
       setFromDate(fmDate24)
-      setToDate(toDate24), setFromDate23(fmDate23), setToDate23(toDate23)
+      _setFromDate(fmDate24)
+      _setToDate(toDate24)
+      setToDate(toDate24), _setFromDate23(fmDate23), _setToDate23(toDate23)
     }
   }
-
-  console.log(fmDate23)
 
   useEffect(() => {
     return () => {
@@ -156,6 +163,7 @@ const Dashboard = () => {
           options={formattedCompanys}
           onChange={(value: { value: string; label: string }) => {
             setBranchCode(value.value)
+            _setBranchCode(value.value)
             setCompany(value.label)
           }}
           className="w-[330px] ml-3"

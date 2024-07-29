@@ -2,19 +2,16 @@
 import axios from 'axios'
 import React, { createContext, useEffect, useState } from 'react'
 import { useContextApi } from './Context'
+import { LOCAL_URL } from './database-connect'
 
 export const StatisticalContext = createContext({})
 
 const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
-  const {
-    fromDate,
-    toDate,
-    fromDate23,
-    toDate23,
-    branchCode,
-  }: any = useContextApi()
-
-  const localUrl = 'http://localhost:5002/bima/perfomance'
+  const [fromDate23, setFromDate23] = useState('1-jan-2023')
+  const [toDate23, setToDate23] = useState('31-dec-2023')
+  const [fromDate, setFromDate] = useState('1-jan-2024')
+  const [toDate, setToDate] = useState('31-dec-2024')
+  const [branchCode, setBranchCode] = useState('')
   const [premiums2024, setPremiums2024] = useState([])
   const [premiums2023, setPremiums2023] = useState([])
   const [claims2023, setClaims2023] = useState([])
@@ -31,7 +28,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchPremiums2024 = async () => {
       const { data } = await axios.get(
-        `${localUrl}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setPremiums2024(data.result)
     }
@@ -41,17 +38,17 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchPremiums2023 = async () => {
       const { data } = await axios.get(
-        `${localUrl}/underwriting?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/underwriting?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
       )
       setPremiums2023(data.result)
     }
     fetchPremiums2023()
-  }, [fromDate, toDate, branchCode])
+  }, [fromDate23, toDate23, branchCode])
 
   useEffect(() => {
     const fetchClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/claims?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/claims?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
       )
       setClaims2023(data.result)
     }
@@ -61,7 +58,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setClaims2024(data.result)
     }
@@ -71,7 +68,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchOutStandingClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate23}&fromDate=${fromDate23}`,
+        `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate23}&fromDate=${fromDate23}`,
       )
       setOutstandingClaims23(data.result)
     }
@@ -81,7 +78,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchOutStandingClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
+        `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
       )
       setOutstandingClaims24(data.result)
     }
@@ -91,7 +88,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRICession = async () => {
       const { data } = await axios.get(
-        `${localUrl}/ri-cessions?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/ri-cessions?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
       )
       setRiCession23(data.result)
     }
@@ -101,7 +98,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRICession = async () => {
       const { data } = await axios.get(
-        `${localUrl}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setRiCession24(data.result)
     }
@@ -111,7 +108,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRIPaidCession = async () => {
       const { data } = await axios.get(
-        `${localUrl}/ri-paid-cession-sum?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
       )
       setRiPaidCession23(data.result)
     }
@@ -121,7 +118,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRIPaidCession = async () => {
       const { data } = await axios.get(
-        `${localUrl}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setRiPaidCession24(data.result)
     }
@@ -131,7 +128,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchManagementExpenses = async () => {
       const { data } = await axios.get(
-        `${localUrl}/management-expenses?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/management-expenses?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
       )
       setManagementExpenses23(data.result)
     }
@@ -141,7 +138,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchManagementExpenses = async () => {
       const { data } = await axios.get(
-        `${localUrl}/management-expenses?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/management-expenses?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setManagementExpenses24(data.result)
     }
@@ -201,10 +198,17 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const { totalOutstanding: totalOutstanding2024 } = calculateOutstandingClaims(
     outstandingClaims24,
   )
+  console.log('23', fromDate23)
+  console.log('24', fromDate)
 
   return (
     <StatisticalContext.Provider
       value={{
+        setFromDate,
+        setFromDate23,
+        setToDate,
+        setToDate23,
+        setBranchCode,
         totalPremium2024,
         commision2024,
         totalPremium2023,

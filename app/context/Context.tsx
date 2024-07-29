@@ -15,15 +15,13 @@ import {
   IUndebitedPolicies,
   IUnrenewedPolicies,
 } from '../assets/interfaces'
+import { LOCAL_URL } from './database-connect'
 
 const Context = createContext({})
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const localUrl = 'http://localhost:5002/bima/perfomance'
   const [branchCode, setBranchCode] = useState('')
   const [fromDate, setFromDate] = useState('1-jan-2024')
   const [toDate, setToDate] = useState('31-dec-2024')
-  const [fromDate23, setFromDate23] = useState('1-jan-2023')
-  const [toDate23, setToDate23] = useState('31-dec-2023')
   const [years, setYears] = useState([])
   const [bimaData, setBimaData] = useState<IBimaData[]>([])
   const [claimsData, setClaimsData] = useState([])
@@ -58,7 +56,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (username: any, password: any) => {
     try {
-      const response = await axios.post(`${localUrl}/login`, {
+      const response = await axios.post(`${LOCAL_URL}/login`, {
         un: username,
         pw: password,
       })
@@ -84,7 +82,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchDirectClients = async () => {
       const { data } = await axios.get(
-        `${localUrl}/direct-clients?branchCode=${branchCode}`,
+        `${LOCAL_URL}/direct-clients?branchCode=${branchCode}`,
       )
       setDirectClients(data.result)
     }
@@ -93,7 +91,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchOutstandingRiCessionReports = async () => {
       const { data } = await axios.get(
-        `${localUrl}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
       )
       setRiOutstandingCessionReport(data.result)
     }
@@ -103,7 +101,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRIPaidCessionReports = async () => {
       const { data } = await axios.get(
-        `${localUrl}/ri-paid-cession-report?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/ri-paid-cession-report?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setRiPaidCessionReport(data.result)
     }
@@ -112,7 +110,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRICessionReports = async () => {
       const { data } = await axios.get(
-        `${localUrl}/ri-cessions-register?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/ri-cessions-register?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setRiCessionReport(data.result)
     }
@@ -122,7 +120,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRIPaidCession = async () => {
       const { data } = await axios.get(
-        `${localUrl}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setRiPaidCession(data.result)
     }
@@ -132,7 +130,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRICession = async () => {
       const { data } = await axios.get(
-        `${localUrl}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setRiCession(data.result)
     }
@@ -142,7 +140,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchBimaData = async () => {
       const { data } = await axios.get(
-        `${localUrl}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setBimaData(data.result)
     }
@@ -151,7 +149,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const fetchOrgBranches = async () => {
-      const { data } = await axios.get(`${localUrl}/branches`)
+      const { data } = await axios.get(`${LOCAL_URL}/branches`)
       setCompanys([
         { organization_name: 'Entire Company', organization_code: '' },
         ...data.result,
@@ -163,7 +161,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setClaimsData(data.result)
     }
@@ -173,7 +171,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRegisteredClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setRegisteredClaims(data.result)
     }
@@ -182,7 +180,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchOutStandingClaims = async () => {
       const { data } = await axios.get(
-        `${localUrl}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
+        `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
       )
       setOutstandingClaims(data.result)
     }
@@ -191,7 +189,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchProductionPerUnit = async () => {
       const { data } = await axios.get(
-        `${localUrl}/production?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/production?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setProductionData(data.result)
     }
@@ -201,7 +199,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchEntityClients = async () => {
       const { data } = await axios.get(
-        `${localUrl}/clients?branchCode=${branchCode}`,
+        `${LOCAL_URL}/clients?branchCode=${branchCode}`,
       )
       setClients(data.result)
     }
@@ -210,7 +208,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchUnrenewedPolicies = async () => {
       const { data } = await axios.get(
-        `${localUrl}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setUnrenewedPolicies(data.result)
     }
@@ -219,7 +217,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchUndebitedPolicies = async () => {
       const { data } = await axios.get(
-        `${localUrl}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setUndebitedPolicies(data.result)
     }
@@ -228,7 +226,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchSalvages = async () => {
       const { data } = await axios.get(
-        `${localUrl}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setSalvages(data.result)
     }
@@ -237,7 +235,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchRecoveries = async () => {
       const { data } = await axios.get(
-        `${localUrl}/recovery?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/recovery?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setRecovery(data.result)
     }
@@ -246,7 +244,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchARreceipts = async () => {
       const { data } = await axios.get(
-        `${localUrl}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setReceipts(data.result)
     }
@@ -255,7 +253,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchReinsurance = async () => {
       const { data } = await axios.get(
-        `${localUrl}/reinsurance?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/reinsurance?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setReinsurance(data.result)
     }
@@ -265,7 +263,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchLossRatio = async () => {
       const { data } = await axios.get(
-        `${localUrl}/cm-loss-ratio?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/cm-loss-ratio?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
       )
       setCmLossRatio(data.result)
     }
@@ -552,9 +550,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setBranchCode,
         fromDate,
         branchCode,
-        fromDate23,
-        setFromDate23,
-        setToDate23,
         toDate24,
         toDate,
         setFromDate,

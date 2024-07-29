@@ -13,16 +13,16 @@ const CustomCard = ({ total2024, total2023, name }: ICustomCard) => {
     <div className="border  pt-4 h-[8rem] w-[30rem]">
       <p className="flex justify-center">{name.toUpperCase()}</p>
       <div className="flex justify-evenly mt-2">
-        <div className="flex flex-col justify-evenly">
-          <p className="text-[1rem]">2023</p>
-          <p className="font-bold text-[1.1rem]">
-            KSH {Number(total2024.toFixed(2)).toLocaleString()}
-          </p>
-        </div>
         <div className="flex flex-col justify-evenly ">
           <p className="text-[1rem]">2024</p>
           <p className="font-bold text-[1.1rem]">
             KSH {Number(total2023.toFixed(2)).toLocaleString()}
+          </p>
+        </div>
+        <div className="flex flex-col justify-evenly">
+          <p className="text-[1rem]">2023</p>
+          <p className="font-bold text-[1.1rem]">
+            KSH {Number(total2024.toFixed(2)).toLocaleString()}
           </p>
         </div>
       </div>
@@ -85,32 +85,32 @@ const Statistical = () => {
     <div className="mt-2 ml-3">
       <div className="grid gap-4 grid-cols-2">
         <CustomCard
-          name="Premiums"
+          name="Gross Premiums"
           total2023={totalPremium2023}
           total2024={totalPremium2024}
         />
         <CustomCard
-          name="Commission"
+          name="Gross Commission"
           total2023={commision2023}
           total2024={commision2024}
         />
         <CustomCard
-          name="Claim Paid"
+          name="Gross Claim Paid"
           total2023={totalClaimPaid2023}
           total2024={totalClaimPaid2024}
         />
         <CustomCard
-          name="Claim Outstanding"
+          name="Gross Claim Outstanding"
           total2023={totalOutstanding2023}
           total2024={totalOutstanding2024}
         />
         <CustomCard
-          name="ME Expenses"
+          name="Management Expenses"
           total2023={totalME23}
           total2024={totalME24}
         />
         <CustomCard
-          name="Fac Commision"
+          name="Fac  Out Commision"
           total2023={facCommission23}
           total2024={facCommission24}
         />

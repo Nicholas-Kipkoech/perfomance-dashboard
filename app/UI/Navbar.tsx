@@ -15,8 +15,6 @@ const Navbar = () => {
   const { logout, setComponent, fromDate, toDate }: any = useContextApi()
   const router = useRouter()
 
-  console.log(fromDate, toDate)
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const accessToken: any = localStorage.getItem('accessToken')
