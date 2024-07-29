@@ -550,7 +550,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setBranchCode,
         fromDate,
         branchCode,
-        toDate24,
         toDate,
         setFromDate,
         setToDate,
