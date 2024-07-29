@@ -16,12 +16,13 @@ import {
   IUnrenewedPolicies,
 } from '../assets/interfaces'
 import { LOCAL_URL } from './database-connect'
+import { getDates } from '../dashboard/premiums/helpers'
 
 const Context = createContext({})
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [branchCode, setBranchCode] = useState('')
-  const [fromDate, setFromDate] = useState('1-jan-2024')
-  const [toDate, setToDate] = useState('31-dec-2024')
+  const [fromDate, setFromDate] = useState('')
+  const [toDate, setToDate] = useState('')
   const [years, setYears] = useState([])
   const [bimaData, setBimaData] = useState<IBimaData[]>([])
   const [claimsData, setClaimsData] = useState([])
@@ -53,6 +54,12 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     [],
   )
   const [directClients, setDirectClients] = useState([])
+
+  useEffect(() => {
+    const { currentYear, lastYear } = getDates()
+    setFromDate(currentYear.startDate)
+    setToDate(currentYear.endDate)
+  }, [])
 
   const login = async (username: any, password: any) => {
     try {

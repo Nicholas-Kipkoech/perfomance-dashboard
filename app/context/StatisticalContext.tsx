@@ -3,14 +3,15 @@ import axios from 'axios'
 import React, { createContext, useEffect, useState } from 'react'
 import { useContextApi } from './Context'
 import { LOCAL_URL } from './database-connect'
+import { getDates } from '../dashboard/premiums/helpers'
 
 export const StatisticalContext = createContext({})
 
 const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
-  const [fromDate23, setFromDate23] = useState('1-jan-2023')
-  const [toDate23, setToDate23] = useState('31-dec-2023')
-  const [fromDate, setFromDate] = useState('1-jan-2024')
-  const [toDate, setToDate] = useState('31-dec-2024')
+  const [fromDate23, setFromDate23] = useState('')
+  const [toDate23, setToDate23] = useState('')
+  const [fromDate, setFromDate] = useState('')
+  const [toDate, setToDate] = useState('')
   const [branchCode, setBranchCode] = useState('')
   const [premiums2024, setPremiums2024] = useState([])
   const [premiums2023, setPremiums2023] = useState([])
@@ -32,6 +33,14 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
     riOutstandingCessionReport24,
     setRiOutstandingCessionReport24,
   ] = useState([])
+
+  useEffect(() => {
+    const { currentYear, lastYear } = getDates()
+    setFromDate(currentYear.startDate)
+    setFromDate23(lastYear.startDate)
+    setToDate23(lastYear.endDate)
+    setToDate(currentYear.endDate)
+  }, [])
 
   useEffect(() => {
     const fetchPremiums2024 = async () => {
@@ -226,8 +235,6 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const { totalOutstanding: totalOutstanding2024 } = calculateOutstandingClaims(
     outstandingClaims24,
   )
-  console.log('23', fromDate23)
-  console.log('24', fromDate)
 
   return (
     <StatisticalContext.Provider

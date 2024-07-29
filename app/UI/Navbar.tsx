@@ -64,10 +64,14 @@ const Navbar = () => {
       >
         <MenuOutlined size={20} />
       </Dropdown>
-
-      <span className="justify-start font-[700] md:text-[25px] sm:text-[12px] ml-3">
-        {user?.orgDesc}
-      </span>
+      <div className="flex items-center justify-between gap-8">
+        <span className="justify-start font-[700] md:text-[25px] sm:text-[12px] ml-3">
+          {user?.orgDesc}
+        </span>
+        <p>
+          [{fromDate.toUpperCase()}] - [{toDate.toUpperCase()}]
+        </p>
+      </div>
       <div className="flex items-center">
         <CustomButton
           name="Logout"
