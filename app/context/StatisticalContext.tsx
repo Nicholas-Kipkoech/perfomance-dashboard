@@ -8,10 +8,12 @@ import { getDates } from '../dashboard/premiums/helpers'
 export const StatisticalContext = createContext({})
 
 const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
-  const [fromDate23, setFromDate23] = useState('')
-  const [toDate23, setToDate23] = useState('')
-  const [fromDate, setFromDate] = useState('')
-  const [toDate, setToDate] = useState('')
+  const { currentYear, lastYear } = getDates()
+
+  const [fromDate23, setFromDate23] = useState(lastYear.startDate)
+  const [toDate23, setToDate23] = useState(lastYear.endDate)
+  const [fromDate, setFromDate] = useState(currentYear.startDate)
+  const [toDate, setToDate] = useState(currentYear.endDate)
   const [branchCode, setBranchCode] = useState('')
   const [premiums2024, setPremiums2024] = useState([])
   const [premiums2023, setPremiums2023] = useState([])
@@ -34,14 +36,6 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
     setRiOutstandingCessionReport24,
   ] = useState([])
   const [loadingData, setLoadingData] = useState(false)
-
-  useEffect(() => {
-    const { currentYear, lastYear } = getDates()
-    setFromDate(currentYear.startDate)
-    setFromDate23(lastYear.startDate)
-    setToDate23(lastYear.endDate)
-    setToDate(currentYear.endDate)
-  }, [])
 
   useEffect(() => {
     const fetchData = async () => {

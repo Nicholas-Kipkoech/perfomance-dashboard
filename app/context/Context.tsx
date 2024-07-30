@@ -20,9 +20,11 @@ import { getDates } from '../dashboard/premiums/helpers'
 
 const Context = createContext({})
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const { currentYear } = getDates()
+
   const [branchCode, setBranchCode] = useState('')
-  const [fromDate, setFromDate] = useState('')
-  const [toDate, setToDate] = useState('')
+  const [fromDate, setFromDate] = useState(currentYear.startDate)
+  const [toDate, setToDate] = useState(currentYear.endDate)
   const [years, setYears] = useState([])
   const [bimaData, setBimaData] = useState<IBimaData[]>([])
   const [claimsData, setClaimsData] = useState([])
@@ -55,12 +57,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   )
   const [directClients, setDirectClients] = useState([])
   const [loadingData, setLoadingData] = useState(false)
-
-  useEffect(() => {
-    const { currentYear, lastYear } = getDates()
-    setFromDate(currentYear.startDate)
-    setToDate(currentYear.endDate)
-  }, [])
 
   const login = async (username: any, password: any) => {
     try {
