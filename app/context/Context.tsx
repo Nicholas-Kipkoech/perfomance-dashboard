@@ -54,6 +54,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     [],
   )
   const [directClients, setDirectClients] = useState([])
+  const [loadingData, setLoadingData] = useState(false)
 
   useEffect(() => {
     const { currentYear, lastYear } = getDates()
@@ -76,6 +77,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       return false
     }
   }
+
   const logout = () => {
     localStorage.removeItem('accessToken')
   }
@@ -86,195 +88,123 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       return token !== null
     }
   }
-  useEffect(() => {
-    const fetchDirectClients = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/direct-clients?branchCode=${branchCode}`,
-      )
-      setDirectClients(data.result)
-    }
-    fetchDirectClients()
-  }, [branchCode])
-  useEffect(() => {
-    const fetchOutstandingRiCessionReports = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRiOutstandingCessionReport(data.result)
-    }
-    fetchOutstandingRiCessionReports()
-  }, [toDate, branchCode])
 
   useEffect(() => {
-    const fetchRIPaidCessionReports = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-paid-cession-report?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRiPaidCessionReport(data.result)
-    }
-    fetchRIPaidCessionReports()
-  }, [fromDate, toDate, branchCode])
-  useEffect(() => {
-    const fetchRICessionReports = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-cessions-register?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRiCessionReport(data.result)
-    }
-    fetchRICessionReports()
-  }, [fromDate, toDate, branchCode])
+    const fetchData = async () => {
+      setLoadingData(true)
+      try {
+        const [
+          directClientsResponse,
+          outstandingRiCessionReportsResponse,
+          RIPaidCessionReportsResponse,
+          RICessionReportsResponse,
+          RIPaidCessionResponse,
+          RICessionResponse,
+          bimaDataResponse,
+          orgBranchesResponse,
+          claimsResponse,
+          registeredClaimsResponse,
+          outstandingClaimsResponse,
+          productionPerUnitResponse,
+          entityClientsResponse,
+          unrenewedPoliciesResponse,
+          undebitedPoliciesResponse,
+          salvagesResponse,
+          recoveriesResponse,
+          ARReceiptsResponse,
+          reinsuranceResponse,
+          lossRatioResponse,
+        ] = await Promise.all([
+          axios.get(`${LOCAL_URL}/direct-clients?branchCode=${branchCode}`),
+          axios.get(
+            `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-paid-cession-report?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-cessions-register?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(`${LOCAL_URL}/branches`),
+          axios.get(
+            `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/production?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(`${LOCAL_URL}/clients?branchCode=${branchCode}`),
+          axios.get(
+            `${LOCAL_URL}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/recovery?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/reinsurance?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/cm-loss-ratio?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
+          ),
+        ])
 
-  useEffect(() => {
-    const fetchRIPaidCession = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRiPaidCession(data.result)
-    }
-    fetchRIPaidCession()
-  }, [fromDate, toDate, branchCode])
+        setDirectClients(directClientsResponse.data.result)
+        setRiOutstandingCessionReport(
+          outstandingRiCessionReportsResponse.data.result,
+        )
+        setRiPaidCessionReport(RIPaidCessionReportsResponse.data.result)
+        setRiCessionReport(RICessionReportsResponse.data.result)
+        setRiPaidCession(RIPaidCessionResponse.data.result)
+        setRiCession(RICessionResponse.data.result)
+        setBimaData(bimaDataResponse.data.result)
+        setCompanys([
+          { organization_name: 'Entire Company', organization_code: '' },
+          ...orgBranchesResponse.data.result,
+        ])
+        setClaimsData(claimsResponse.data.result)
+        setRegisteredClaims(registeredClaimsResponse.data.result)
+        setOutstandingClaims(outstandingClaimsResponse.data.result)
+        setProductionData(productionPerUnitResponse.data.result)
+        setClients(entityClientsResponse.data.result)
+        setUnrenewedPolicies(unrenewedPoliciesResponse.data.result)
+        setUndebitedPolicies(undebitedPoliciesResponse.data.result)
+        setSalvages(salvagesResponse.data.result)
+        setRecovery(recoveriesResponse.data.result)
+        setReceipts(ARReceiptsResponse.data.result)
+        setReinsurance(reinsuranceResponse.data.result)
+        setCmLossRatio(lossRatioResponse.data.result)
+        setLoadingData(false)
+      } catch (error) {
+        setLoadingData(false)
 
-  useEffect(() => {
-    const fetchRICession = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRiCession(data.result)
+        console.error('Error fetching data', error)
+      }
     }
-    fetchRICession()
-  }, [fromDate, toDate, branchCode])
 
-  useEffect(() => {
-    const fetchBimaData = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setBimaData(data.result)
-    }
-    fetchBimaData()
-  }, [fromDate, toDate, branchCode])
-
-  useEffect(() => {
-    const fetchOrgBranches = async () => {
-      const { data } = await axios.get(`${LOCAL_URL}/branches`)
-      setCompanys([
-        { organization_name: 'Entire Company', organization_code: '' },
-        ...data.result,
-      ])
-    }
-    fetchOrgBranches()
-  }, [])
-
-  useEffect(() => {
-    const fetchClaims = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setClaimsData(data.result)
-    }
-    fetchClaims()
-  }, [fromDate, toDate, branchCode])
-
-  useEffect(() => {
-    const fetchRegisteredClaims = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRegisteredClaims(data.result)
-    }
-    fetchRegisteredClaims()
-  }, [fromDate, toDate, branchCode])
-  useEffect(() => {
-    const fetchOutStandingClaims = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
-      )
-      setOutstandingClaims(data.result)
-    }
-    fetchOutStandingClaims()
-  }, [fromDate, toDate, branchCode])
-  useEffect(() => {
-    const fetchProductionPerUnit = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/production?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setProductionData(data.result)
-    }
-    fetchProductionPerUnit()
-  }, [fromDate, toDate, branchCode])
-
-  useEffect(() => {
-    const fetchEntityClients = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/clients?branchCode=${branchCode}`,
-      )
-      setClients(data.result)
-    }
-    fetchEntityClients()
-  }, [fromDate, toDate, branchCode])
-  useEffect(() => {
-    const fetchUnrenewedPolicies = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setUnrenewedPolicies(data.result)
-    }
-    fetchUnrenewedPolicies()
-  }, [fromDate, toDate, branchCode])
-  useEffect(() => {
-    const fetchUndebitedPolicies = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setUndebitedPolicies(data.result)
-    }
-    fetchUndebitedPolicies()
-  }, [fromDate, toDate, branchCode])
-  useEffect(() => {
-    const fetchSalvages = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setSalvages(data.result)
-    }
-    fetchSalvages()
-  }, [fromDate, toDate, branchCode])
-  useEffect(() => {
-    const fetchRecoveries = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/recovery?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRecovery(data.result)
-    }
-    fetchRecoveries()
-  }, [fromDate, toDate, branchCode])
-  useEffect(() => {
-    const fetchARreceipts = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setReceipts(data.result)
-    }
-    fetchARreceipts()
-  }, [fromDate, toDate, branchCode])
-  useEffect(() => {
-    const fetchReinsurance = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/reinsurance?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setReinsurance(data.result)
-    }
-    fetchReinsurance()
-  }, [fromDate, toDate, branchCode])
-
-  useEffect(() => {
-    const fetchLossRatio = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/cm-loss-ratio?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setCmLossRatio(data.result)
-    }
-    fetchLossRatio()
+    fetchData()
   }, [fromDate, toDate, branchCode])
 
   function calculatePremiums(bimaData: any) {
@@ -405,7 +335,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     )
 
     registeredClaims.forEach((claim: any) => {
-      console.log('claim', claim)
       let total = claim.totalProvision
       if (claim.motorCode === '070' || claim.motorCode === '080') {
         motorRegisteredClaims += total
@@ -610,6 +539,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         riPaidCessionReport,
         riOutstandingCessionReport,
         totalDirectClients,
+        loadingData,
       }}
     >
       {children}

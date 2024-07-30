@@ -33,6 +33,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
     riOutstandingCessionReport24,
     setRiOutstandingCessionReport24,
   ] = useState([])
+  const [loadingData, setLoadingData] = useState(false)
 
   useEffect(() => {
     const { currentYear, lastYear } = getDates()
@@ -43,144 +44,96 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   useEffect(() => {
-    const fetchPremiums2024 = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setPremiums2024(data.result)
-    }
-    fetchPremiums2024()
-  }, [fromDate, toDate, branchCode])
+    const fetchData = async () => {
+      setLoadingData(true)
+      try {
+        const [
+          premiums2024Response,
+          premiums2023Response,
+          claims2023Response,
+          claims2024Response,
+          outstandingClaims23Response,
+          outstandingClaims24Response,
+          riCession23Response,
+          riCession24Response,
+          riPaidCession23Response,
+          riPaidCession24Response,
+          managementExpenses23Response,
+          managementExpenses24Response,
+          riOutstandingCessionReport23Response,
+          riOutstandingCessionReport24Response,
+        ] = await Promise.all([
+          axios.get(
+            `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/underwriting?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/claims?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate23}&fromDate=${fromDate23}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-cessions?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/management-expenses?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/management-expenses?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate23}&branchCode=${branchCode}`,
+          ),
+          axios.get(
+            `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
+          ),
+        ])
 
-  useEffect(() => {
-    const fetchPremiums2023 = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/underwriting?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-      )
-      setPremiums2023(data.result)
+        setPremiums2024(premiums2024Response.data.result)
+        setPremiums2023(premiums2023Response.data.result)
+        setClaims2023(claims2023Response.data.result)
+        setClaims2024(claims2024Response.data.result)
+        setOutstandingClaims23(outstandingClaims23Response.data.result)
+        setOutstandingClaims24(outstandingClaims24Response.data.result)
+        setRiCession23(riCession23Response.data.result)
+        setRiCession24(riCession24Response.data.result)
+        setRiPaidCession23(riPaidCession23Response.data.result)
+        setRiPaidCession24(riPaidCession24Response.data.result)
+        setManagementExpenses23(managementExpenses23Response.data.result)
+        setManagementExpenses24(managementExpenses24Response.data.result)
+        setRiOutstandingCessionReport23(
+          riOutstandingCessionReport23Response.data.result,
+        )
+        setRiOutstandingCessionReport24(
+          riOutstandingCessionReport24Response.data.result,
+        )
+        setLoadingData(false)
+      } catch (error) {
+        setLoadingData(false)
+        console.error('Error fetching data', error)
+      }
     }
-    fetchPremiums2023()
-  }, [fromDate23, toDate23, branchCode])
 
-  useEffect(() => {
-    const fetchClaims = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/claims?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-      )
-      setClaims2023(data.result)
-    }
-    fetchClaims()
-  }, [fromDate23, toDate23, branchCode])
-
-  useEffect(() => {
-    const fetchClaims = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setClaims2024(data.result)
-    }
-    fetchClaims()
-  }, [fromDate, toDate, branchCode])
-
-  useEffect(() => {
-    const fetchOutStandingClaims = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate23}&fromDate=${fromDate23}`,
-      )
-      setOutstandingClaims23(data.result)
-    }
-    fetchOutStandingClaims()
-  }, [fromDate23, toDate23, branchCode])
-
-  useEffect(() => {
-    const fetchOutStandingClaims = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
-      )
-      setOutstandingClaims24(data.result)
-    }
-    fetchOutStandingClaims()
-  }, [fromDate, toDate, branchCode])
-
-  useEffect(() => {
-    const fetchRICession = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-cessions?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-      )
-      setRiCession23(data.result)
-    }
-    fetchRICession()
-  }, [fromDate23, toDate23, branchCode])
-
-  useEffect(() => {
-    const fetchRICession = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRiCession24(data.result)
-    }
-    fetchRICession()
-  }, [fromDate, toDate, branchCode])
-
-  useEffect(() => {
-    const fetchRIPaidCession = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-      )
-      setRiPaidCession23(data.result)
-    }
-    fetchRIPaidCession()
-  }, [fromDate23, toDate23, branchCode])
-
-  useEffect(() => {
-    const fetchRIPaidCession = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRiPaidCession24(data.result)
-    }
-    fetchRIPaidCession()
-  }, [fromDate, toDate, branchCode])
-
-  useEffect(() => {
-    const fetchManagementExpenses = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/management-expenses?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-      )
-      setManagementExpenses23(data.result)
-    }
-    fetchManagementExpenses()
-  }, [fromDate23, toDate23, branchCode])
-
-  useEffect(() => {
-    const fetchManagementExpenses = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/management-expenses?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setManagementExpenses24(data.result)
-    }
-    fetchManagementExpenses()
-  }, [fromDate, toDate, branchCode])
-
-  useEffect(() => {
-    const fetchOutstandingRiCessionReports = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      setRiOutstandingCessionReport24(data.result)
-    }
-    fetchOutstandingRiCessionReports()
-  }, [toDate, branchCode])
-
-  useEffect(() => {
-    const fetchOutstandingRiCessionReports = async () => {
-      const { data } = await axios.get(
-        `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate23}&branchCode=${branchCode}`,
-      )
-      setRiOutstandingCessionReport23(data.result)
-    }
-    fetchOutstandingRiCessionReports()
-  }, [toDate23, branchCode])
+    fetchData()
+  }, [fromDate, toDate, fromDate23, toDate23, branchCode])
 
   function calculatePremiums(premiums: any) {
     const totalPremium = premiums.reduce((total: number, premium: any) => {
@@ -260,6 +213,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         managementExpenses24,
         riOutstandingCessionReport23,
         riOutstandingCessionReport24,
+        loadingData,
       }}
     >
       {children}

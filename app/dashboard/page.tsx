@@ -57,6 +57,7 @@ const Dashboard = () => {
     setBranchCode,
     setCompany,
     component,
+    loadingData,
   }: any = useContextApi()
 
   const {
@@ -72,7 +73,6 @@ const Dashboard = () => {
   const [toDate23, setTdDate23] = useState('')
   const [fmDate24, setFmDate24] = useState('')
   const [toDate24, setTdDate24] = useState('')
-  const [loading, setLoading] = useState(false)
   const [timeoutId, setTimeoutId] = useState<any>(null)
 
   const formattedCompanys: [] = companys.map((company: IBranches) => {
@@ -131,12 +131,7 @@ const Dashboard = () => {
   const handleRunReports = () => {
     if (checkDate === true) {
       alert('Please select from date and to date')
-    } else {
-      setLoading(true)
-      const id = setTimeout(() => {
-        setLoading(false) // After 2 seconds, set loading to false
-      }, 5000)
-      setTimeoutId(id) // Store the timeout ID
+
       setFromDate(fmDate24)
       _setFromDate(fmDate24)
       _setToDate(toDate24)
@@ -154,6 +149,27 @@ const Dashboard = () => {
   }, [timeoutId])
 
   const checkDate = fmDate24.split('-').join('') === 'undefinedundefined'
+
+  if (loadingData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col gap-2">
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{
+                  fontSize: 60,
+                  color: '#cb7229',
+                }}
+                spin
+              />
+            }
+          />{' '}
+          <p className="text-[#cb7229]">Fetching data.....</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="mt-[20px] ml-4 flex flex-col justify-center">
@@ -192,36 +208,15 @@ const Dashboard = () => {
           />
         </div>
         <CustomButton
-          name={loading ? 'Running...' : 'Run'}
-          disabled={loading}
+          name={loadingData ? 'Running...' : 'Run'}
+          disabled={loadingData}
           className={
             'bg-[#cb7229] text-white h-[40px] md:w-[152px] sm:w-[20rem] flex justify-center items-center mt-8 rounded-md'
           }
           onClick={handleRunReports}
         />
       </div>
-      <div className="flex flex-wrap ">
-        {loading ? (
-          <div className="flex items-center justify-center h-screen">
-            <div className="flex flex-col gap-2">
-              <Spin
-                indicator={
-                  <LoadingOutlined
-                    style={{
-                      fontSize: 60,
-                      color: '#cb7229',
-                    }}
-                    spin
-                  />
-                }
-              />{' '}
-              <p className="text-[#cb7229]">Fetching data.....</p>
-            </div>
-          </div>
-        ) : (
-          renderComponent()
-        )}
-      </div>
+      <div className="flex flex-wrap ">{renderComponent()}</div>
     </div>
   )
 }
