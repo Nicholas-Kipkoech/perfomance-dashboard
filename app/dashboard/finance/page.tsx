@@ -1,11 +1,19 @@
 'use client'
 import { useContextApi } from '@/app/context/Context'
 import CustomCard from '@/app/UI/reusableComponents/CustomCard'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Spin } from 'antd'
 import Link from 'next/link'
 import React from 'react'
 
 const Finance = () => {
-  const { receiptResults, toDate, fromDate, branchCode }: any = useContextApi()
+  const {
+    receiptResults,
+    toDate,
+    fromDate,
+    branchCode,
+    loadingData,
+  }: any = useContextApi()
   interface IFinanceCard {
     name: string
     color?: string
@@ -42,6 +50,27 @@ const Finance = () => {
           </p>
         </div>
       </Link>
+    )
+  }
+
+  if (loadingData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col gap-2">
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{
+                  fontSize: 60,
+                  color: '#cb7229',
+                }}
+                spin
+              />
+            }
+          />{' '}
+          <p className="text-[#cb7229]">Fetching data.....</p>
+        </div>
+      </div>
     )
   }
   const receiptListingLink = `http://192.168.1.112:8001/icon/reports?p_module_name=AR_RECEIPT_LISTING&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=AR.MGR&p_org_code=50&p_menu_code=AR000032&p_grp_code=AR.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=RECEIPT%20LISTING%20REPORT&P_ORG_CODE=50&P_CURRENCY=&P_BRANCH=${branchCode}&P_CATEGORY=&P_AGENT=&P_FM_DT=${fromDate}&P_TO_DT=${toDate}&P_CREATED_BY=&P_PAYING_FOR=&P_MODE=&P_STATUS=`

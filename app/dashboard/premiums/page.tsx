@@ -1,6 +1,8 @@
 'use client'
 import { useContextApi } from '@/app/context/Context'
 import CustomCard from '@/app/UI/reusableComponents/CustomCard'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Spin } from 'antd'
 import Link from 'next/link'
 import React from 'react'
 
@@ -23,6 +25,7 @@ const Underwriting = () => {
     nonMotorUndebited,
     motorUndebited,
     commision,
+    loadingData,
   }: any = useContextApi()
 
   const totalReinsurance = reinsurance.reduce(
@@ -66,6 +69,26 @@ const Underwriting = () => {
           </p>
         </div>
       </Link>
+    )
+  }
+  if (loadingData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col gap-2">
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{
+                  fontSize: 60,
+                  color: '#cb7229',
+                }}
+                spin
+              />
+            }
+          />{' '}
+          <p className="text-[#cb7229]">Fetching data.....</p>
+        </div>
+      </div>
     )
   }
 

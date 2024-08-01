@@ -1,6 +1,8 @@
 'use client'
 import { useContextApi } from '@/app/context/Context'
 import CustomCard from '@/app/UI/reusableComponents/CustomCard'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Spin } from 'antd'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
@@ -19,6 +21,7 @@ const Claims = () => {
     motorPaidClaims,
     nonMotorPaidClaims,
     nonMotorOutstanding,
+    loadingData,
   }: any = useContextApi()
   const router = useRouter()
   const totalLossRatio = filteredLossRation.reduce(
@@ -46,6 +49,27 @@ const Claims = () => {
   const motorRegisteredPerc = Math.round(
     (motorRegisteredClaims / totalRegisteredClaims) * 100,
   )
+
+  if (loadingData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col gap-2">
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{
+                  fontSize: 60,
+                  color: '#cb7229',
+                }}
+                spin
+              />
+            }
+          />{' '}
+          <p className="text-[#cb7229]">Fetching data.....</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>
