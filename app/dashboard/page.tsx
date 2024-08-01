@@ -73,7 +73,6 @@ const Dashboard = () => {
   const [toDate23, setTdDate23] = useState('')
   const [fmDate24, setFmDate24] = useState('')
   const [toDate24, setTdDate24] = useState('')
-  const [timeoutId, setTimeoutId] = useState<any>(null)
 
   const formattedCompanys: [] = companys.map((company: IBranches) => {
     return {
@@ -108,7 +107,7 @@ const Dashboard = () => {
       formattedMonth = months[Number(month - 1)]
     }
     const formattedToDate = day + '-' + formattedMonth + '-' + year
-    const formattedToDate23 = day + '-' + formattedMonth + '-' + 2023
+    const formattedToDate23 = day + '-' + formattedMonth + '-' + '2023'
 
     setTdDate23(formattedToDate23)
     setTdDate24(formattedToDate)
@@ -123,32 +122,22 @@ const Dashboard = () => {
       formattedMonth = months[Number(month - 1)]
     }
     const formattedToDate = day + '-' + formattedMonth + '-' + year
-    const formattedToDate23 = day + '-' + formattedMonth + '-' + 2023
+    const formattedToDate23 = day + '-' + formattedMonth + '-' + '2023'
+
     setFmDate23(formattedToDate23)
     setFmDate24(formattedToDate)
   }
 
   const handleRunReports = () => {
-    if (checkDate === true) {
+    if (fmDate24.length !== 11 || toDate24.length !== 11) {
       alert('Please select from date and to date')
-
+    } else {
       setFromDate(fmDate24)
       _setFromDate(fmDate24)
       _setToDate(toDate24)
       setToDate(toDate24), _setFromDate23(fmDate23), _setToDate23(toDate23)
     }
   }
-
-  useEffect(() => {
-    return () => {
-      // Cleanup function to clear timeout when component unmounts
-      if (timeoutId) {
-        clearTimeout(timeoutId)
-      }
-    }
-  }, [timeoutId])
-
-  const checkDate = fmDate24.split('-').join('') === 'undefinedundefined'
 
   if (loadingData) {
     return (
@@ -209,7 +198,6 @@ const Dashboard = () => {
         </div>
         <CustomButton
           name={loadingData ? 'Running...' : 'Run'}
-          disabled={loadingData}
           className={
             'bg-[#cb7229] text-white h-[40px] md:w-[152px] sm:w-[20rem] flex justify-center items-center mt-8 rounded-md'
           }

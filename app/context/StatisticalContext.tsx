@@ -37,6 +37,8 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   ] = useState([])
   const [loadingData, setLoadingData] = useState(false)
 
+  
+
   useEffect(() => {
     const fetchData = async () => {
       setLoadingData(true)
