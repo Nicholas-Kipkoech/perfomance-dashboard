@@ -205,8 +205,8 @@ const Statistical = () => {
           name="Gross Fac Out Commision"
           total2023={facCommission23}
           total2024={facCommission24}
-          loading23={loadingManagementExpenses23}
-          loading24={loadingManagementExpenses24}
+          loading23={loadingRiCession23}
+          loading24={loadingRiCession24}
         />
         <CustomCard
           name="Gross Fac Premium"
