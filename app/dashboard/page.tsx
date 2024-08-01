@@ -57,7 +57,6 @@ const Dashboard = () => {
     setBranchCode,
     setCompany,
     component,
-    loadingData,
   }: any = useContextApi()
 
   const {
@@ -139,27 +138,6 @@ const Dashboard = () => {
     }
   }
 
-  if (loadingData) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="flex flex-col gap-2">
-          <Spin
-            indicator={
-              <LoadingOutlined
-                style={{
-                  fontSize: 60,
-                  color: '#cb7229',
-                }}
-                spin
-              />
-            }
-          />{' '}
-          <p className="text-[#cb7229]">Fetching data.....</p>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="mt-[20px] ml-4 flex flex-col justify-center">
       <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
@@ -197,7 +175,7 @@ const Dashboard = () => {
           />
         </div>
         <CustomButton
-          name={loadingData ? 'Running...' : 'Run'}
+          name={'Run'}
           className={
             'bg-[#cb7229] text-white h-[40px] md:w-[152px] sm:w-[20rem] flex justify-center items-center mt-8 rounded-md'
           }

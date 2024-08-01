@@ -1,7 +1,6 @@
 'use client'
 import axios from 'axios'
 import React, { createContext, useEffect, useState } from 'react'
-import { useContextApi } from './Context'
 import { LOCAL_URL } from './database-connect'
 import { getDates } from '../dashboard/premiums/helpers'
 
@@ -15,121 +14,315 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const [fromDate, setFromDate] = useState(currentYear.startDate)
   const [toDate, setToDate] = useState(currentYear.endDate)
   const [branchCode, setBranchCode] = useState('')
+
+  // States for data and loading status
   const [premiums2024, setPremiums2024] = useState([])
+  const [loadingPremiums2024, setLoadingPremiums2024] = useState(false)
+
   const [premiums2023, setPremiums2023] = useState([])
+  const [loadingPremiums2023, setLoadingPremiums2023] = useState(false)
+
   const [claims2023, setClaims2023] = useState([])
+  const [loadingClaims2023, setLoadingClaims2023] = useState(false)
+
   const [claims2024, setClaims2024] = useState([])
+  const [loadingClaims2024, setLoadingClaims2024] = useState(false)
+
   const [outstandingClaims23, setOutstandingClaims23] = useState([])
+  const [loadingOutstandingClaims23, setLoadingOutstandingClaims23] = useState(
+    false,
+  )
+
   const [outstandingClaims24, setOutstandingClaims24] = useState([])
+  const [loadingOutstandingClaims24, setLoadingOutstandingClaims24] = useState(
+    false,
+  )
+
   const [riCession23, setRiCession23] = useState([])
+  const [loadingRiCession23, setLoadingRiCession23] = useState(false)
+
   const [riCession24, setRiCession24] = useState([])
+  const [loadingRiCession24, setLoadingRiCession24] = useState(false)
+
   const [riPaidCession23, setRiPaidCession23] = useState([])
+  const [loadingRiPaidCession23, setLoadingRiPaidCession23] = useState(false)
+
   const [riPaidCession24, setRiPaidCession24] = useState([])
+  const [loadingRiPaidCession24, setLoadingRiPaidCession24] = useState(false)
+
   const [managementExpenses23, setManagementExpenses23] = useState([])
+  const [
+    loadingManagementExpenses23,
+    setLoadingManagementExpenses23,
+  ] = useState(false)
+
   const [managementExpenses24, setManagementExpenses24] = useState([])
+  const [
+    loadingManagementExpenses24,
+    setLoadingManagementExpenses24,
+  ] = useState(false)
+
   const [
     riOutstandingCessionReport23,
     setRiOutstandingCessionReport23,
   ] = useState([])
   const [
+    loadingRiOutstandingCessionReport23,
+    setLoadingRiOutstandingCessionReport23,
+  ] = useState(false)
+
+  const [
     riOutstandingCessionReport24,
     setRiOutstandingCessionReport24,
   ] = useState([])
-  const [loadingData, setLoadingData] = useState(false)
-
-  
+  const [
+    loadingRiOutstandingCessionReport24,
+    setLoadingRiOutstandingCessionReport24,
+  ] = useState(false)
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoadingData(true)
-      try {
-        const [
-          premiums2024Response,
-          premiums2023Response,
-          claims2023Response,
-          claims2024Response,
-          outstandingClaims23Response,
-          outstandingClaims24Response,
-          riCession23Response,
-          riCession24Response,
-          riPaidCession23Response,
-          riPaidCession24Response,
-          managementExpenses23Response,
-          managementExpenses24Response,
-          riOutstandingCessionReport23Response,
-          riOutstandingCessionReport24Response,
-        ] = await Promise.all([
-          axios.get(
-            `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/underwriting?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/claims?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate23}&fromDate=${fromDate23}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-cessions?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/management-expenses?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/management-expenses?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate23}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-        ])
+    setLoadingPremiums2024(true)
+    axios
+      .get(
+        `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setPremiums2024(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching premiums 2024', error)
+      })
+      .finally(() => {
+        setLoadingPremiums2024(false)
+      })
+  }, [fromDate, toDate, branchCode])
 
-        setPremiums2024(premiums2024Response.data.result)
-        setPremiums2023(premiums2023Response.data.result)
-        setClaims2023(claims2023Response.data.result)
-        setClaims2024(claims2024Response.data.result)
-        setOutstandingClaims23(outstandingClaims23Response.data.result)
-        setOutstandingClaims24(outstandingClaims24Response.data.result)
-        setRiCession23(riCession23Response.data.result)
-        setRiCession24(riCession24Response.data.result)
-        setRiPaidCession23(riPaidCession23Response.data.result)
-        setRiPaidCession24(riPaidCession24Response.data.result)
-        setManagementExpenses23(managementExpenses23Response.data.result)
-        setManagementExpenses24(managementExpenses24Response.data.result)
-        setRiOutstandingCessionReport23(
-          riOutstandingCessionReport23Response.data.result,
-        )
-        setRiOutstandingCessionReport24(
-          riOutstandingCessionReport24Response.data.result,
-        )
-        setLoadingData(false)
-      } catch (error) {
-        setLoadingData(false)
-        console.error('Error fetching data', error)
-      }
-    }
+  useEffect(() => {
+    setLoadingPremiums2023(true)
+    axios
+      .get(
+        `${LOCAL_URL}/underwriting?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setPremiums2023(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching premiums 2023', error)
+      })
+      .finally(() => {
+        setLoadingPremiums2023(false)
+      })
+  }, [fromDate23, toDate23, branchCode])
 
-    fetchData()
-  }, [fromDate, toDate, fromDate23, toDate23, branchCode])
+  useEffect(() => {
+    setLoadingClaims2023(true)
+    axios
+      .get(
+        `${LOCAL_URL}/claims?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setClaims2023(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching claims 2023', error)
+      })
+      .finally(() => {
+        setLoadingClaims2023(false)
+      })
+  }, [fromDate23, toDate23, branchCode])
+
+  useEffect(() => {
+    setLoadingClaims2024(true)
+    axios
+      .get(
+        `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setClaims2024(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching claims 2024', error)
+      })
+      .finally(() => {
+        setLoadingClaims2024(false)
+      })
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingOutstandingClaims23(true)
+    axios
+      .get(
+        `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate23}&fromDate=${fromDate23}`,
+      )
+      .then((response) => {
+        setOutstandingClaims23(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching outstanding claims 2023', error)
+      })
+      .finally(() => {
+        setLoadingOutstandingClaims23(false)
+      })
+  }, [fromDate23, toDate23, branchCode])
+
+  useEffect(() => {
+    setLoadingOutstandingClaims24(true)
+    axios
+      .get(
+        `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
+      )
+      .then((response) => {
+        setOutstandingClaims24(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching outstanding claims 2024', error)
+      })
+      .finally(() => {
+        setLoadingOutstandingClaims24(false)
+      })
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingRiCession23(true)
+    axios
+      .get(
+        `${LOCAL_URL}/ri-cessions?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setRiCession23(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching RI cession 2023', error)
+      })
+      .finally(() => {
+        setLoadingRiCession23(false)
+      })
+  }, [fromDate23, toDate23, branchCode])
+
+  useEffect(() => {
+    setLoadingRiCession24(true)
+    axios
+      .get(
+        `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setRiCession24(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching RI cession 2024', error)
+      })
+      .finally(() => {
+        setLoadingRiCession24(false)
+      })
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingRiPaidCession23(true)
+    axios
+      .get(
+        `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setRiPaidCession23(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching RI paid cession 2023', error)
+      })
+      .finally(() => {
+        setLoadingRiPaidCession23(false)
+      })
+  }, [fromDate23, toDate23, branchCode])
+
+  useEffect(() => {
+    setLoadingRiPaidCession24(true)
+    axios
+      .get(
+        `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setRiPaidCession24(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching RI paid cession 2024', error)
+      })
+      .finally(() => {
+        setLoadingRiPaidCession24(false)
+      })
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingManagementExpenses23(true)
+    axios
+      .get(
+        `${LOCAL_URL}/management-expenses?fromDate=${fromDate23}&toDate=${toDate23}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setManagementExpenses23(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching management expenses 2023', error)
+      })
+      .finally(() => {
+        setLoadingManagementExpenses23(false)
+      })
+  }, [fromDate23, toDate23, branchCode])
+
+  useEffect(() => {
+    setLoadingManagementExpenses24(true)
+    axios
+      .get(
+        `${LOCAL_URL}/management-expenses?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setManagementExpenses24(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching management expenses 2024', error)
+      })
+      .finally(() => {
+        setLoadingManagementExpenses24(false)
+      })
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingRiOutstandingCessionReport23(true)
+    axios
+      .get(
+        `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate23}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setRiOutstandingCessionReport23(response.data.result)
+      })
+      .catch((error) => {
+        console.error(
+          'Error fetching RI outstanding cession report 2023',
+          error,
+        )
+      })
+      .finally(() => {
+        setLoadingRiOutstandingCessionReport23(false)
+      })
+  }, [toDate23, branchCode])
+
+  useEffect(() => {
+    setLoadingRiOutstandingCessionReport24(true)
+    axios
+      .get(
+        `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setRiOutstandingCessionReport24(response.data.result)
+      })
+      .catch((error) => {
+        console.error(
+          'Error fetching RI outstanding cession report 2024',
+          error,
+        )
+      })
+      .finally(() => {
+        setLoadingRiOutstandingCessionReport24(false)
+      })
+  }, [toDate, branchCode])
 
   function calculatePremiums(premiums: any) {
     const totalPremium = premiums.reduce((total: number, premium: any) => {
@@ -209,7 +402,20 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         managementExpenses24,
         riOutstandingCessionReport23,
         riOutstandingCessionReport24,
-        loadingData,
+        loadingPremiums2024,
+        loadingPremiums2023,
+        loadingClaims2023,
+        loadingClaims2024,
+        loadingOutstandingClaims23,
+        loadingOutstandingClaims24,
+        loadingRiCession23,
+        loadingRiCession24,
+        loadingRiPaidCession23,
+        loadingRiPaidCession24,
+        loadingManagementExpenses23,
+        loadingManagementExpenses24,
+        loadingRiOutstandingCessionReport23,
+        loadingRiOutstandingCessionReport24,
       }}
     >
       {children}
