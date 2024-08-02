@@ -72,27 +72,27 @@ const Finance = () => {
       key: 'bankCode',
     },
     {
-      title: 'Bank Branch Code',
+      title: 'Branch Code',
       dataIndex: 'bankBranchCode',
       key: 'bankBranchCode',
     },
     {
-      title: 'Bank Account No',
+      title: 'Account No',
       dataIndex: 'bankAccountNo',
       key: 'bankAccountNo',
     },
     {
-      title: 'Bank Account Name',
+      title: 'Account Name',
       dataIndex: 'bankAccountName',
       key: 'bankAccountName',
     },
     {
-      title: 'Bank Currency Code',
+      title: 'Account Currency',
       dataIndex: 'bankCurCode',
       key: 'bankCurCode',
     },
     {
-      title: 'Bank Transaction Code',
+      title: 'Transaction Currency',
       dataIndex: 'bankTrnCode',
       key: 'bankTrnCode',
     },
