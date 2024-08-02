@@ -56,6 +56,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     [],
   )
   const [directClients, setDirectClients] = useState([])
+  const [bankBalances, setBankBalances] = useState([])
   const [loadingData, setLoadingData] = useState(false)
 
   const login = async (username: any, password: any) => {
@@ -110,6 +111,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
           ARReceiptsResponse,
           reinsuranceResponse,
           lossRatioResponse,
+          bankBalancesResponse,
         ] = await Promise.all([
           axios.get(`${LOCAL_URL}/direct-clients?branchCode=${branchCode}`),
           axios.get(
@@ -165,6 +167,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
           axios.get(
             `${LOCAL_URL}/cm-loss-ratio?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
           ),
+          axios.get(`${LOCAL_URL}/bank-balances`),
         ])
 
         setDirectClients(directClientsResponse.data.result)
@@ -192,6 +195,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         setReceipts(ARReceiptsResponse.data.result)
         setReinsurance(reinsuranceResponse.data.result)
         setCmLossRatio(lossRatioResponse.data.result)
+        setBankBalances(bankBalancesResponse.data.result)
         setLoadingData(false)
       } catch (error) {
         setLoadingData(false)
@@ -535,6 +539,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         riPaidCessionReport,
         riOutstandingCessionReport,
         totalDirectClients,
+        bankBalances,
         loadingData,
       }}
     >
