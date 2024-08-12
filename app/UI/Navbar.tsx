@@ -5,14 +5,13 @@ import { useRouter } from 'next/navigation'
 import { jwtDecode } from 'jwt-decode'
 import { useContextApi } from '../context/Context'
 
-import { Space, Dropdown } from 'antd'
-import type { MenuProps } from 'react-select'
-import path from 'path/win32'
-import { MenuFoldOutlined, MenuOutlined } from '@ant-design/icons'
+import { Dropdown } from 'antd'
+import { MenuOutlined } from '@ant-design/icons'
 
 const Navbar = () => {
   const [user, setUser] = useState<any>({})
-  const { logout, setComponent, fromDate, toDate }: any = useContextApi()
+  const { logout, setComponent }: any = useContextApi()
+
   const router = useRouter()
 
   useEffect(() => {
@@ -68,9 +67,6 @@ const Navbar = () => {
         <span className="justify-start font-[700] md:text-[25px] sm:text-[12px] ml-3">
           {user?.orgDesc}
         </span>
-        <p>
-          [{fromDate.toUpperCase()}] - [{toDate.toUpperCase()}]
-        </p>
       </div>
       <div className="flex items-center">
         <CustomButton

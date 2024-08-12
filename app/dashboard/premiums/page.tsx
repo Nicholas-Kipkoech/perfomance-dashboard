@@ -11,12 +11,8 @@ import React, { useState } from 'react'
 
 const Underwriting = () => {
   const {
-    year: _year,
-    setFromDate,
-    toDate: _toDate,
-    setToDate,
     companys,
-    setBranchCode,
+
     setCompany,
     totalPremium,
     totalNewBusiness,
@@ -36,6 +32,7 @@ const Underwriting = () => {
     motorUndebited,
     commision,
     loadingData,
+    fetchUWData,
   }: any = useContextApi()
 
   const totalReinsurance = reinsurance.reduce(
@@ -58,7 +55,7 @@ const Underwriting = () => {
     'Nov',
     'Dec',
   ]
-
+  const [branchCode, setBranchCode] = useState('')
   const [fmDate24, setFmDate24] = useState('')
   const [toDate24, setTdDate24] = useState('')
 
@@ -95,12 +92,11 @@ const Underwriting = () => {
     setFmDate24(formattedToDate)
   }
 
-  const handleRunReports = () => {
+  const handleRunReports = async () => {
     if (fmDate24.length !== 11 || toDate24.length !== 11) {
       alert('Please select from date and to date')
     } else {
-      setFromDate(fmDate24)
-      setToDate(toDate24)
+      await fetchUWData(fmDate24, toDate24, branchCode)
     }
   }
 
@@ -157,7 +153,7 @@ const Underwriting = () => {
               />
             }
           />{' '}
-          <p className="text-[#cb7229]">Fetching data.....</p>
+          <p className="text-[#cb7229]">Fetching underwritting data.....</p>
         </div>
       </div>
     )

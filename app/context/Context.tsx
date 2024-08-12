@@ -1,6 +1,6 @@
 'use client'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useContext } from 'react'
 import { createContext } from 'react'
 import {
@@ -11,22 +11,14 @@ import {
   IReceipts,
   IRecovery,
   IRegisteredClaims,
-  ISalvages,
   IUndebitedPolicies,
   IUnrenewedPolicies,
 } from '../assets/interfaces'
 import { LOCAL_URL } from './database-connect'
-import { getDates } from '../dashboard/premiums/helpers'
 import { jwtDecode } from 'jwt-decode'
 
 const Context = createContext({})
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { currentYear } = getDates()
-
-  const [branchCode, setBranchCode] = useState('')
-  const [fromDate, setFromDate] = useState(currentYear.startDate)
-  const [toDate, setToDate] = useState(currentYear.endDate)
-  const [years, setYears] = useState([])
   const [bimaData, setBimaData] = useState<IBimaData[]>([])
   const [claimsData, setClaimsData] = useState([])
   const [registeredClaims, setRegisteredClaims] = useState<IRegisteredClaims[]>(
@@ -93,126 +85,126 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     return true
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoadingData(true)
-      try {
-        const [
-          directClientsResponse,
-          outstandingRiCessionReportsResponse,
-          RIPaidCessionReportsResponse,
-          RICessionReportsResponse,
-          RIPaidCessionResponse,
-          RICessionResponse,
-          bimaDataResponse,
-          orgBranchesResponse,
-          claimsResponse,
-          registeredClaimsResponse,
-          outstandingClaimsResponse,
-          productionPerUnitResponse,
-          entityClientsResponse,
-          unrenewedPoliciesResponse,
-          undebitedPoliciesResponse,
-          salvagesResponse,
-          recoveriesResponse,
-          ARReceiptsResponse,
-          reinsuranceResponse,
-          lossRatioResponse,
-          bankBalancesResponse,
-        ] = await Promise.all([
-          axios.get(`${LOCAL_URL}/direct-clients?branchCode=${branchCode}`),
-          axios.get(
-            `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-paid-cession-report?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-cessions-register?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(`${LOCAL_URL}/branches`),
-          axios.get(
-            `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/production?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(`${LOCAL_URL}/clients?branchCode=${branchCode}`),
-          axios.get(
-            `${LOCAL_URL}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/recovery?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/reinsurance?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-          ),
-          axios.get(
-            `${LOCAL_URL}/cm-loss-ratio?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
-          ),
-          axios.get(`${LOCAL_URL}/bank-balances`),
-        ])
+  const fetchUWData = async (
+    fromDate: string,
+    toDate: string,
+    branchCode: string,
+  ) => {
+    setLoadingData(true)
+    try {
+      const [
+        directClientsResponse,
+        outstandingRiCessionReportsResponse,
+        RIPaidCessionReportsResponse,
+        RICessionReportsResponse,
+        RIPaidCessionResponse,
+        RICessionResponse,
+        bimaDataResponse,
+        orgBranchesResponse,
+        claimsResponse,
+        registeredClaimsResponse,
+        outstandingClaimsResponse,
+        productionPerUnitResponse,
+        entityClientsResponse,
+        unrenewedPoliciesResponse,
+        undebitedPoliciesResponse,
+        salvagesResponse,
+        recoveriesResponse,
+        ARReceiptsResponse,
+        reinsuranceResponse,
+        lossRatioResponse,
+        bankBalancesResponse,
+      ] = await Promise.all([
+        axios.get(`${LOCAL_URL}/direct-clients?branchCode=${branchCode}`),
+        axios.get(
+          `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/ri-paid-cession-report?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/ri-cessions-register?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(`${LOCAL_URL}/branches`),
+        axios.get(
+          `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/production?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(`${LOCAL_URL}/clients?branchCode=${branchCode}`),
+        axios.get(
+          `${LOCAL_URL}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/recovery?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/reinsurance?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/cm-loss-ratio?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
+        ),
+        axios.get(`${LOCAL_URL}/bank-balances`),
+      ])
 
-        setDirectClients(directClientsResponse.data.result)
-        setRiOutstandingCessionReport(
-          outstandingRiCessionReportsResponse.data.result,
-        )
-        setRiPaidCessionReport(RIPaidCessionReportsResponse.data.result)
-        setRiCessionReport(RICessionReportsResponse.data.result)
-        setRiPaidCession(RIPaidCessionResponse.data.result)
-        setRiCession(RICessionResponse.data.result)
-        setBimaData(bimaDataResponse.data.result)
-        setCompanys([
-          { organization_name: 'Entire Company', organization_code: '' },
-          ...orgBranchesResponse.data.result,
-        ])
-        setClaimsData(claimsResponse.data.result)
-        setRegisteredClaims(registeredClaimsResponse.data.result)
-        setOutstandingClaims(outstandingClaimsResponse.data.result)
-        setProductionData(productionPerUnitResponse.data.result)
-        setClients(entityClientsResponse.data.result)
-        setUnrenewedPolicies(unrenewedPoliciesResponse.data.result)
-        setUndebitedPolicies(undebitedPoliciesResponse.data.result)
-        setSalvages(salvagesResponse.data.result)
-        setRecovery(recoveriesResponse.data.result)
-        setReceipts(ARReceiptsResponse.data.result)
-        setReinsurance(reinsuranceResponse.data.result)
-        setCmLossRatio(lossRatioResponse.data.result)
-        setBankBalances(bankBalancesResponse.data.result)
-        setLoadingData(false)
-      } catch (error) {
-        setLoadingData(false)
+      setDirectClients(directClientsResponse.data.result)
+      setRiOutstandingCessionReport(
+        outstandingRiCessionReportsResponse.data.result,
+      )
+      setRiPaidCessionReport(RIPaidCessionReportsResponse.data.result)
+      setRiCessionReport(RICessionReportsResponse.data.result)
+      setRiPaidCession(RIPaidCessionResponse.data.result)
+      setRiCession(RICessionResponse.data.result)
+      setBimaData(bimaDataResponse.data.result)
+      setCompanys([
+        { organization_name: 'Entire Company', organization_code: '' },
+        ...orgBranchesResponse.data.result,
+      ])
+      setClaimsData(claimsResponse.data.result)
+      setRegisteredClaims(registeredClaimsResponse.data.result)
+      setOutstandingClaims(outstandingClaimsResponse.data.result)
+      setProductionData(productionPerUnitResponse.data.result)
+      setClients(entityClientsResponse.data.result)
+      setUnrenewedPolicies(unrenewedPoliciesResponse.data.result)
+      setUndebitedPolicies(undebitedPoliciesResponse.data.result)
+      setSalvages(salvagesResponse.data.result)
+      setRecovery(recoveriesResponse.data.result)
+      setReceipts(ARReceiptsResponse.data.result)
+      setReinsurance(reinsuranceResponse.data.result)
+      setCmLossRatio(lossRatioResponse.data.result)
+      setBankBalances(bankBalancesResponse.data.result)
+      setLoadingData(false)
+    } catch (error) {
+      setLoadingData(false)
 
-        console.error('Error fetching data', error)
-      }
+      console.error('Error fetching data', error)
     }
-
-    fetchData()
-  }, [fromDate, toDate, branchCode])
+  }
 
   function calculatePremiums(bimaData: any) {
     let nonMotorPremium = 0
@@ -490,12 +482,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         login,
         logout,
         isAuthenticated,
-        setBranchCode,
-        fromDate,
-        branchCode,
-        toDate,
-        setFromDate,
-        setToDate,
+
         totalPremium,
         totalNewBusiness,
         totalRenewals,
@@ -514,7 +501,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         company,
         companys,
         setCompany,
-        years,
+
         component,
         setComponent,
         totalRegisteredClaims,
@@ -548,6 +535,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         totalDirectClients,
         bankBalances,
         loadingData,
+        fetchUWData,
       }}
     >
       {children}

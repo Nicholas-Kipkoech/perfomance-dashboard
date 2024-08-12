@@ -45,23 +45,18 @@ const ReinsuranceContextProvider = ({
     try {
       const [
         outstandingRiCessionReportsResponse,
-
         RIPaidCessionResponse,
         RICessionResponse,
-
         orgBranchesResponse,
       ] = await Promise.all([
         axios.get(
           `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
         ),
         axios.get(
-          `${LOCAL_URL}/ri-paid-cession-report?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/ri-cessions-register?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
           `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
+        axios.get(
+          `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
         ),
         axios.get(`${LOCAL_URL}/branches`),
       ])

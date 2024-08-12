@@ -46,8 +46,6 @@ export const ClaimsContext = createContext({})
 const ClaimsContextProvider = ({ children }: { children: React.ReactNode }) => {
   const { currentYear } = getDates()
 
-  const [branchCode, setBranchCode] = useState('')
-
   const [claimsData, setClaimsData] = useState([])
   const [registeredClaims, setRegisteredClaims] = useState<IRegisteredClaims[]>(
     [],
@@ -229,7 +227,7 @@ const ClaimsContextProvider = ({ children }: { children: React.ReactNode }) => {
         nonMotorOutstanding,
         loadingData,
         companys,
-        setBranchCode,
+
         setCompany,
         fetchClaimsData,
       }}
