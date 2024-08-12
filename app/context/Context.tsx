@@ -17,6 +17,7 @@ import {
 } from '../assets/interfaces'
 import { LOCAL_URL } from './database-connect'
 import { getDates } from '../dashboard/premiums/helpers'
+import { jwtDecode } from 'jwt-decode'
 
 const Context = createContext({})
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -81,9 +82,15 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const isAuthenticated = () => {
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('accessToken')
-      return token !== null
+      const accessTokenJson = localStorage.getItem('accessToken')
+      if (!accessTokenJson) return false
+      const decodedToken: any = jwtDecode(accessTokenJson)
+      const currentTime = Date.now() / 1000
+      if (currentTime >= decodedToken?.exp) {
+        return false
+      }
     }
+    return true
   }
 
   useEffect(() => {

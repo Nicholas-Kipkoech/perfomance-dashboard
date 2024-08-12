@@ -2,7 +2,7 @@
 import { useContextApi } from '@/app/context/Context'
 import CustomCard from '@/app/UI/reusableComponents/CustomCard'
 import { LoadingOutlined } from '@ant-design/icons'
-import { Spin, Table } from 'antd'
+import { ConfigProvider, Spin, Table } from 'antd'
 import Link from 'next/link'
 import React from 'react'
 
@@ -105,36 +105,34 @@ const Finance = () => {
       title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
+      render: (_: any, item: any) => <p>{item.amount.toLocaleString()}</p>,
     },
   ]
 
   const allBankBalances = bankBalances.filter((bankBalance: IBankBalance) => {
     return bankBalance.bankCurCode === bankBalance.bankTrnCode
   })
-  const KSHBankBalances = allBankBalances.filter(
-    (bankbalance: IBankBalance) => {
-      return bankbalance.bankCurCode === 'KSH'
-    },
-  )
+
+  const KSHBankBalances = allBankBalances
+    .filter((bankBalance: IBankBalance) => bankBalance.bankCurCode === 'KSH')
+    .sort((a: IBankBalance, b: IBankBalance) => b.amount - a.amount)
 
   const totalInKSH = KSHBankBalances.reduce(
     (acc: any, bankBalance: IBankBalance) => acc + bankBalance.amount,
     0,
   )
-  const USDBankBalances = allBankBalances.filter(
-    (bankbalance: IBankBalance) => {
-      return bankbalance.bankCurCode === 'USD'
-    },
-  )
+  const USDBankBalances = allBankBalances
+    .filter((bankBalance: IBankBalance) => bankBalance.bankCurCode === 'USD')
+    .sort((a: IBankBalance, b: IBankBalance) => b.amount - a.amount)
+
   const totalInUSD = USDBankBalances.reduce(
     (acc: any, bankBalance: IBankBalance) => acc + bankBalance.amount,
     0,
   )
-  const EUROBankBalances = allBankBalances.filter(
-    (bankbalance: IBankBalance) => {
-      return bankbalance.bankCurCode === 'EURO'
-    },
-  )
+  const EUROBankBalances = allBankBalances
+    .filter((bankBalance: IBankBalance) => bankBalance.bankCurCode === 'EURO')
+    .sort((a: IBankBalance, b: IBankBalance) => b.amount - a.amount)
+
   const totalInEURO = EUROBankBalances.reduce(
     (acc: any, bankBalance: IBankBalance) => acc + bankBalance.amount,
     0,
@@ -169,35 +167,92 @@ const Finance = () => {
           link={receiptListingLink}
         />
       </div>
+      {totalInKSH === 0 ? (
+        <></>
+      ) : (
+        <>
+          <div className="flex justify-between px-5">
+            <p className="font-bold">Bank Balances</p>
 
-      <div className="flex justify-between px-5">
-        <p className="font-bold">Bank Balances</p>
+            <p className="font-bold">
+              Total In KSH {Math.floor(totalInKSH).toLocaleString()}
+            </p>
+          </div>
 
-        <p className="font-bold">
-          Total In KSH {Math.floor(totalInKSH).toLocaleString()}
-        </p>
-      </div>
+          <ConfigProvider
+            theme={{
+              components: {
+                Table: {
+                  headerBg: '#092332',
+                  headerColor: 'white',
+                  colorBgContainer: 'whitesmoke',
+                  rowHoverBg: '#cb7529',
+                  padding: 10,
+                },
+              },
+            }}
+          >
+            <Table columns={columns} dataSource={KSHBankBalances} />
+          </ConfigProvider>
+        </>
+      )}
 
-      <Table columns={columns} dataSource={KSHBankBalances} />
+      {totalInUSD === 0 ? (
+        <></>
+      ) : (
+        <>
+          <div className="flex justify-between px-5">
+            <p className="font-bold">Bank Balances</p>
 
-      <div className="flex justify-between px-5">
-        <p className="font-bold">Bank Balances</p>
+            <p className="font-bold">
+              Total In USD {Math.floor(totalInUSD).toLocaleString()}
+            </p>
+          </div>
+          <ConfigProvider
+            theme={{
+              components: {
+                Table: {
+                  headerBg: '#092332',
+                  headerColor: 'white',
+                  colorBgContainer: 'whitesmoke',
+                  rowHoverBg: '#cb7529',
+                  padding: 10,
+                },
+              },
+            }}
+          >
+            <Table columns={columns} dataSource={USDBankBalances} />
+          </ConfigProvider>
+        </>
+      )}
 
-        <p className="font-bold">
-          Total In USD {Math.floor(totalInUSD).toLocaleString()}
-        </p>
-      </div>
-
-      <Table columns={columns} dataSource={USDBankBalances} />
-
-      <div className="flex justify-between px-5">
-        <p className="font-bold">Bank Balances</p>
-        <p className="font-bold">
-          Total In EURO {Math.floor(totalInEURO).toLocaleString()}
-        </p>
-      </div>
-
-      <Table columns={columns} dataSource={EUROBankBalances} />
+      {totalInEURO === 0 ? (
+        <></>
+      ) : (
+        <>
+          <div className="flex justify-between px-5">
+            <p className="font-bold">Bank Balances</p>
+            <p className="font-bold">
+              Total In EURO {Math.floor(totalInEURO).toLocaleString()}
+            </p>
+          </div>
+          <ConfigProvider
+            theme={{
+              components: {
+                Table: {
+                  headerBg: '#092332',
+                  headerColor: 'white',
+                  colorBgContainer: 'whitesmoke',
+                  rowHoverBg: '#cb7529',
+                  padding: 10,
+                },
+              },
+            }}
+          >
+            <Table columns={columns} dataSource={EUROBankBalances} />
+          </ConfigProvider>
+        </>
+      )}
     </div>
   )
 }
