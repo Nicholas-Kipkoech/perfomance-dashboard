@@ -1,10 +1,13 @@
 'use client'
+import { IBranches } from '@/app/assets/interfaces'
 import { useContextApi } from '@/app/context/Context'
+import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import CustomCard from '@/app/UI/reusableComponents/CustomCard'
+import CustomSelect from '@/app/UI/reusableComponents/CustomSelect'
 import { LoadingOutlined } from '@ant-design/icons'
-import { Spin } from 'antd'
+import { DatePicker, Spin } from 'antd'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 
 const Claims = () => {
   const {
@@ -22,6 +25,13 @@ const Claims = () => {
     nonMotorPaidClaims,
     nonMotorOutstanding,
     loadingData,
+    year: _year,
+    setFromDate,
+    toDate: _toDate,
+    setToDate,
+    companys,
+    setBranchCode,
+    setCompany,
   }: any = useContextApi()
   const router = useRouter()
   const totalLossRatio = filteredLossRation.reduce(
@@ -50,29 +60,130 @@ const Claims = () => {
     (motorRegisteredClaims / totalRegisteredClaims) * 100,
   )
 
-  if (loadingData) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="flex flex-col gap-2">
-          <Spin
-            indicator={
-              <LoadingOutlined
-                style={{
-                  fontSize: 60,
-                  color: '#cb7229',
-                }}
-                spin
-              />
-            }
-          />{' '}
-          <p className="text-[#cb7229]">Fetching data.....</p>
-        </div>
-      </div>
-    )
+  // if (loadingData) {
+  //   return (
+  //     <div className="flex items-center justify-center h-screen">
+  //       <div className="flex flex-col gap-2">
+  //         <Spin
+  //           indicator={
+  //             <LoadingOutlined
+  //               style={{
+  //                 fontSize: 60,
+  //                 color: '#cb7229',
+  //               }}
+  //               spin
+  //             />
+  //           }
+  //         />{' '}
+  //         <p className="text-[#cb7229]">Fetching data.....</p>
+  //       </div>
+  //     </div>
+  //   )
+  // }
+
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ]
+
+  const [fmDate24, setFmDate24] = useState('')
+  const [toDate24, setTdDate24] = useState('')
+
+  const formattedCompanys: [] = companys.map((company: IBranches) => {
+    return {
+      label: company.organization_name,
+      value: company.organization_code,
+    }
+  })
+
+  const handleToDate = (date: any, dateString: any) => {
+    const [day, month, year] = dateString.split('-')
+    let formattedMonth: any = ''
+    if (month < 10) {
+      formattedMonth = months[month.toString().slice(1) - 1]
+    } else {
+      formattedMonth = months[Number(month - 1)]
+    }
+    const formattedToDate = day + '-' + formattedMonth + '-' + year
+
+    setTdDate24(formattedToDate)
+  }
+
+  const handleFromDate = (date: any, dateString: any) => {
+    const [day, month, year] = dateString.split('-')
+    let formattedMonth: any = ''
+    if (month < 10) {
+      formattedMonth = months[month.toString().slice(1) - 1]
+    } else {
+      formattedMonth = months[Number(month - 1)]
+    }
+    const formattedToDate = day + '-' + formattedMonth + '-' + year
+
+    setFmDate24(formattedToDate)
+  }
+
+  const handleRunReports = () => {
+    if (fmDate24.length !== 11 || toDate24.length !== 11) {
+      alert('Please select from date and to date')
+    } else {
+      setFromDate(fmDate24)
+      setToDate(toDate24)
+    }
   }
 
   return (
     <div>
+      <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
+        <CustomSelect
+          defaultValue={{ label: 'Entire Company', value: '' }}
+          options={formattedCompanys}
+          onChange={(value: { value: string; label: string }) => {
+            setBranchCode(value.value)
+            setCompany(value.label)
+          }}
+          className="w-[330px] ml-3"
+          name="Company"
+        />
+        <div className="flex flex-col mt-2">
+          <label>From date</label>
+          <DatePicker
+            format={'DD-MM-YYYY'}
+            placeholder={'DD-MM-YYYY'}
+            className={
+              'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
+            }
+            onChange={handleFromDate}
+          />
+        </div>
+        <div className="flex flex-col mt-2">
+          <label>To date</label>
+          <DatePicker
+            format={'DD-MM-YYYY'}
+            placeholder={'DD-MM-YYYY'}
+            className={
+              'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
+            }
+            onChange={handleToDate}
+          />
+        </div>
+        <CustomButton
+          name={'Run'}
+          className={
+            'bg-[#cb7229] text-white h-[40px] md:w-[152px] sm:w-[20rem] flex justify-center items-center mt-8 rounded-md'
+          }
+          onClick={handleRunReports}
+        />
+      </div>
       <div className="flex flex-wrap gap-3 h-auto  overflow-auto  border-b-slate-800 p-2">
         <div
           className={`md:h-[130px] sm:h-[130px] w-[450px] border cursor-pointer rounded-md p-[20px]`}

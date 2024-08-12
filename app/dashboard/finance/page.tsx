@@ -1,10 +1,13 @@
 'use client'
+import { IBranches } from '@/app/assets/interfaces'
 import { useContextApi } from '@/app/context/Context'
+import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import CustomCard from '@/app/UI/reusableComponents/CustomCard'
+import CustomSelect from '@/app/UI/reusableComponents/CustomSelect'
 import { LoadingOutlined } from '@ant-design/icons'
-import { ConfigProvider, Spin, Table } from 'antd'
+import { ConfigProvider, DatePicker, Spin, Table } from 'antd'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 
 interface IBankBalance {
   bankCode: string
@@ -25,6 +28,13 @@ const Finance = () => {
     branchCode,
     loadingData,
     bankBalances,
+    year: _year,
+    setFromDate,
+    toDate: _toDate,
+    setToDate,
+    companys,
+    setBranchCode,
+    setCompany,
   }: any = useContextApi()
   interface IFinanceCard {
     name: string
@@ -37,7 +47,7 @@ const Finance = () => {
         href={`${link}`}
         target="_blank"
         style={{ backgroundColor: color }}
-        className={`h-[130px] w-[330px] border h-auto cursor-pointer  rounded-md p-[10px]`}
+        className={`h-[130px] w-[330px] border  cursor-pointer  rounded-md p-[10px]`}
         onClick={() => {}}
       >
         <div className="flex gap-1 flex-col text-[14px] ">
@@ -137,30 +147,129 @@ const Finance = () => {
     (acc: any, bankBalance: IBankBalance) => acc + bankBalance.amount,
     0,
   )
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ]
 
-  if (loadingData) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="flex flex-col gap-2">
-          <Spin
-            indicator={
-              <LoadingOutlined
-                style={{
-                  fontSize: 60,
-                  color: '#cb7229',
-                }}
-                spin
-              />
-            }
-          />{' '}
-          <p className="text-[#cb7229]">Fetching data.....</p>
-        </div>
-      </div>
-    )
+  const [fmDate24, setFmDate24] = useState('')
+  const [toDate24, setTdDate24] = useState('')
+
+  const formattedCompanys: [] = companys.map((company: IBranches) => {
+    return {
+      label: company.organization_name,
+      value: company.organization_code,
+    }
+  })
+
+  const handleToDate = (date: any, dateString: any) => {
+    const [day, month, year] = dateString.split('-')
+    let formattedMonth: any = ''
+    if (month < 10) {
+      formattedMonth = months[month.toString().slice(1) - 1]
+    } else {
+      formattedMonth = months[Number(month - 1)]
+    }
+    const formattedToDate = day + '-' + formattedMonth + '-' + year
+
+    setTdDate24(formattedToDate)
   }
+
+  const handleFromDate = (date: any, dateString: any) => {
+    const [day, month, year] = dateString.split('-')
+    let formattedMonth: any = ''
+    if (month < 10) {
+      formattedMonth = months[month.toString().slice(1) - 1]
+    } else {
+      formattedMonth = months[Number(month - 1)]
+    }
+    const formattedToDate = day + '-' + formattedMonth + '-' + year
+
+    setFmDate24(formattedToDate)
+  }
+
+  const handleRunReports = () => {
+    if (fmDate24.length !== 11 || toDate24.length !== 11) {
+      alert('Please select from date and to date')
+    } else {
+      setFromDate(fmDate24)
+      setToDate(toDate24)
+    }
+  }
+  // if (loadingData) {
+  //   return (
+  //     <div className="flex items-center justify-center h-screen">
+  //       <div className="flex flex-col gap-2">
+  //         <Spin
+  //           indicator={
+  //             <LoadingOutlined
+  //               style={{
+  //                 fontSize: 60,
+  //                 color: '#cb7229',
+  //               }}
+  //               spin
+  //             />
+  //           }
+  //         />{' '}
+  //         <p className="text-[#cb7229]">Fetching data.....</p>
+  //       </div>
+  //     </div>
+  //   )
+  // }
   const receiptListingLink = `http://192.168.1.112:8001/icon/reports?p_module_name=AR_RECEIPT_LISTING&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=AR.MGR&p_org_code=50&p_menu_code=AR000032&p_grp_code=AR.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=RECEIPT%20LISTING%20REPORT&P_ORG_CODE=50&P_CURRENCY=&P_BRANCH=${branchCode}&P_CATEGORY=&P_AGENT=&P_FM_DT=${fromDate}&P_TO_DT=${toDate}&P_CREATED_BY=&P_PAYING_FOR=&P_MODE=&P_STATUS=`
   return (
     <div>
+      <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
+        <CustomSelect
+          defaultValue={{ label: 'Entire Company', value: '' }}
+          options={formattedCompanys}
+          onChange={(value: { value: string; label: string }) => {
+            setBranchCode(value.value)
+            setCompany(value.label)
+          }}
+          className="w-[330px] ml-3"
+          name="Company"
+        />
+        <div className="flex flex-col mt-2">
+          <label>From date</label>
+          <DatePicker
+            format={'DD-MM-YYYY'}
+            placeholder={'DD-MM-YYYY'}
+            className={
+              'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
+            }
+            onChange={handleFromDate}
+          />
+        </div>
+        <div className="flex flex-col mt-2">
+          <label>To date</label>
+          <DatePicker
+            format={'DD-MM-YYYY'}
+            placeholder={'DD-MM-YYYY'}
+            className={
+              'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
+            }
+            onChange={handleToDate}
+          />
+        </div>
+        <CustomButton
+          name={'Run'}
+          className={
+            'bg-[#cb7229] text-white h-[40px] md:w-[152px] sm:w-[20rem] flex justify-center items-center mt-8 rounded-md'
+          }
+          onClick={handleRunReports}
+        />
+      </div>
       <div className="flex    border-b-slate-800 p-2">
         <CustomFinanceCard
           name={'Receipts Listing'}
