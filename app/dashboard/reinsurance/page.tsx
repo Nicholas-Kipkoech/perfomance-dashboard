@@ -1,13 +1,14 @@
 'use client'
 import { IBranches } from '@/app/assets/interfaces'
 import { useContextApi } from '@/app/context/Context'
+import { ReinsuranceContext } from '@/app/context/ReinsuranceContext'
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import CustomSelect from '@/app/UI/reusableComponents/CustomSelect'
 import { LoadingOutlined } from '@ant-design/icons'
 import { DatePicker, Spin } from 'antd'
 import Link from 'next/link'
 
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 const CustomCard = ({
   total1,
@@ -17,8 +18,6 @@ const CustomCard = ({
   name2,
   name3,
   link,
-  cumulativeTotal,
-  perc,
 }: {
   total1: number
   total2?: number
@@ -75,14 +74,9 @@ const Reinsurance = () => {
     riPaidCession,
     riOutstandingCessionReport,
     loadingData,
-    year: _year,
-    setFromDate,
-    toDate: _toDate,
-    setToDate,
+    fetchRIData,
     companys,
-    setBranchCode,
-    setCompany,
-  }: any = useContextApi()
+  }: any = useContext(ReinsuranceContext)
 
   const treatyPremium = riCession.reduce(
     (acc: any, ri: any) => Number(acc + ri.treatyPremium),
@@ -140,26 +134,26 @@ const Reinsurance = () => {
     (acc: any, ri: any) => Number(acc + ri.xolAmt),
     0,
   )
-  // if (loadingData) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen">
-  //       <div className="flex flex-col gap-2">
-  //         <Spin
-  //           indicator={
-  //             <LoadingOutlined
-  //               style={{
-  //                 fontSize: 60,
-  //                 color: '#cb7229',
-  //               }}
-  //               spin
-  //             />
-  //           }
-  //         />{' '}
-  //         <p className="text-[#cb7229]">Fetching data.....</p>
-  //       </div>
-  //     </div>
-  //   )
-  // }
+  if (loadingData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col gap-2">
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{
+                  fontSize: 60,
+                  color: '#cb7229',
+                }}
+                spin
+              />
+            }
+          />{' '}
+          <p className="text-[#cb7229]">Fetching all reinsurance data.....</p>
+        </div>
+      </div>
+    )
+  }
 
   const months = [
     'Jan',
@@ -178,6 +172,7 @@ const Reinsurance = () => {
 
   const [fmDate24, setFmDate24] = useState('')
   const [toDate24, setTdDate24] = useState('')
+  const [branchCode, setBranchCode] = useState('')
 
   const formattedCompanys: [] = companys.map((company: IBranches) => {
     return {
@@ -212,12 +207,11 @@ const Reinsurance = () => {
     setFmDate24(formattedToDate)
   }
 
-  const handleRunReports = () => {
+  const handleRunReports = async () => {
     if (fmDate24.length !== 11 || toDate24.length !== 11) {
       alert('Please select from date and to date')
     } else {
-      setFromDate(fmDate24)
-      setToDate(toDate24)
+      await fetchRIData(fmDate24, toDate24, branchCode)
     }
   }
   return (
@@ -228,7 +222,6 @@ const Reinsurance = () => {
           options={formattedCompanys}
           onChange={(value: { value: string; label: string }) => {
             setBranchCode(value.value)
-            setCompany(value.label)
           }}
           className="w-[330px] ml-3"
           name="Company"

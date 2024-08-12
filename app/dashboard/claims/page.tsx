@@ -78,7 +78,9 @@ const Claims = () => {
               />
             }
           />{' '}
-          <p className="text-[#cb7229]">Fetching data.....</p>
+          <p className="text-[#cb7229]">
+            Fetching all claims data this might take time...
+          </p>
         </div>
       </div>
     )
