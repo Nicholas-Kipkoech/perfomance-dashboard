@@ -190,7 +190,6 @@ const Statistical = () => {
     companys,
     setBranchCode,
     setCompany,
-    component,
   }: any = useContextApi()
   const {
     setFromDate: _setFromDate,
@@ -253,7 +252,7 @@ const Statistical = () => {
     }
   }
   return (
-    <div className="mt-2 ml-3">
+    <div className="">
       <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
         <CustomSelect
           defaultValue={{ label: 'Entire Company', value: '' }}
@@ -296,7 +295,7 @@ const Statistical = () => {
           onClick={handleRunReports}
         />
       </div>
-      <div className="grid gap-4 grid-cols-2">
+      <div className="grid gap-4 grid-cols-2 mt-2 ml-3">
         <CustomCard
           name="Gross Premiums"
           total2023={totalPremium2023}

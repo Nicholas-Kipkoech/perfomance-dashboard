@@ -1,5 +1,6 @@
 'use client'
 import { IBranches } from '@/app/assets/interfaces'
+import { ClaimsContext } from '@/app/context/ClaimsContext'
 import { useContextApi } from '@/app/context/Context'
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import CustomCard from '@/app/UI/reusableComponents/CustomCard'
@@ -7,15 +8,13 @@ import CustomSelect from '@/app/UI/reusableComponents/CustomSelect'
 import { LoadingOutlined } from '@ant-design/icons'
 import { DatePicker, Spin } from 'antd'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 const Claims = () => {
   const {
     totalClaimPaid,
-    totalClaims,
     totalRegisteredClaims,
     totalOutstanding,
-    totalCount: totalOutstandingCount,
     totalSalvages,
     nonMotorRegisteredClaims,
     motorRegisteredClaims,
@@ -24,15 +23,19 @@ const Claims = () => {
     motorPaidClaims,
     nonMotorPaidClaims,
     nonMotorOutstanding,
-    loadingData,
     year: _year,
-    setFromDate,
-    toDate: _toDate,
-    setToDate,
+
     companys,
-    setBranchCode,
+
     setCompany,
-  }: any = useContextApi()
+    loadingData,
+    fetchClaimsData,
+  }: any = useContext(ClaimsContext)
+
+  const [branchCode, setBranchCode] = useState('')
+  const [fmDate24, setFmDate24] = useState('')
+  const [toDate24, setTdDate24] = useState('')
+
   const router = useRouter()
   const totalLossRatio = filteredLossRation.reduce(
     (acc: number, ratio: any) => {
@@ -60,26 +63,26 @@ const Claims = () => {
     (motorRegisteredClaims / totalRegisteredClaims) * 100,
   )
 
-  // if (loadingData) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen">
-  //       <div className="flex flex-col gap-2">
-  //         <Spin
-  //           indicator={
-  //             <LoadingOutlined
-  //               style={{
-  //                 fontSize: 60,
-  //                 color: '#cb7229',
-  //               }}
-  //               spin
-  //             />
-  //           }
-  //         />{' '}
-  //         <p className="text-[#cb7229]">Fetching data.....</p>
-  //       </div>
-  //     </div>
-  //   )
-  // }
+  if (loadingData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col gap-2">
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{
+                  fontSize: 60,
+                  color: '#cb7229',
+                }}
+                spin
+              />
+            }
+          />{' '}
+          <p className="text-[#cb7229]">Fetching data.....</p>
+        </div>
+      </div>
+    )
+  }
 
   const months = [
     'Jan',
@@ -95,9 +98,6 @@ const Claims = () => {
     'Nov',
     'Dec',
   ]
-
-  const [fmDate24, setFmDate24] = useState('')
-  const [toDate24, setTdDate24] = useState('')
 
   const formattedCompanys: [] = companys.map((company: IBranches) => {
     return {
@@ -132,12 +132,11 @@ const Claims = () => {
     setFmDate24(formattedToDate)
   }
 
-  const handleRunReports = () => {
+  const handleRunReports = async () => {
     if (fmDate24.length !== 11 || toDate24.length !== 11) {
       alert('Please select from date and to date')
     } else {
-      setFromDate(fmDate24)
-      setToDate(toDate24)
+      await fetchClaimsData(fmDate24, toDate24, branchCode)
     }
   }
 

@@ -4,7 +4,7 @@ import { useContextApi } from '../context/Context'
 import Image from 'next/image'
 import iconLogo from '../assets/iconLogo.png'
 import { jwtDecode } from 'jwt-decode'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 const Sidebar = () => {
   const [user, setUser] = useState<any>({})
@@ -18,6 +18,8 @@ const Sidebar = () => {
       }
     }
   }, [])
+
+  const pathname = usePathname()
 
   const menuItems = [
     {
@@ -66,7 +68,9 @@ const Sidebar = () => {
               {item.items.map((item, key) => (
                 <div
                   onClick={() => router.push(item.path)}
-                  className={`h-[30px] text-[14px]   cursor-pointer mt-[2px] flex items-center justify-center`}
+                  className={`h-[30px] text-[14px] ${
+                    pathname === item.path ? 'bg-[#cb7529]' : ''
+                  }   cursor-pointer mt-[2px] flex items-center justify-center`}
                   key={key}
                 >
                   {item.name}

@@ -35,6 +35,7 @@ const Underwriting = () => {
     nonMotorUndebited,
     motorUndebited,
     commision,
+    loadingData,
   }: any = useContextApi()
 
   const totalReinsurance = reinsurance.reduce(
@@ -140,26 +141,27 @@ const Underwriting = () => {
       </Link>
     )
   }
-  // if (loadingData) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen">
-  //       <div className="flex flex-col gap-2">
-  //         <Spin
-  //           indicator={
-  //             <LoadingOutlined
-  //               style={{
-  //                 fontSize: 60,
-  //                 color: '#cb7229',
-  //               }}
-  //               spin
-  //             />
-  //           }
-  //         />{' '}
-  //         <p className="text-[#cb7229]">Fetching data.....</p>
-  //       </div>
-  //     </div>
-  //   )
-  // }
+
+  if (loadingData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col gap-2">
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{
+                  fontSize: 60,
+                  color: '#cb7229',
+                }}
+                spin
+              />
+            }
+          />{' '}
+          <p className="text-[#cb7229]">Fetching data.....</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div>
