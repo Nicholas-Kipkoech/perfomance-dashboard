@@ -381,6 +381,8 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <StatisticalContext.Provider
       value={{
+        fromDate,
+        toDate,
         setFromDate,
         setFromDate23,
         setToDate,

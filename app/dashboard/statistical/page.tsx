@@ -189,6 +189,8 @@ const Statistical = () => {
     setToDate: _setToDate,
     setToDate23: _setToDate23,
     setBranchCode: _setBranchCode,
+    fromDate,
+    toDate,
   }: any = useContext(StatisticalContext)
 
   const [fmDate23, setFmDate23] = useState('')
@@ -245,7 +247,7 @@ const Statistical = () => {
   return (
     <div className="">
       <p className="flex justify-center font-bold">
-        Running Period [{fmDate23}] - [{toDate23}]
+        Running Period [{fromDate}] - [{toDate}]
       </p>
       <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
         <CustomSelect
