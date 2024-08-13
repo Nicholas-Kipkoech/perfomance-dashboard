@@ -1,9 +1,7 @@
 'use client'
 import { IBranches } from '@/app/assets/interfaces'
 import { useContextApi } from '@/app/context/Context'
-import FinanceContextProvider, {
-  FinanceContext,
-} from '@/app/context/FinanceContext'
+import { FinanceContext } from '@/app/context/FinanceContext'
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import CustomCard from '@/app/UI/reusableComponents/CustomCard'
 import CustomSelect from '@/app/UI/reusableComponents/CustomSelect'
@@ -235,7 +233,6 @@ const Finance = () => {
           options={formattedCompanys}
           onChange={(value: { value: string; label: string }) => {
             setBranchCode(value.value)
-            setCompany(value.label)
           }}
           className="w-[330px] ml-3"
           name="Company"
@@ -276,7 +273,7 @@ const Finance = () => {
           link={receiptListingLink}
         />
       </div>
-      {totalInKSH === 0 ? (
+      {totalInKSH <= 0 ? (
         <></>
       ) : (
         <>
@@ -306,7 +303,7 @@ const Finance = () => {
         </>
       )}
 
-      {totalInUSD === 0 ? (
+      {totalInUSD <= 0 ? (
         <></>
       ) : (
         <>
@@ -335,7 +332,7 @@ const Finance = () => {
         </>
       )}
 
-      {totalInEURO === 0 ? (
+      {totalInEURO <= 0 ? (
         <></>
       ) : (
         <>

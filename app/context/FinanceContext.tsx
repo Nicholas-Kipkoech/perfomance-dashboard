@@ -37,7 +37,7 @@ const FinanceContextProvider = ({
         ),
 
         axios.get(
-          `${LOCAL_URL}/bank-balances?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          `${LOCAL_URL}/bank-balances?toDate=${toDate}&branchCode=${branchCode}`,
         ),
       ])
 
