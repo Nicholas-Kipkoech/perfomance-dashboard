@@ -273,7 +273,7 @@ const Finance = () => {
           link={receiptListingLink}
         />
       </div>
-      {totalInKSH <= 0 ? (
+      {totalInKSH === 0 ? (
         <></>
       ) : (
         <>
@@ -303,7 +303,7 @@ const Finance = () => {
         </>
       )}
 
-      {totalInUSD <= 0 ? (
+      {totalInUSD === 0 ? (
         <></>
       ) : (
         <>
@@ -332,7 +332,7 @@ const Finance = () => {
         </>
       )}
 
-      {totalInEURO <= 0 ? (
+      {totalInEURO === 0 ? (
         <></>
       ) : (
         <>
