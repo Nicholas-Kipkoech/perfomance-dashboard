@@ -216,6 +216,9 @@ const Reinsurance = () => {
   }
   return (
     <div>
+      <p className="flex justify-center font-bold">
+        Running Period [{fmDate24}] - [{toDate24}]
+      </p>
       <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
         <CustomSelect
           defaultValue={{ label: 'Entire Company', value: '' }}

@@ -36,7 +36,9 @@ const FinanceContextProvider = ({
           `${LOCAL_URL}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
         ),
 
-        axios.get(`${LOCAL_URL}/bank-balances`),
+        axios.get(
+          `${LOCAL_URL}/bank-balances?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        ),
       ])
 
       setCompanys([

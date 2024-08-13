@@ -182,15 +182,7 @@ const Statistical = () => {
     'Nov',
     'Dec',
   ]
-  const {
-    year: _year,
-    setFromDate,
-    toDate: _toDate,
-    setToDate,
-    companys,
-    setBranchCode,
-    setCompany,
-  }: any = useContextApi()
+  const { companys, setBranchCode, setCompany }: any = useContextApi()
   const {
     setFromDate: _setFromDate,
     setFromDate23: _setFromDate23,
@@ -245,14 +237,16 @@ const Statistical = () => {
     if (fmDate24.length !== 11 || toDate24.length !== 11) {
       alert('Please select from date and to date')
     } else {
-      setFromDate(fmDate24)
       _setFromDate(fmDate24)
       _setToDate(toDate24)
-      setToDate(toDate24), _setFromDate23(fmDate23), _setToDate23(toDate23)
+      _setFromDate23(fmDate23), _setToDate23(toDate23)
     }
   }
   return (
     <div className="">
+      <p className="flex justify-center font-bold">
+        Running Period [{fmDate23}] - [{toDate23}]
+      </p>
       <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
         <CustomSelect
           defaultValue={{ label: 'Entire Company', value: '' }}

@@ -226,6 +226,9 @@ const Finance = () => {
   const receiptListingLink = `http://192.168.1.112:8001/icon/reports?p_module_name=AR_RECEIPT_LISTING&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=AR.MGR&p_org_code=50&p_menu_code=AR000032&p_grp_code=AR.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=RECEIPT%20LISTING%20REPORT&P_ORG_CODE=50&P_CURRENCY=&P_BRANCH=${branchCode}&P_CATEGORY=&P_AGENT=&P_FM_DT=${fmDate24}&P_TO_DT=${toDate24}&P_CREATED_BY=&P_PAYING_FOR=&P_MODE=&P_STATUS=`
   return (
     <div>
+      <p className="flex justify-center font-bold">
+        Running Period [{fmDate24}] - [{toDate24}]
+      </p>
       <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
         <CustomSelect
           defaultValue={{ label: 'Entire Company', value: '' }}
