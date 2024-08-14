@@ -5,7 +5,7 @@ import { StatisticalContext } from '@/app/context/StatisticalContext'
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import CustomSelect from '@/app/UI/reusableComponents/CustomSelect'
 import { LoadingOutlined } from '@ant-design/icons'
-import { DatePicker, Spin } from 'antd'
+import { ConfigProvider, DatePicker, Spin, Table } from 'antd'
 import React, { useContext, useState } from 'react'
 
 interface ICustomCard {
@@ -104,6 +104,8 @@ const Statistical = () => {
     loadingManagementExpenses24,
     loadingRiOutstandingCessionReport23,
     loadingRiOutstandingCessionReport24,
+    businessSummary,
+    loadingBusinessSummary,
   }: any = useContext(StatisticalContext)
 
   const facCommission23 = riCession23.reduce(
@@ -244,6 +246,39 @@ const Statistical = () => {
       _setFromDate23(fmDate23), _setToDate23(toDate23)
     }
   }
+
+  const columns = [
+    {
+      title: 'Branch Name',
+      dataIndex: 'branchName',
+      key: 'branchName',
+    },
+    {
+      title: 'Total Premium',
+      dataIndex: 'totalPremium',
+      key: 'totalPremium',
+      render: (_: any, item: any) => (
+        <p>{item.totalPremium.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: 'Receipt Total',
+      dataIndex: 'receiptTotal',
+      key: 'receiptTotal',
+      render: (_: any, item: any) => (
+        <p>{item.receiptTotal.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: 'Credit Note Amount',
+      dataIndex: 'totalInvoiceAmt',
+      key: 'totalInvoiceAmt',
+      render: (_: any, item: any) => (
+        <p>{item.totalInvoiceAmt.toLocaleString()}</p>
+      ),
+    },
+  ]
+
   return (
     <div className="">
       <p className="flex justify-center font-bold">
@@ -355,6 +390,30 @@ const Statistical = () => {
           loading23={loadingRiOutstandingCessionReport23}
           loading24={loadingRiOutstandingCessionReport24}
         />
+      </div>
+      <div className="mt-2 ml-3">
+        <p className="flex justify-center font-bold">
+          Business Summary Per Branch
+        </p>
+        <ConfigProvider
+          theme={{
+            components: {
+              Table: {
+                headerBg: '#092332',
+                headerColor: 'white',
+                colorBgContainer: 'whitesmoke',
+                rowHoverBg: '#cb7529',
+                padding: 8,
+              },
+            },
+          }}
+        >
+          <Table
+            dataSource={businessSummary}
+            columns={columns}
+            loading={loadingBusinessSummary}
+          />
+        </ConfigProvider>
       </div>
     </div>
   )

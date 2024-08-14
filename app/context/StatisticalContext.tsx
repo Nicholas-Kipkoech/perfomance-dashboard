@@ -51,6 +51,8 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const [loadingRiPaidCession24, setLoadingRiPaidCession24] = useState(false)
 
   const [managementExpenses23, setManagementExpenses23] = useState([])
+  const [businessSummary, setBusinessSummary] = useState([])
+  const [loadingBusinessSummary, setLoadingBusinessSummary] = useState(false)
   const [
     loadingManagementExpenses23,
     setLoadingManagementExpenses23,
@@ -324,6 +326,23 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
       })
   }, [toDate, branchCode])
 
+  useEffect(() => {
+    setLoadingBusinessSummary(true)
+    axios
+      .get(
+        `${LOCAL_URL}/getBusinessSummaryPerBranch?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setBusinessSummary(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching Business summary ', error)
+      })
+      .finally(() => {
+        setLoadingBusinessSummary(false)
+      })
+  }, [toDate, branchCode])
+
   function calculatePremiums(premiums: any) {
     const totalPremium = premiums.reduce((total: number, premium: any) => {
       return total + premium.premiums + premium.earthQuake + premium.PVTPremium
@@ -402,6 +421,8 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         riPaidCession24,
         managementExpenses23,
         managementExpenses24,
+        businessSummary,
+        loadingBusinessSummary,
         riOutstandingCessionReport23,
         riOutstandingCessionReport24,
         loadingPremiums2024,
