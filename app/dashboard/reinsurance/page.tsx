@@ -134,26 +134,6 @@ const Reinsurance = () => {
     (acc: any, ri: any) => Number(acc + ri.xolAmt),
     0,
   )
-  if (loadingData) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="flex flex-col gap-2">
-          <Spin
-            indicator={
-              <LoadingOutlined
-                style={{
-                  fontSize: 60,
-                  color: '#cb7229',
-                }}
-                spin
-              />
-            }
-          />{' '}
-          <p className="text-[#cb7229]">Fetching all reinsurance data.....</p>
-        </div>
-      </div>
-    )
-  }
 
   const months = [
     'Jan',
@@ -213,6 +193,26 @@ const Reinsurance = () => {
     } else {
       await fetchRIData(fmDate24, toDate24, branchCode)
     }
+  }
+  if (loadingData) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-col gap-2">
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{
+                  fontSize: 60,
+                  color: '#cb7229',
+                }}
+                spin
+              />
+            }
+          />{' '}
+          <p className="text-[#cb7229]">Fetching all reinsurance data.....</p>
+        </div>
+      </div>
+    )
   }
   return (
     <div>
