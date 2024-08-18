@@ -227,7 +227,9 @@ const ClaimsContextProvider = ({ children }: { children: React.ReactNode }) => {
         nonMotorOutstanding,
         loadingData,
         companys,
-
+        outstandingClaims,
+        cmLossRatio,
+        claimsData,
         setCompany,
         fetchClaimsData,
       }}
