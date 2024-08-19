@@ -457,6 +457,8 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <StatisticalContext.Provider
       value={{
+        fromDate23,
+        toDate23,
         fromDate,
         toDate,
         setFromDate,
@@ -502,6 +504,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         loadingRiOutstandingCessionReport24,
         unpaidBills,
         loadingUnpaidBills,
+        branchCode,
       }}
     >
       {children}

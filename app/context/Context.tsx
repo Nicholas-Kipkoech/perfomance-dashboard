@@ -37,6 +37,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [recovery, setRecovery] = useState<IRecovery[]>([])
   const [receipts, setReceipts] = useState<IReceipts[]>([])
   const [companys, setCompanys] = useState<IBranches[]>([])
+
   const [company, setCompany] = useState('INTRA')
   const [component, setComponent] = useState('Statistical')
   const [reinsurance, setReinsurance] = useState([])
@@ -502,7 +503,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         company,
         companys,
         setCompany,
-
         component,
         setComponent,
         totalRegisteredClaims,

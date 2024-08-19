@@ -7,6 +7,7 @@ import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import CustomSelect from '@/app/UI/reusableComponents/CustomSelect'
 import { LoadingOutlined } from '@ant-design/icons'
 import { ConfigProvider, DatePicker, Spin, Table } from 'antd'
+import Link from 'next/link'
 import React, { useContext, useState } from 'react'
 
 interface ICustomCard {
@@ -15,6 +16,8 @@ interface ICustomCard {
   loading23?: boolean
   loading24?: boolean
   name: string
+  to23?: string
+  to24?: string
 }
 
 const CustomCard = ({
@@ -23,6 +26,8 @@ const CustomCard = ({
   name,
   loading23,
   loading24,
+  to23,
+  to24,
 }: ICustomCard) => {
   return (
     <div className="border  pt-4 h-[8rem] w-[30rem]">
@@ -43,9 +48,13 @@ const CustomCard = ({
               }
             />
           ) : (
-            <p className="font-bold text-[1.1rem]">
+            <Link
+              href={`${to24}`}
+              target="_blank"
+              className="font-bold text-[1.1rem]"
+            >
               KSH {Number(total2024.toFixed(2)).toLocaleString()}
-            </p>
+            </Link>
           )}
         </div>
         <div className="flex flex-col justify-evenly">
@@ -63,9 +72,13 @@ const CustomCard = ({
               }
             />
           ) : (
-            <p className="font-bold text-[1.1rem]">
+            <Link
+              href={`${to23}`}
+              target="_blank"
+              className="font-bold text-[1.1rem]"
+            >
               KSH {Number(total2023.toFixed(2)).toLocaleString()}
-            </p>
+            </Link>
           )}
         </div>
       </div>
@@ -107,6 +120,8 @@ const Statistical = () => {
     loadingRiOutstandingCessionReport24,
     businessSummary,
     loadingBusinessSummary,
+    fromDate23,
+    toDate23,
   }: any = useContext(StatisticalContext)
 
   const facCommission23 = riCession23.reduce(
@@ -185,13 +200,13 @@ const Statistical = () => {
     'Nov',
     'Dec',
   ]
-  const { companys, setBranchCode, setCompany }: any = useContextApi()
+  const { companys, setCompany }: any = useContextApi()
   const {
     setFromDate: _setFromDate,
     setFromDate23: _setFromDate23,
     setToDate: _setToDate,
     setToDate23: _setToDate23,
-    setBranchCode: _setBranchCode,
+    setBranchCode,
     fromDate,
     toDate,
     cmLossRatio,
@@ -200,10 +215,11 @@ const Statistical = () => {
     filteredLossRation,
     unpaidBills,
     loadingUnpaidBills,
+    branchCode,
   }: any = useContext(StatisticalContext)
 
   const [fmDate23, setFmDate23] = useState('')
-  const [toDate23, setTdDate23] = useState('')
+  const [tDate23, setTdDate23] = useState('')
   const [fmDate24, setFmDate24] = useState('')
   const [toDate24, setTdDate24] = useState('')
 
@@ -268,9 +284,24 @@ const Statistical = () => {
     } else {
       _setFromDate(fmDate24)
       _setToDate(toDate24)
-      _setFromDate23(fmDate23), _setToDate23(toDate23)
+      _setFromDate23(fmDate23), _setToDate23(tDate23)
     }
   }
+
+  const claimPaidRecovery23Report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_PAID_CESSIONS_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000013&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=PAID%20CESSION%20SUMMARY%20CLASSWISE&P_ORG_CODE=50&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}`
+  const claimPaidRecovery24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_PAID_CESSIONS_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000013&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=PAID%20CESSION%20SUMMARY%20CLASSWISE&P_ORG_CODE=50&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
+  const grossFacPremium23Report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_CESSIONS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000012&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=RI%20CESSIONS&P_ORG_CODE=50&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}`
+  const grossFacPremium24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_CESSIONS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000012&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=RI%20CESSIONS&P_ORG_CODE=50&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
+  const RIouts23report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_OUTS_CESSIONS_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000013&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=OUTSTANDING%20CLAIMS%20CESSIONS%20REPORT%20[Reconciliation]&P_ORG_CODE=50&P_CLASS=&P_SUBCLASS=&P_ASATDATE=${toDate23}`
+  const RIouts24report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_OUTS_CESSIONS_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000013&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=OUTSTANDING%20CLAIMS%20CESSIONS%20REPORT%20[Reconciliation]&P_ORG_CODE=50&P_CLASS=&P_SUBCLASS=&P_ASATDATE=${toDate}`
+  const ME23Report = `http://192.168.1.112:8001/icon/reports?p_module_name=GL_EXPENSE_ANALYSIS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=GL.MGR&p_org_code=50&p_menu_code=GL000040&p_grp_code=GL.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=EXPENSE%20ANALYSIS&P_ORG_CODE=50&P_CURRENCY=&P_COL_CODE=ME&P_BRANCH=${branchCode}&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}`
+  const ME24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=GL_EXPENSE_ANALYSIS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=GL.MGR&p_org_code=50&p_menu_code=GL000040&p_grp_code=GL.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=EXPENSE%20ANALYSIS&P_ORG_CODE=50&P_CURRENCY=&P_COL_CODE=ME&P_BRANCH=${branchCode}&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
+  const grossClaimsOuts23Report = `http://192.168.1.112:8001/icon/reports?p_module_name=CM_AGNANALYS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=CM.MGR&p_org_code=50&p_menu_code=CM000030&p_grp_code=CM.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=CLAIM%20AGEING%20ANALYSIS%20REPORT&P_ORG_CODE=50&P_RPT_TYPE=S&P_ASATDATE=${toDate23}`
+  const grossClaimsOuts24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=CM_AGNANALYS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=CM.MGR&p_org_code=50&p_menu_code=CM000030&p_grp_code=CM.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=CLAIM%20AGEING%20ANALYSIS%20REPORT&P_ORG_CODE=50&P_RPT_TYPE=S&P_ASATDATE=${toDate}`
+  const grossClaimPaid23Report = `http://192.168.1.112:8001/icon/reports?p_module_name=CM_PAID_CLMS_SUMMARY&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=CM.MGR&p_org_code=50&p_menu_code=CM000032&p_grp_code=CM.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=CLAIMS%20PAID%20SUMMARY&P_ORG_CODE=50&P_BRANCH_GROUP=&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}`
+  const grossClaimPaid24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=CM_PAID_CLMS_SUMMARY&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=CM.MGR&p_org_code=50&p_menu_code=CM000032&p_grp_code=CM.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=CLAIMS%20PAID%20SUMMARY&P_ORG_CODE=50&P_BRANCH_GROUP=&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
+  const grossPremComm23report = `http://192.168.1.112:8001/icon/reports?p_module_name=UW_COMP_PROD_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=UW.ADF&p_org_code=50&p_menu_code=UW000186&p_grp_code=UW.ADF&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=COMPANY%20PRODUCTION%20SUMMARY&P_ORG_CODE=50&P_BRANCH_GROUP=&P_BRANCH=${branchCode}&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}&P_COMESA=Y`
+  const grossPremComm24report = `http://192.168.1.112:8001/icon/reports?p_module_name=UW_COMP_PROD_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=UW.ADF&p_org_code=50&p_menu_code=UW000186&p_grp_code=UW.ADF&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=COMPANY%20PRODUCTION%20SUMMARY&P_ORG_CODE=50&P_BRANCH_GROUP=&P_BRANCH=${branchCode}&P_FM_DT=${fromDate}&P_TO_DT=${toDate}&P_COMESA=Y`
 
   const columns = [
     {
@@ -396,6 +427,7 @@ const Statistical = () => {
     (acc: any, item: any) => acc + item.amountToPay,
     0,
   )
+
   return (
     <div className="">
       <p className="flex justify-center font-bold">
@@ -407,7 +439,6 @@ const Statistical = () => {
           options={formattedCompanys}
           onChange={(value: { value: string; label: string }) => {
             setBranchCode(value.value)
-            _setBranchCode(value.value)
             setCompany(value.label)
           }}
           className="w-[330px] ml-3"
@@ -447,12 +478,16 @@ const Statistical = () => {
         <CustomCard
           name="Gross Premiums"
           total2023={totalPremium2023}
+          to23={grossPremComm23report}
+          to24={grossPremComm24report}
           loading23={loadingPremiums2023}
           loading24={loadingPremiums2024}
           total2024={totalPremium2024}
         />
         <CustomCard
           name="Gross Commission"
+          to23={grossPremComm23report}
+          to24={grossPremComm24report}
           total2023={commision2023}
           loading23={loadingPremiums2023}
           loading24={loadingPremiums2024}
@@ -460,6 +495,8 @@ const Statistical = () => {
         />
         <CustomCard
           name="Gross Claim Paid"
+          to23={grossClaimPaid23Report}
+          to24={grossClaimPaid24Report}
           total2023={totalClaimPaid2023}
           total2024={totalClaimPaid2024}
           loading23={loadingClaims2023}
@@ -467,6 +504,8 @@ const Statistical = () => {
         />
         <CustomCard
           name="Gross Claim Outstanding"
+          to23={grossClaimsOuts23Report}
+          to24={grossClaimsOuts24Report}
           total2023={totalOutstanding2023}
           total2024={totalOutstanding2024}
           loading23={loadingOutstandingClaims23}
@@ -474,6 +513,8 @@ const Statistical = () => {
         />
         <CustomCard
           name="Management Expenses"
+          to23={ME23Report}
+          to24={ME24Report}
           total2023={totalME23}
           total2024={totalME24}
           loading23={loadingManagementExpenses23}
@@ -481,6 +522,8 @@ const Statistical = () => {
         />
         <CustomCard
           name="Gross Fac Out Commision"
+          to23={grossFacPremium23Report}
+          to24={grossFacPremium24Report}
           total2023={facCommission23}
           total2024={facCommission24}
           loading23={loadingRiCession23}
@@ -488,12 +531,16 @@ const Statistical = () => {
         />
         <CustomCard
           name="Gross Fac Premium"
+          to23={grossFacPremium23Report}
+          to24={grossFacPremium24Report}
           total2023={facPremium23}
           total2024={facPremium24}
           loading23={loadingRiCession23}
           loading24={loadingRiCession24}
         />
         <CustomCard
+          to23={claimPaidRecovery23Report}
+          to24={claimPaidRecovery24Report}
           name="Claim Paid Recovery"
           total2023={claimPaidRecovery23}
           total2024={claimPaidRecovery24}
@@ -501,6 +548,8 @@ const Statistical = () => {
           loading24={loadingRiPaidCession24}
         />
         <CustomCard
+          to23={RIouts23report}
+          to24={RIouts24report}
           name="Reinsurance share of claim outstanding"
           total2023={totalOutstandingReinsurance23}
           total2024={totalOutstandingReinsurance24}
