@@ -52,6 +52,11 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [managementExpenses23, setManagementExpenses23] = useState([])
   const [businessSummary, setBusinessSummary] = useState([])
+
+  const [cmLossRatio, setCmLossRatio] = useState([])
+  const [cmPaidOuts, setCmPaidOuts] = useState([])
+  const [loadingLossRatio, setLoadingLossRatio] = useState(false)
+
   const [loadingBusinessSummary, setLoadingBusinessSummary] = useState(false)
   const [
     loadingManagementExpenses23,
@@ -343,6 +348,40 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
       })
   }, [toDate, branchCode])
 
+  useEffect(() => {
+    setLoadingLossRatio(true)
+    axios
+      .get(
+        `${LOCAL_URL}/cm-loss-ratio?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setCmLossRatio(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching Business summary ', error)
+      })
+      .finally(() => {
+        setLoadingLossRatio(false)
+      })
+  }, [toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingLossRatio(true)
+    axios
+      .get(
+        `${LOCAL_URL}/CMpaidAndOuts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setCmPaidOuts(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching Business summary ', error)
+      })
+      .finally(() => {
+        setLoadingLossRatio(false)
+      })
+  }, [toDate, branchCode])
+
   function calculatePremiums(premiums: any) {
     const totalPremium = premiums.reduce((total: number, premium: any) => {
       return total + premium.premiums + premium.earthQuake + premium.PVTPremium
@@ -407,6 +446,9 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         setToDate,
         setToDate23,
         setBranchCode,
+        loadingLossRatio,
+        cmPaidOuts,
+        cmLossRatio,
         totalPremium2024,
         commision2024,
         totalPremium2023,

@@ -1,5 +1,6 @@
 'use client'
 import { IBranches } from '@/app/assets/interfaces'
+import { ClaimsContext } from '@/app/context/ClaimsContext'
 import { useContextApi } from '@/app/context/Context'
 import { StatisticalContext } from '@/app/context/StatisticalContext'
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
@@ -193,12 +194,33 @@ const Statistical = () => {
     setBranchCode: _setBranchCode,
     fromDate,
     toDate,
+    cmLossRatio,
+    loadingLossRatio,
+    cmPaidOuts,
   }: any = useContext(StatisticalContext)
 
   const [fmDate23, setFmDate23] = useState('')
   const [toDate23, setTdDate23] = useState('')
   const [fmDate24, setFmDate24] = useState('')
   const [toDate24, setTdDate24] = useState('')
+
+  const lossRatioMap = new Map(
+    cmLossRatio.map((item) => [item.branchCode, item]),
+  )
+  const mergedLRCPOuts = cmPaidOuts.map((item) => {
+    const lossRatioItem = lossRatioMap.get(item.branchCode)
+    return {
+      branchName: item.branchName,
+      lossRatio: lossRatioItem ? lossRatioItem.total : null,
+      claimsPaid: item.claimPaid,
+      outstandingAmount: item.outstandingAmount,
+    }
+  })
+  const uniqueBranchNames = Array.from(
+    new Set(mergedLRCPOuts.map((item) => item.branchName)),
+  ).map((branchName) => {
+    return mergedLRCPOuts.find((item) => item.branchName === branchName)
+  })
 
   const formattedCompanys: [] = companys.map((company: IBranches) => {
     return {
@@ -258,7 +280,7 @@ const Statistical = () => {
       dataIndex: 'totalPremium',
       key: 'totalPremium',
       render: (_: any, item: any) => (
-        <p>{item.totalPremium.toLocaleString()}</p>
+        <p className="flex justify-end">{item.totalPremium.toLocaleString()}</p>
       ),
     },
     {
@@ -266,7 +288,7 @@ const Statistical = () => {
       dataIndex: 'receiptTotal',
       key: 'receiptTotal',
       render: (_: any, item: any) => (
-        <p>{item.receiptTotal.toLocaleString()}</p>
+        <p className="flex justify-end">{item.receiptTotal.toLocaleString()}</p>
       ),
     },
     {
@@ -274,11 +296,71 @@ const Statistical = () => {
       dataIndex: 'totalInvoiceAmt',
       key: 'totalInvoiceAmt',
       render: (_: any, item: any) => (
-        <p>{item.totalInvoiceAmt.toLocaleString()}</p>
+        <p className="flex justify-end">
+          {item.totalInvoiceAmt.toLocaleString()}
+        </p>
+      ),
+    },
+    {
+      title: 'Management Expenses',
+      dataIndex: 'lossRatio',
+      key: 'lossRatio',
+      render: (_: any, item: any) => (
+        <p className="flex justify-end">
+          {Math.floor(
+            (item.totalPremium / totalPremium2024) * totalME24,
+          ).toLocaleString()}
+        </p>
       ),
     },
   ]
 
+  const columns2 = [
+    {
+      title: 'Branch Name',
+      dataIndex: 'branchName',
+      key: 'branchName',
+    },
+    {
+      title: 'Claim Paid',
+      dataIndex: 'totalPremium',
+      key: 'totalPremium',
+      render: (_: any, item: any) => (
+        <p className="flex justify-end">{item.claimsPaid.toLocaleString()}</p>
+      ),
+    },
+    {
+      title: 'Outstanding Amount',
+      dataIndex: 'receiptTotal',
+      key: 'receiptTotal',
+      render: (_: any, item: any) => (
+        <p className="flex justify-end">
+          {item.outstandingAmount.toLocaleString()}
+        </p>
+      ),
+    },
+    {
+      title: 'Loss Ratio',
+      dataIndex: 'lossRatio',
+      key: 'lossRatio',
+      render: (_: any, item: any) => (
+        <p className="flex justify-end">{item.lossRatio}</p>
+      ),
+    },
+  ]
+
+  const totalBussPrem = businessSummary.reduce(
+    (acc: any, item) => acc + item.totalPremium,
+    0,
+  )
+  const receiptsTotal = businessSummary.reduce(
+    (acc: any, item) => acc + item.receiptTotal,
+    0,
+  )
+  const CRTotals = businessSummary.reduce(
+    (acc: any, item) => acc + item.totalInvoiceAmt,
+    0,
+  )
   return (
     <div className="">
       <p className="flex justify-center font-bold">
@@ -395,6 +477,12 @@ const Statistical = () => {
         <p className="flex justify-center font-bold">
           Business Summary Per Branch
         </p>
+        <div className="flex gap-2 text-[14px] font-bold">
+          <p>Total Premium: {totalBussPrem.toLocaleString()} </p>
+          <p>Receipts Total: {receiptsTotal.toLocaleString()} </p>
+          <p>ME Total: {Math.floor(totalME24).toLocaleString()} </p>
+          <p>Credit Notes Total: {CRTotals.toLocaleString()} </p>
+        </div>
         <ConfigProvider
           theme={{
             components: {
@@ -412,6 +500,25 @@ const Statistical = () => {
             dataSource={businessSummary}
             columns={columns}
             loading={loadingBusinessSummary}
+          />
+        </ConfigProvider>
+        <ConfigProvider
+          theme={{
+            components: {
+              Table: {
+                headerBg: '#092332',
+                headerColor: 'white',
+                colorBgContainer: 'whitesmoke',
+                rowHoverBg: '#cb7529',
+                padding: 8,
+              },
+            },
+          }}
+        >
+          <Table
+            dataSource={uniqueBranchNames}
+            columns={columns2}
+            loading={loadingLossRatio}
           />
         </ConfigProvider>
       </div>
