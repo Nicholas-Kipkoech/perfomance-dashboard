@@ -205,10 +205,10 @@ const Statistical = () => {
   const [toDate24, setTdDate24] = useState('')
 
   const lossRatioMap = new Map(
-    cmLossRatio.map((item) => [item.branchCode, item]),
+    cmLossRatio.map((item: any) => [item.branchCode, item]),
   )
-  const mergedLRCPOuts = cmPaidOuts.map((item) => {
-    const lossRatioItem = lossRatioMap.get(item.branchCode)
+  const mergedLRCPOuts = cmPaidOuts.map((item: any) => {
+    const lossRatioItem: any = lossRatioMap.get(item.branchCode)
     return {
       branchName: item.branchName,
       lossRatio: lossRatioItem ? lossRatioItem.total : null,
@@ -217,9 +217,9 @@ const Statistical = () => {
     }
   })
   const uniqueBranchNames = Array.from(
-    new Set(mergedLRCPOuts.map((item) => item.branchName)),
+    new Set(mergedLRCPOuts.map((item: any) => item.branchName)),
   ).map((branchName) => {
-    return mergedLRCPOuts.find((item) => item.branchName === branchName)
+    return mergedLRCPOuts.find((item: any) => item.branchName === branchName)
   })
 
   const formattedCompanys: [] = companys.map((company: IBranches) => {
@@ -350,15 +350,15 @@ const Statistical = () => {
   ]
 
   const totalBussPrem = businessSummary.reduce(
-    (acc: any, item) => acc + item.totalPremium,
+    (acc: any, item: any) => acc + item.totalPremium,
     0,
   )
   const receiptsTotal = businessSummary.reduce(
-    (acc: any, item) => acc + item.receiptTotal,
+    (acc: any, item: any) => acc + item.receiptTotal,
     0,
   )
   const CRTotals = businessSummary.reduce(
-    (acc: any, item) => acc + item.totalInvoiceAmt,
+    (acc: any, item: any) => acc + item.totalInvoiceAmt,
     0,
   )
   return (
