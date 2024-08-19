@@ -198,6 +198,8 @@ const Statistical = () => {
     loadingLossRatio,
     cmPaidOuts,
     filteredLossRation,
+    unpaidBills,
+    loadingUnpaidBills,
   }: any = useContext(StatisticalContext)
 
   const [fmDate23, setFmDate23] = useState('')
@@ -350,6 +352,22 @@ const Statistical = () => {
     },
   ]
 
+  const columns3 = [
+    {
+      title: 'Category',
+      dataIndex: 'category',
+      key: 'category',
+    },
+    {
+      title: 'Totals',
+      dataIndex: 'lossRatio',
+      key: 'lossRatio',
+      render: (_: any, item: any) => (
+        <p className="flex justify-end">{item.amountToPay.toLocaleString()}</p>
+      ),
+    },
+  ]
+
   const totalBussPrem = businessSummary.reduce(
     (acc: any, item: any) => acc + item.totalPremium,
     0,
@@ -372,6 +390,10 @@ const Statistical = () => {
     (acc: number, ratio: any) => {
       return ratio.total !== null ? acc + Number(ratio.total) : acc
     },
+    0,
+  )
+  const unpaidBillsTotals = unpaidBills.reduce(
+    (acc: any, item: any) => acc + item.amountToPay,
     0,
   )
   return (
@@ -487,7 +509,7 @@ const Statistical = () => {
         />
       </div>
       <div className="mt-2 ml-3">
-        <p className="flex justify-center font-bold">
+        <p className="flex justify-center text-[1.5rem] font-bold">
           Business Summary Per Branch
         </p>
         <div className="flex justify-between mx-2 text-[14px] font-bold">
@@ -541,6 +563,29 @@ const Statistical = () => {
             dataSource={uniqueBranchNames}
             columns={columns2}
             loading={loadingLossRatio}
+          />
+        </ConfigProvider>
+        <div className="font-bold flex justify-between items-center mx-2">
+          <p className="text-[1.5rem]">Unpaid Bills</p>
+          <p>Overall Total: {unpaidBillsTotals.toLocaleString()}</p>
+        </div>
+        <ConfigProvider
+          theme={{
+            components: {
+              Table: {
+                headerBg: '#092332',
+                headerColor: 'white',
+                colorBgContainer: 'whitesmoke',
+                rowHoverBg: '#cb7529',
+                padding: 8,
+              },
+            },
+          }}
+        >
+          <Table
+            dataSource={unpaidBills}
+            columns={columns3}
+            loading={loadingUnpaidBills}
           />
         </ConfigProvider>
       </div>

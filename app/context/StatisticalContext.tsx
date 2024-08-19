@@ -55,7 +55,9 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [cmLossRatio, setCmLossRatio] = useState([])
   const [cmPaidOuts, setCmPaidOuts] = useState([])
+  const [unpaidBills, setUnPaidBills] = useState([])
   const [loadingLossRatio, setLoadingLossRatio] = useState(false)
+  const [loadingUnpaidBills, setLoadingUnPaidBills] = useState(false)
 
   const [loadingBusinessSummary, setLoadingBusinessSummary] = useState(false)
   const [
@@ -368,9 +370,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     setLoadingLossRatio(true)
     axios
-      .get(
-        `${LOCAL_URL}/CMpaidAndOuts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
+      .get(`${LOCAL_URL}/CMpaidAndOuts?fromDate=${fromDate}&toDate=${toDate}`)
       .then((response) => {
         setCmPaidOuts(response.data.result)
       })
@@ -380,7 +380,22 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
       .finally(() => {
         setLoadingLossRatio(false)
       })
-  }, [toDate, branchCode])
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingUnPaidBills(true)
+    axios
+      .get(`${LOCAL_URL}/unpaidBills?fromDate=${fromDate}&toDate=${toDate}`)
+      .then((response) => {
+        setUnPaidBills(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching Business summary ', error)
+      })
+      .finally(() => {
+        setLoadingUnPaidBills(false)
+      })
+  }, [fromDate, toDate, branchCode])
 
   function calculatePremiums(premiums: any) {
     const totalPremium = premiums.reduce((total: number, premium: any) => {
@@ -438,7 +453,6 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const filteredLossRation = cmLossRatio.filter((claim: any) => {
     return claim.cm_order_no === 10
   })
-  console.log(filteredLossRation)
 
   return (
     <StatisticalContext.Provider
@@ -486,6 +500,8 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         loadingManagementExpenses24,
         loadingRiOutstandingCessionReport23,
         loadingRiOutstandingCessionReport24,
+        unpaidBills,
+        loadingUnpaidBills,
       }}
     >
       {children}
