@@ -361,6 +361,15 @@ const Statistical = () => {
     (acc: any, item: any) => acc + item.totalInvoiceAmt,
     0,
   )
+
+  const claimPaidTotals = uniqueBranchNames.reduce(
+    (acc: any, item: any) => acc + item.claimsPaid,
+    0,
+  )
+  const outstandingAmtTotals = uniqueBranchNames.reduce(
+    (acc: any, item: any) => acc + item.outstandingAmount,
+    0,
+  )
   return (
     <div className="">
       <p className="flex justify-center font-bold">
@@ -477,7 +486,7 @@ const Statistical = () => {
         <p className="flex justify-center font-bold">
           Business Summary Per Branch
         </p>
-        <div className="flex gap-2 text-[14px] font-bold">
+        <div className="flex justify-between mx-2 text-[14px] font-bold">
           <p>Total Premium: {totalBussPrem.toLocaleString()} </p>
           <p>Receipts Total: {receiptsTotal.toLocaleString()} </p>
           <p>ME Total: {Math.floor(totalME24).toLocaleString()} </p>
@@ -502,6 +511,12 @@ const Statistical = () => {
             loading={loadingBusinessSummary}
           />
         </ConfigProvider>
+        <div className="flex justify-between mx-2 text-[14px] font-bold">
+          <p>Total Claims Paid: {claimPaidTotals.toLocaleString()} </p>
+          <p>
+            Oustanding Amount Total: {totalOutstanding2024.toLocaleString()}{' '}
+          </p>
+        </div>
         <ConfigProvider
           theme={{
             components: {
