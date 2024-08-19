@@ -388,7 +388,7 @@ const Statistical = () => {
 
   const lossRatioTotals = filteredLossRation.reduce(
     (acc: number, ratio: any) => {
-      return ratio.total !== null ? acc + Number(ratio.total) : acc
+      return ratio.total !== null ? acc + Number(ratio.total / 100) : acc
     },
     0,
   )
@@ -544,7 +544,7 @@ const Statistical = () => {
           <p>
             Oustanding Amount Total: {totalOutstanding2024.toLocaleString()}{' '}
           </p>
-          <p>Loss Ratio Overall: {lossRatioTotals.toLocaleString()} </p>
+          <p>Loss Ratio Overall: {Math.floor(Number(lossRatioTotals))} </p>
         </div>
         <ConfigProvider
           theme={{
