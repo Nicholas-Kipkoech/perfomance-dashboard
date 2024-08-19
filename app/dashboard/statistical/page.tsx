@@ -197,6 +197,7 @@ const Statistical = () => {
     cmLossRatio,
     loadingLossRatio,
     cmPaidOuts,
+    filteredLossRation,
   }: any = useContext(StatisticalContext)
 
   const [fmDate23, setFmDate23] = useState('')
@@ -366,8 +367,11 @@ const Statistical = () => {
     (acc: any, item: any) => acc + item.claimsPaid,
     0,
   )
-  const lossRatioTotals = uniqueBranchNames.reduce(
-    (acc: any, item: any) => acc + item.lossRatio,
+
+  const lossRatioTotals = filteredLossRation.reduce(
+    (acc: number, ratio: any) => {
+      return ratio.total !== null ? acc + Number(ratio.total) : acc
+    },
     0,
   )
   return (
@@ -490,7 +494,9 @@ const Statistical = () => {
           <p>Total Premium: {totalBussPrem.toLocaleString()} </p>
           <p>Receipts Total: {receiptsTotal.toLocaleString()} </p>
           <p>Credit Notes Total: {CRTotals.toLocaleString()} </p>
-          <p>ME Total: {Math.floor(totalME24).toLocaleString()} </p>
+          <p>
+            Management Expenses Total: {Math.floor(totalME24).toLocaleString()}{' '}
+          </p>
         </div>
         <ConfigProvider
           theme={{
@@ -516,7 +522,7 @@ const Statistical = () => {
           <p>
             Oustanding Amount Total: {totalOutstanding2024.toLocaleString()}{' '}
           </p>
-          <p>Loss Ration Overall: {lossRatioTotals.toLocaleString()} </p>
+          <p>Loss Ratio Overall: {lossRatioTotals.toLocaleString()} </p>
         </div>
         <ConfigProvider
           theme={{

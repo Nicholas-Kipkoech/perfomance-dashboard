@@ -1,6 +1,6 @@
 'use client'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { createContext } from 'react'
 import {
@@ -84,6 +84,13 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
     return true
   }
+  useEffect(() => {
+    async function fetchBranches() {
+      const response = await axios.get(`${LOCAL_URL}/branches`)
+      setCompanys(response.data.result)
+    }
+    fetchBranches()
+  }, [])
 
   const fetchUWData = async (
     fromDate: string,
@@ -100,7 +107,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         RIPaidCessionResponse,
         RICessionResponse,
         bimaDataResponse,
-        orgBranchesResponse,
         claimsResponse,
         registeredClaimsResponse,
         outstandingClaimsResponse,
@@ -134,7 +140,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         axios.get(
           `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
         ),
-        axios.get(`${LOCAL_URL}/branches`),
         axios.get(
           `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
         ),
@@ -181,10 +186,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       setRiPaidCession(RIPaidCessionResponse.data.result)
       setRiCession(RICessionResponse.data.result)
       setBimaData(bimaDataResponse.data.result)
-      setCompanys([
-        { organization_name: 'Entire Company', organization_code: '' },
-        ...orgBranchesResponse.data.result,
-      ])
       setClaimsData(claimsResponse.data.result)
       setRegisteredClaims(registeredClaimsResponse.data.result)
       setOutstandingClaims(outstandingClaimsResponse.data.result)

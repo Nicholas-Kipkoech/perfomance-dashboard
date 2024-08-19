@@ -435,6 +435,10 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const { totalOutstanding: totalOutstanding2024 } = calculateOutstandingClaims(
     outstandingClaims24,
   )
+  const filteredLossRation = cmLossRatio.filter((claim: any) => {
+    return claim.cm_order_no === 10
+  })
+  console.log(filteredLossRation)
 
   return (
     <StatisticalContext.Provider
@@ -447,6 +451,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         setToDate23,
         setBranchCode,
         loadingLossRatio,
+        filteredLossRation,
         cmPaidOuts,
         cmLossRatio,
         totalPremium2024,
