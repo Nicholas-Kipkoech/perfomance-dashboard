@@ -366,8 +366,8 @@ const Statistical = () => {
     (acc: any, item: any) => acc + item.claimsPaid,
     0,
   )
-  const outstandingAmtTotals = uniqueBranchNames.reduce(
-    (acc: any, item: any) => acc + item.outstandingAmount,
+  const lossRatioTotals = uniqueBranchNames.reduce(
+    (acc: any, item: any) => acc + item.lossRatio,
     0,
   )
   return (
@@ -489,8 +489,8 @@ const Statistical = () => {
         <div className="flex justify-between mx-2 text-[14px] font-bold">
           <p>Total Premium: {totalBussPrem.toLocaleString()} </p>
           <p>Receipts Total: {receiptsTotal.toLocaleString()} </p>
-          <p>ME Total: {Math.floor(totalME24).toLocaleString()} </p>
           <p>Credit Notes Total: {CRTotals.toLocaleString()} </p>
+          <p>ME Total: {Math.floor(totalME24).toLocaleString()} </p>
         </div>
         <ConfigProvider
           theme={{
@@ -516,6 +516,7 @@ const Statistical = () => {
           <p>
             Oustanding Amount Total: {totalOutstanding2024.toLocaleString()}{' '}
           </p>
+          <p>Loss Ration Overall: {lossRatioTotals.toLocaleString()} </p>
         </div>
         <ConfigProvider
           theme={{
