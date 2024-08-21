@@ -2,10 +2,19 @@
 import { StatisticalContext } from '@/app/context/StatisticalContext'
 import { ConfigProvider, Table } from 'antd'
 import { useSearchParams, useRouter } from 'next/navigation'
-import React, { useContext, useEffect } from 'react'
+import React, { Suspense, useContext, useEffect } from 'react'
 import { IoArrowBackOutline } from 'react-icons/io5'
 
+// Ensure the component is wrapped with Suspense to handle async data
 const UnpaidBills = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <UnpaidBillsContent />
+    </Suspense>
+  )
+}
+
+const UnpaidBillsContent = () => {
   const { setCategory, unpaidBills2, loadingUnpaidBills2 }: any = useContext(
     StatisticalContext,
   )
@@ -17,8 +26,11 @@ const UnpaidBills = () => {
   const params = useSearchParams()
   const category = params.get('category')
   useEffect(() => {
-    setCategory(category)
-  }, [])
+    if (category) {
+      setCategory(category)
+    }
+  }, [category, setCategory])
+
   const router = useRouter()
   const columns = [
     {
@@ -28,11 +40,12 @@ const UnpaidBills = () => {
     },
     {
       title: 'Amount To Pay',
-      dataIndex: 'payee_name',
-      key: 'payee_name',
-      render: (_: any, item: any) => <p>{item.amountToPay.toLocaleString()}</p>,
+      dataIndex: 'amountToPay',
+      key: 'amountToPay',
+      render: (amountToPay: number) => <p>{amountToPay.toLocaleString()}</p>,
     },
   ]
+
   return (
     <div className="mt-2 mx-2">
       <div className="flex justify-between mb-4 items-center">

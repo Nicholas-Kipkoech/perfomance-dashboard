@@ -9,7 +9,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { ConfigProvider, DatePicker, Spin, Table } from 'antd'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { useContext, useState } from 'react'
+import React, { Suspense, useContext, useState } from 'react'
 
 interface ICustomCard {
   total2024: number
@@ -463,216 +463,219 @@ const Statistical = () => {
   }))
 
   return (
-    <div className="">
-      <p className="flex justify-center font-bold">
-        Running Period [{fromDate}] - [{toDate}]
-      </p>
-      <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
-        <CustomSelect
-          defaultValue={{ label: 'Entire Company', value: '' }}
-          options={formattedCompanys}
-          onChange={(value: { value: string; label: string }) => {
-            setBranchCode(value.value)
-            setCompany(value.label)
-          }}
-          className="w-[330px] ml-3"
-          name="Company"
-        />
-        <div className="flex flex-col mt-2">
-          <label>From date</label>
-          <DatePicker
-            format={'DD-MM-YYYY'}
-            placeholder={'DD-MM-YYYY'}
-            className={
-              'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
-            }
-            onChange={handleFromDate}
-          />
-        </div>
-        <div className="flex flex-col mt-2">
-          <label>To date</label>
-          <DatePicker
-            format={'DD-MM-YYYY'}
-            placeholder={'DD-MM-YYYY'}
-            className={
-              'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
-            }
-            onChange={handleToDate}
-          />
-        </div>
-        <CustomButton
-          name={'Run'}
-          className={
-            'bg-[#cb7229] text-white h-[40px] md:w-[152px] sm:w-[20rem] flex justify-center items-center mt-8 rounded-md'
-          }
-          onClick={handleRunReports}
-        />
-      </div>
-      <div className="grid gap-4 grid-cols-2 mt-2 ml-3">
-        <CustomCard
-          name="Gross Premiums"
-          total2023={totalPremium2023}
-          to23={grossPremComm23report}
-          to24={grossPremComm24report}
-          loading23={loadingPremiums2023}
-          loading24={loadingPremiums2024}
-          total2024={totalPremium2024}
-        />
-        <CustomCard
-          name="Gross Commission"
-          to23={grossPremComm23report}
-          to24={grossPremComm24report}
-          total2023={commision2023}
-          loading23={loadingPremiums2023}
-          loading24={loadingPremiums2024}
-          total2024={commision2024}
-        />
-        <CustomCard
-          name="Gross Claim Paid"
-          to23={grossClaimPaid23Report}
-          to24={grossClaimPaid24Report}
-          total2023={totalClaimPaid2023}
-          total2024={totalClaimPaid2024}
-          loading23={loadingClaims2023}
-          loading24={loadingClaims2024}
-        />
-        <CustomCard
-          name="Gross Claim Outstanding"
-          to23={grossClaimsOuts23Report}
-          to24={grossClaimsOuts24Report}
-          total2023={totalOutstanding2023}
-          total2024={totalOutstanding2024}
-          loading23={loadingOutstandingClaims23}
-          loading24={loadingOutstandingClaims24}
-        />
-        <CustomCard
-          name="Management Expenses"
-          to23={ME23Report}
-          to24={ME24Report}
-          total2023={totalME23}
-          total2024={totalME24}
-          loading23={loadingManagementExpenses23}
-          loading24={loadingManagementExpenses24}
-        />
-        <CustomCard
-          name="Gross Fac Out Commision"
-          to23={grossFacPremium23Report}
-          to24={grossFacPremium24Report}
-          total2023={facCommission23}
-          total2024={facCommission24}
-          loading23={loadingRiCession23}
-          loading24={loadingRiCession24}
-        />
-        <CustomCard
-          name="Gross Fac Premium"
-          to23={grossFacPremium23Report}
-          to24={grossFacPremium24Report}
-          total2023={facPremium23}
-          total2024={facPremium24}
-          loading23={loadingRiCession23}
-          loading24={loadingRiCession24}
-        />
-        <CustomCard
-          to23={claimPaidRecovery23Report}
-          to24={claimPaidRecovery24Report}
-          name="Claim Paid Recovery"
-          total2023={claimPaidRecovery23}
-          total2024={claimPaidRecovery24}
-          loading23={loadingRiPaidCession23}
-          loading24={loadingRiPaidCession24}
-        />
-        <CustomCard
-          to23={RIouts23report}
-          to24={RIouts24report}
-          name="Reinsurance share of claim outstanding"
-          total2023={totalOutstandingReinsurance23}
-          total2024={totalOutstandingReinsurance24}
-          loading23={loadingRiOutstandingCessionReport23}
-          loading24={loadingRiOutstandingCessionReport24}
-        />
-      </div>
-      <div className="mt-2 ml-3">
-        <p className="flex justify-center text-[1.5rem] font-bold">
-          Business Summary Per Branch
+    <Suspense>
+      <div className="">
+        <p className="flex justify-center font-bold">
+          Running Period [{fromDate}] - [{toDate}]
         </p>
-        <div className="flex justify-between mx-2 text-[14px] font-bold">
-          <p>Total Premium: {totalBussPrem.toLocaleString()} </p>
-          <p>Receipts Total: {receiptsTotal.toLocaleString()} </p>
-          <p>Credit Notes Total: {CRTotals.toLocaleString()} </p>
-          <p>
-            Management Expenses Total: {Math.floor(totalME24).toLocaleString()}{' '}
+        <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
+          <CustomSelect
+            defaultValue={{ label: 'Entire Company', value: '' }}
+            options={formattedCompanys}
+            onChange={(value: { value: string; label: string }) => {
+              setBranchCode(value.value)
+              setCompany(value.label)
+            }}
+            className="w-[330px] ml-3"
+            name="Company"
+          />
+          <div className="flex flex-col mt-2">
+            <label>From date</label>
+            <DatePicker
+              format={'DD-MM-YYYY'}
+              placeholder={'DD-MM-YYYY'}
+              className={
+                'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
+              }
+              onChange={handleFromDate}
+            />
+          </div>
+          <div className="flex flex-col mt-2">
+            <label>To date</label>
+            <DatePicker
+              format={'DD-MM-YYYY'}
+              placeholder={'DD-MM-YYYY'}
+              className={
+                'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
+              }
+              onChange={handleToDate}
+            />
+          </div>
+          <CustomButton
+            name={'Run'}
+            className={
+              'bg-[#cb7229] text-white h-[40px] md:w-[152px] sm:w-[20rem] flex justify-center items-center mt-8 rounded-md'
+            }
+            onClick={handleRunReports}
+          />
+        </div>
+        <div className="grid gap-4 grid-cols-2 mt-2 ml-3">
+          <CustomCard
+            name="Gross Premiums"
+            total2023={totalPremium2023}
+            to23={grossPremComm23report}
+            to24={grossPremComm24report}
+            loading23={loadingPremiums2023}
+            loading24={loadingPremiums2024}
+            total2024={totalPremium2024}
+          />
+          <CustomCard
+            name="Gross Commission"
+            to23={grossPremComm23report}
+            to24={grossPremComm24report}
+            total2023={commision2023}
+            loading23={loadingPremiums2023}
+            loading24={loadingPremiums2024}
+            total2024={commision2024}
+          />
+          <CustomCard
+            name="Gross Claim Paid"
+            to23={grossClaimPaid23Report}
+            to24={grossClaimPaid24Report}
+            total2023={totalClaimPaid2023}
+            total2024={totalClaimPaid2024}
+            loading23={loadingClaims2023}
+            loading24={loadingClaims2024}
+          />
+          <CustomCard
+            name="Gross Claim Outstanding"
+            to23={grossClaimsOuts23Report}
+            to24={grossClaimsOuts24Report}
+            total2023={totalOutstanding2023}
+            total2024={totalOutstanding2024}
+            loading23={loadingOutstandingClaims23}
+            loading24={loadingOutstandingClaims24}
+          />
+          <CustomCard
+            name="Management Expenses"
+            to23={ME23Report}
+            to24={ME24Report}
+            total2023={totalME23}
+            total2024={totalME24}
+            loading23={loadingManagementExpenses23}
+            loading24={loadingManagementExpenses24}
+          />
+          <CustomCard
+            name="Gross Fac Out Commision"
+            to23={grossFacPremium23Report}
+            to24={grossFacPremium24Report}
+            total2023={facCommission23}
+            total2024={facCommission24}
+            loading23={loadingRiCession23}
+            loading24={loadingRiCession24}
+          />
+          <CustomCard
+            name="Gross Fac Premium"
+            to23={grossFacPremium23Report}
+            to24={grossFacPremium24Report}
+            total2023={facPremium23}
+            total2024={facPremium24}
+            loading23={loadingRiCession23}
+            loading24={loadingRiCession24}
+          />
+          <CustomCard
+            to23={claimPaidRecovery23Report}
+            to24={claimPaidRecovery24Report}
+            name="Claim Paid Recovery"
+            total2023={claimPaidRecovery23}
+            total2024={claimPaidRecovery24}
+            loading23={loadingRiPaidCession23}
+            loading24={loadingRiPaidCession24}
+          />
+          <CustomCard
+            to23={RIouts23report}
+            to24={RIouts24report}
+            name="Reinsurance share of claim outstanding"
+            total2023={totalOutstandingReinsurance23}
+            total2024={totalOutstandingReinsurance24}
+            loading23={loadingRiOutstandingCessionReport23}
+            loading24={loadingRiOutstandingCessionReport24}
+          />
+        </div>
+        <div className="mt-2 ml-3">
+          <p className="flex justify-center text-[1.5rem] font-bold">
+            Business Summary Per Branch
           </p>
-        </div>
-        <ConfigProvider
-          theme={{
-            components: {
-              Table: {
-                headerBg: '#092332',
-                headerColor: 'white',
-                colorBgContainer: 'whitesmoke',
-                rowHoverBg: '#cb7529',
-                padding: 8,
+          <div className="flex justify-between mx-2 text-[14px] font-bold">
+            <p>Total Premium: {totalBussPrem.toLocaleString()} </p>
+            <p>Receipts Total: {receiptsTotal.toLocaleString()} </p>
+            <p>Credit Notes Total: {CRTotals.toLocaleString()} </p>
+            <p>
+              Management Expenses Total:{' '}
+              {Math.floor(totalME24).toLocaleString()}{' '}
+            </p>
+          </div>
+          <ConfigProvider
+            theme={{
+              components: {
+                Table: {
+                  headerBg: '#092332',
+                  headerColor: 'white',
+                  colorBgContainer: 'whitesmoke',
+                  rowHoverBg: '#cb7529',
+                  padding: 8,
+                },
               },
-            },
-          }}
-        >
-          <Table
-            dataSource={businessSummary}
-            columns={columns}
-            loading={loadingBusinessSummary}
-          />
-        </ConfigProvider>
-        <div className="flex justify-between mx-2 text-[14px] font-bold">
-          <p>Total Claims Paid: {claimPaidTotals.toLocaleString()} </p>
-          <p>
-            Oustanding Amount Total: {totalOutstanding2024.toLocaleString()}{' '}
-          </p>
-          <p>Loss ratio overall: {lossRatioTotals}% </p>
-        </div>
-        <ConfigProvider
-          theme={{
-            components: {
-              Table: {
-                headerBg: '#092332',
-                headerColor: 'white',
-                colorBgContainer: 'whitesmoke',
-                rowHoverBg: '#cb7529',
-                padding: 8,
+            }}
+          >
+            <Table
+              dataSource={businessSummary}
+              columns={columns}
+              loading={loadingBusinessSummary}
+            />
+          </ConfigProvider>
+          <div className="flex justify-between mx-2 text-[14px] font-bold">
+            <p>Total Claims Paid: {claimPaidTotals.toLocaleString()} </p>
+            <p>
+              Oustanding Amount Total: {totalOutstanding2024.toLocaleString()}{' '}
+            </p>
+            <p>Loss ratio overall: {lossRatioTotals}% </p>
+          </div>
+          <ConfigProvider
+            theme={{
+              components: {
+                Table: {
+                  headerBg: '#092332',
+                  headerColor: 'white',
+                  colorBgContainer: 'whitesmoke',
+                  rowHoverBg: '#cb7529',
+                  padding: 8,
+                },
               },
-            },
-          }}
-        >
-          <Table
-            dataSource={uniqueBranchNames}
-            columns={columns2}
-            loading={loadingLossRatio}
-          />
-        </ConfigProvider>
-        <div className="font-bold flex justify-between items-center mx-2">
-          <p className="text-[1.5rem]">Unpaid Bills</p>
-          <p>Overall Total: {unpaidBillsTotals.toLocaleString()}</p>
-        </div>
-        <ConfigProvider
-          theme={{
-            components: {
-              Table: {
-                headerBg: '#092332',
-                headerColor: 'white',
-                colorBgContainer: 'whitesmoke',
-                rowHoverBg: '#cb7529',
-                padding: 8,
+            }}
+          >
+            <Table
+              dataSource={uniqueBranchNames}
+              columns={columns2}
+              loading={loadingLossRatio}
+            />
+          </ConfigProvider>
+          <div className="font-bold flex justify-between items-center mx-2">
+            <p className="text-[1.5rem]">Unpaid Bills</p>
+            <p>Overall Total: {unpaidBillsTotals.toLocaleString()}</p>
+          </div>
+          <ConfigProvider
+            theme={{
+              components: {
+                Table: {
+                  headerBg: '#092332',
+                  headerColor: 'white',
+                  colorBgContainer: 'whitesmoke',
+                  rowHoverBg: '#cb7529',
+                  padding: 8,
+                },
               },
-            },
-          }}
-        >
-          <Table
-            dataSource={groupedTotals}
-            columns={columns3}
-            loading={loadingUnpaidBills}
-          />
-        </ConfigProvider>
+            }}
+          >
+            <Table
+              dataSource={groupedTotals}
+              columns={columns3}
+              loading={loadingUnpaidBills}
+            />
+          </ConfigProvider>
+        </div>
       </div>
-    </div>
+    </Suspense>
   )
 }
 

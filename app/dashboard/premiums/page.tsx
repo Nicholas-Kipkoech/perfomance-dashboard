@@ -35,9 +35,7 @@ const Underwriting = () => {
     nonMotorUndebited,
     motorUndebited,
     commision,
-
     loadingBimaData,
-
     loadingClients,
     loadingUnrenewedPolicies,
     loadingUndebitedPolicies,
