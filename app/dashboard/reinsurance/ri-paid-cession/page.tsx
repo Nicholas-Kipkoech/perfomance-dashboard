@@ -84,23 +84,19 @@ const RIPaidCessions = () => {
       title: '100% si',
       dataIndex: '100%si',
       key: '100%si',
-      render: (_: any, item: any) => (
-        <p>KSH {item['100%si'].toLocaleString()}</p>
-      ),
+      render: (_: any, item: any) => <p> {item['100%si'].toLocaleString()}</p>,
     },
     {
       title: '100% Amount',
       dataIndex: '100%amt',
       key: '100%amt',
-      render: (_: any, item: any) => (
-        <p>KSH {item['100%amt'].toLocaleString()}</p>
-      ),
+      render: (_: any, item: any) => <p> {item['100%amt'].toLocaleString()}</p>,
     },
     {
       title: 'CQS Amount',
       dataIndex: 'cqsAmt',
       key: 'cqsAmt',
-      render: (_: any, item: any) => <p>KSH {item.cqsAmt.toLocaleString()}</p>,
+      render: (_: any, item: any) => <p> {item.cqsAmt.toLocaleString()}</p>,
     },
     {
       title: 'CQS Perc',
@@ -113,7 +109,7 @@ const RIPaidCessions = () => {
       dataIndex: 'retentionAmt',
       key: 'retentionAmt',
       render: (_: any, item: any) => (
-        <p>KSH {item.retentionAmt.toLocaleString()}</p>
+        <p> {item.retentionAmt.toLocaleString()}</p>
       ),
     },
     {

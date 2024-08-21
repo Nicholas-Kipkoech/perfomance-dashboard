@@ -40,7 +40,7 @@ const CustomCard = ({
             {name1.toUpperCase()}
           </p>
           <p className="text-[13px] font-bold flex justify-start items-start">
-            KSH {total1.toLocaleString()}
+            {total1.toLocaleString()}
           </p>
         </div>
         {name2 && (
@@ -49,7 +49,7 @@ const CustomCard = ({
               {name2?.toUpperCase()}
             </p>
             <p className="text-[13px] font-bold flex justify-start items-start">
-              KSH {total2?.toLocaleString()}
+              {total2?.toLocaleString()}
             </p>
           </div>
         )}
@@ -59,7 +59,7 @@ const CustomCard = ({
               {name3?.toUpperCase()}
             </p>
             <p className="text-[13px] font-bold flex justify-start items-start">
-              KSH {total3?.toLocaleString()}
+              {total3?.toLocaleString()}
             </p>
           </div>
         )}
@@ -273,7 +273,7 @@ const Reinsurance = () => {
                 {'Total reinsurance premium (ceeded)'.toUpperCase()}
               </p>
               <p className="text-[18px] font-bold flex justify-start items-start">
-                KSH {(treatyPremium + facPremium).toLocaleString()}
+                {(treatyPremium + facPremium).toLocaleString()}
               </p>
             </div>
           )}
@@ -312,7 +312,7 @@ const Reinsurance = () => {
                 {'Total Reinsurance Commission (Earned)'.toUpperCase()}
               </p>
               <p className="text-[18px] font-bold flex justify-start items-start">
-                KSH {(treatyCommission + facCommission).toLocaleString()}
+                {(treatyCommission + facCommission).toLocaleString()}
               </p>
             </div>
           )}
@@ -351,7 +351,7 @@ const Reinsurance = () => {
                 {'Reinsurance Claim paid Recovery'.toUpperCase()}
               </p>
               <p className="text-[18px] font-bold flex justify-start items-start">
-                KSH {(treatyAmt + facAmt + xolAmt).toLocaleString()}
+                {(treatyAmt + facAmt + xolAmt).toLocaleString()}
               </p>
             </div>
           )}
@@ -391,7 +391,7 @@ const Reinsurance = () => {
                 {'reinsurance share of claim Outstanding '.toUpperCase()}
               </p>
               <p className="text-[18px] font-bold flex justify-start items-start">
-                KSH {totalOutstandingReinsurance.toLocaleString()}
+                {totalOutstandingReinsurance.toLocaleString()}
               </p>
             </div>
           )}

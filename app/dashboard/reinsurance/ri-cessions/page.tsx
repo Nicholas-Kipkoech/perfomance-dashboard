@@ -60,7 +60,7 @@ const RICessions = () => {
       dataIndex: '100%(si)',
       key: '100%(si)',
       render: (_: any, item: any) => (
-        <p>KSH {item['100%(si)']?.toLocaleString()}</p>
+        <p> {item['100%(si)']?.toLocaleString()}</p>
       ),
     },
     {
@@ -68,7 +68,7 @@ const RICessions = () => {
       dataIndex: '100%(prem)',
       key: '100%(prem)',
       render: (_: any, item: any) => (
-        <p>KSH {item['100%(prem)']?.toLocaleString()}</p>
+        <p> {item['100%(prem)']?.toLocaleString()}</p>
       ),
     },
     {
@@ -76,7 +76,7 @@ const RICessions = () => {
       dataIndex: 'retentionSi',
       key: 'retentionSi',
       render: (_: any, item: any) => (
-        <p>KSH {item.retentionSi.toLocaleString()}</p>
+        <p> {item.retentionSi.toLocaleString()}</p>
       ),
     },
     {
@@ -84,42 +84,38 @@ const RICessions = () => {
       dataIndex: 'retentionPrem',
       key: 'retentionPrem',
       render: (_: any, item: any) => (
-        <p>KSH {item.retentionPrem.toLocaleString()}</p>
+        <p> {item.retentionPrem.toLocaleString()}</p>
       ),
     },
     {
       title: 'CQS si',
       dataIndex: 'cqsSi',
       key: 'cqsSi',
-      render: (_: any, item: any) => <p>KSH {item.cqsSi.toLocaleString()}</p>,
+      render: (_: any, item: any) => <p> {item.cqsSi.toLocaleString()}</p>,
     },
     {
       title: 'CQS prem',
       dataIndex: 'cqsPrem',
       key: 'cqsPrem',
-      render: (_: any, item: any) => <p>KSH {item.cqsPrem.toLocaleString()}</p>,
+      render: (_: any, item: any) => <p> {item.cqsPrem.toLocaleString()}</p>,
     },
     {
       title: 'Surp 1 Prem',
       dataIndex: 'surp1Si',
       key: 'surp1Si',
-      render: (_: any, item: any) => <p>KSH {item.surp1Si.toLocaleString()}</p>,
+      render: (_: any, item: any) => <p> {item.surp1Si.toLocaleString()}</p>,
     },
     {
       title: 'Surp 1 Prem',
       dataIndex: 'surp1Prem',
       key: 'surp1Prem',
-      render: (_: any, item: any) => (
-        <p>KSH {item.surp1Prem.toLocaleString()}</p>
-      ),
+      render: (_: any, item: any) => <p> {item.surp1Prem.toLocaleString()}</p>,
     },
     {
       title: 'Surp 1 Comm',
       dataIndex: 'surp1Comm',
       key: 'surp1Comm',
-      render: (_: any, item: any) => (
-        <p>KSH {item.surp1Comm.toLocaleString()}</p>
-      ),
+      render: (_: any, item: any) => <p> {item.surp1Comm.toLocaleString()}</p>,
     },
     {
       title: 'Surp 2 Si',

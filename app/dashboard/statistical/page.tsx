@@ -54,7 +54,7 @@ const CustomCard = ({
               target="_blank"
               className="font-bold text-[1.1rem]"
             >
-              KSH {Number(total2024.toFixed(2)).toLocaleString()}
+              {Number(total2024.toFixed(2)).toLocaleString()}
             </Link>
           )}
         </div>
@@ -78,7 +78,7 @@ const CustomCard = ({
               target="_blank"
               className="font-bold text-[1.1rem]"
             >
-              KSH {Number(total2023.toFixed(2)).toLocaleString()}
+              {Number(total2023.toFixed(2)).toLocaleString()}
             </Link>
           )}
         </div>
