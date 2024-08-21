@@ -593,7 +593,6 @@ const Statistical = () => {
           <p>
             Oustanding Amount Total: {totalOutstanding2024.toLocaleString()}{' '}
           </p>
-          <p>Loss Ratio Overall: {Math.floor(Number(lossRatioTotals))} </p>
         </div>
         <ConfigProvider
           theme={{
