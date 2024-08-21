@@ -1,7 +1,6 @@
 'use client'
 import { IBranches } from '@/app/assets/interfaces'
 import { ClaimsContext } from '@/app/context/ClaimsContext'
-import { useContextApi } from '@/app/context/Context'
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import CustomCard from '@/app/UI/reusableComponents/CustomCard'
 import CustomSelect from '@/app/UI/reusableComponents/CustomSelect'

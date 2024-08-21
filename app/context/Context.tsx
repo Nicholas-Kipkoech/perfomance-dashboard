@@ -1,8 +1,6 @@
 'use client'
+import React, { useEffect, useState, createContext, useContext } from 'react'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useContext } from 'react'
-import { createContext } from 'react'
 import {
   IBimaData,
   IBranches,
@@ -15,10 +13,17 @@ import {
   IUnrenewedPolicies,
 } from '../assets/interfaces'
 import { LOCAL_URL } from './database-connect'
+
+import { getDates } from '../dashboard/premiums/helpers'
 import { jwtDecode } from 'jwt-decode'
 
 const Context = createContext({})
+
 const ContextProvider = ({ children }: { children: React.ReactNode }) => {
+  const { currentMonth } = getDates()
+  const [fromDate, setFromDate] = useState(currentMonth.startDate)
+  const [toDate, setToDate] = useState(currentMonth.endDate)
+  const [branchCode, setBranchCode] = useState('')
   const [bimaData, setBimaData] = useState<IBimaData[]>([])
   const [claimsData, setClaimsData] = useState([])
   const [registeredClaims, setRegisteredClaims] = useState<IRegisteredClaims[]>(
@@ -41,18 +46,32 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [company, setCompany] = useState('INTRA')
   const [component, setComponent] = useState('Statistical')
   const [reinsurance, setReinsurance] = useState([])
-  const [cmLossRatio, setCmLossRatio] = useState([])
-  const [riCession, setRiCession] = useState([])
-  const [riPaidCession, setRiPaidCession] = useState([])
-  const [riCessionReport, setRiCessionReport] = useState([])
-  const [riPaidCessionReport, setRiPaidCessionReport] = useState([])
-  const [riOutstandingCessionReport, setRiOutstandingCessionReport] = useState(
-    [],
-  )
-  const [directClients, setDirectClients] = useState([])
-  const [bankBalances, setBankBalances] = useState([])
-  const [loadingData, setLoadingData] = useState(false)
 
+  const [directClients, setDirectClients] = useState([])
+
+  // Loading states
+  const [loadingBimaData, setLoadingBimaData] = useState(false)
+  const [loadingClaimsData, setLoadingClaimsData] = useState(false)
+  const [loadingRegisteredClaims, setLoadingRegisteredClaims] = useState(false)
+  const [loadingOutstandingClaims, setLoadingOutstandingClaims] = useState(
+    false,
+  )
+  const [loadingProductionData, setLoadingProductionData] = useState(false)
+  const [loadingClients, setLoadingClients] = useState(false)
+  const [loadingUnrenewedPolicies, setLoadingUnrenewedPolicies] = useState(
+    false,
+  )
+  const [loadingUndebitedPolicies, setLoadingUndebitedPolicies] = useState(
+    false,
+  )
+  const [loadingSalvages, setLoadingSalvages] = useState(false)
+  const [loadingRecovery, setLoadingRecovery] = useState(false)
+  const [loadingReceipts, setLoadingReceipts] = useState(false)
+  const [loadingCompanys, setLoadingCompanys] = useState(false)
+  const [loadingDirectClients, setLoadingDirectClients] = useState(false)
+  const [loadingBankBalances, setLoadingBankBalances] = useState(false)
+
+  // Authentication methods
   const login = async (username: any, password: any) => {
     try {
       const response = await axios.post(`${LOCAL_URL}/login`, {
@@ -85,128 +104,257 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
     return true
   }
+
+  // Fetch Company Data
   useEffect(() => {
-    async function fetchBranches() {
-      const response = await axios.get(`${LOCAL_URL}/branches`)
-      setCompanys(response.data.result)
+    const fetchBranches = async () => {
+      setLoadingCompanys(true)
+      try {
+        const response = await axios.get(`${LOCAL_URL}/branches`)
+        setCompanys(response.data.result)
+      } catch (error) {
+        console.error('Error fetching branches', error)
+      } finally {
+        setLoadingCompanys(false)
+      }
     }
     fetchBranches()
   }, [])
 
-  const fetchUWData = async (
-    fromDate: string,
-    toDate: string,
-    branchCode: string,
-  ) => {
-    setLoadingData(true)
-    try {
-      const [
-        directClientsResponse,
-        outstandingRiCessionReportsResponse,
-        RIPaidCessionReportsResponse,
-        RICessionReportsResponse,
-        RIPaidCessionResponse,
-        RICessionResponse,
-        bimaDataResponse,
-        claimsResponse,
-        registeredClaimsResponse,
-        outstandingClaimsResponse,
-        productionPerUnitResponse,
-        entityClientsResponse,
-        unrenewedPoliciesResponse,
-        undebitedPoliciesResponse,
-        salvagesResponse,
-        recoveriesResponse,
-        ARReceiptsResponse,
-        reinsuranceResponse,
-        lossRatioResponse,
-        bankBalancesResponse,
-      ] = await Promise.all([
-        axios.get(`${LOCAL_URL}/direct-clients?branchCode=${branchCode}`),
-        axios.get(
-          `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/ri-paid-cession-report?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/ri-cessions-register?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/ri-paid-cession-sum?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/ri-cessions?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/production?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(`${LOCAL_URL}/clients?branchCode=${branchCode}`),
-        axios.get(
-          `${LOCAL_URL}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/recovery?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/reinsurance?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/cm-loss-ratio?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
-        ),
-        axios.get(`${LOCAL_URL}/bank-balances`),
-      ])
-
-      setDirectClients(directClientsResponse.data.result)
-      setRiOutstandingCessionReport(
-        outstandingRiCessionReportsResponse.data.result,
-      )
-      setRiPaidCessionReport(RIPaidCessionReportsResponse.data.result)
-      setRiCessionReport(RICessionReportsResponse.data.result)
-      setRiPaidCession(RIPaidCessionResponse.data.result)
-      setRiCession(RICessionResponse.data.result)
-      setBimaData(bimaDataResponse.data.result)
-      setClaimsData(claimsResponse.data.result)
-      setRegisteredClaims(registeredClaimsResponse.data.result)
-      setOutstandingClaims(outstandingClaimsResponse.data.result)
-      setProductionData(productionPerUnitResponse.data.result)
-      setClients(entityClientsResponse.data.result)
-      setUnrenewedPolicies(unrenewedPoliciesResponse.data.result)
-      setUndebitedPolicies(undebitedPoliciesResponse.data.result)
-      setSalvages(salvagesResponse.data.result)
-      setRecovery(recoveriesResponse.data.result)
-      setReceipts(ARReceiptsResponse.data.result)
-      setReinsurance(reinsuranceResponse.data.result)
-      setCmLossRatio(lossRatioResponse.data.result)
-      setBankBalances(bankBalancesResponse.data.result)
-      setLoadingData(false)
-    } catch (error) {
-      setLoadingData(false)
-
-      console.error('Error fetching data', error)
+  // Fetch Direct Clients Data
+  useEffect(() => {
+    const fetchDirectClients = async () => {
+      setLoadingDirectClients(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/direct-clients?branchCode=${branchCode}`,
+        )
+        setDirectClients(response.data.result)
+      } catch (error) {
+        console.error('Error fetching direct clients', error)
+      } finally {
+        setLoadingDirectClients(false)
+      }
     }
-  }
+    fetchDirectClients()
+  }, [branchCode])
+
+  // Fetch Bima Data
+  useEffect(() => {
+    const fetchBimaData = async () => {
+      setLoadingBimaData(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/underwriting?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setBimaData(response.data.result)
+      } catch (error) {
+        console.error('Error fetching Bima data', error)
+      } finally {
+        setLoadingBimaData(false)
+      }
+    }
+    fetchBimaData()
+  }, [fromDate, toDate, branchCode])
+
+  // Fetch Claims Data
+  useEffect(() => {
+    const fetchClaimsData = async () => {
+      setLoadingClaimsData(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setClaimsData(response.data.result)
+      } catch (error) {
+        console.error('Error fetching claims data', error)
+      } finally {
+        setLoadingClaimsData(false)
+      }
+    }
+    fetchClaimsData()
+  }, [fromDate, toDate, branchCode])
+
+  // Fetch Registered Claims Data
+  useEffect(() => {
+    const fetchRegisteredClaims = async () => {
+      setLoadingRegisteredClaims(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setRegisteredClaims(response.data.result)
+      } catch (error) {
+        console.error('Error fetching registered claims data', error)
+      } finally {
+        setLoadingRegisteredClaims(false)
+      }
+    }
+    fetchRegisteredClaims()
+  }, [fromDate, toDate, branchCode])
+
+  // Fetch Outstanding Claims Data
+  useEffect(() => {
+    const fetchOutstandingClaims = async () => {
+      setLoadingOutstandingClaims(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
+        )
+        setOutstandingClaims(response.data.result)
+      } catch (error) {
+        console.error('Error fetching outstanding claims data', error)
+      } finally {
+        setLoadingOutstandingClaims(false)
+      }
+    }
+    fetchOutstandingClaims()
+  }, [fromDate, toDate, branchCode])
+
+  // Fetch Production Data
+  useEffect(() => {
+    const fetchProductionData = async () => {
+      setLoadingProductionData(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/production?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setProductionData(response.data.result)
+      } catch (error) {
+        console.error('Error fetching production data', error)
+      } finally {
+        setLoadingProductionData(false)
+      }
+    }
+    fetchProductionData()
+  }, [fromDate, toDate, branchCode])
+
+  // Fetch Clients Data
+  useEffect(() => {
+    const fetchClients = async () => {
+      setLoadingClients(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/clients?branchCode=${branchCode}`,
+        )
+        setClients(response.data.result)
+      } catch (error) {
+        console.error('Error fetching clients data', error)
+      } finally {
+        setLoadingClients(false)
+      }
+    }
+    fetchClients()
+  }, [branchCode])
+
+  // Fetch Unrenewed Policies Data
+  useEffect(() => {
+    const fetchUnrenewedPolicies = async () => {
+      setLoadingUnrenewedPolicies(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/unrenewed-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setUnrenewedPolicies(response.data.result)
+      } catch (error) {
+        console.error('Error fetching unrenewed policies data', error)
+      } finally {
+        setLoadingUnrenewedPolicies(false)
+      }
+    }
+    fetchUnrenewedPolicies()
+  }, [fromDate, toDate, branchCode])
+
+  // Fetch Undebited Policies Data
+  useEffect(() => {
+    const fetchUndebitedPolicies = async () => {
+      setLoadingUndebitedPolicies(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/undebited-policies?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setUndebitedPolicies(response.data.result)
+      } catch (error) {
+        console.error('Error fetching undebited policies data', error)
+      } finally {
+        setLoadingUndebitedPolicies(false)
+      }
+    }
+    fetchUndebitedPolicies()
+  }, [branchCode])
+
+  // Fetch Salvages Data
+  useEffect(() => {
+    const fetchSalvages = async () => {
+      setLoadingSalvages(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/salvagesfromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setSalvages(response.data.result)
+      } catch (error) {
+        console.error('Error fetching salvages data', error)
+      } finally {
+        setLoadingSalvages(false)
+      }
+    }
+    fetchSalvages()
+  }, [branchCode])
+
+  // Fetch Recovery Data
+  useEffect(() => {
+    const fetchRecovery = async () => {
+      setLoadingRecovery(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/recovery?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setRecovery(response.data.result)
+      } catch (error) {
+        console.error('Error fetching recovery data', error)
+      } finally {
+        setLoadingRecovery(false)
+      }
+    }
+    fetchRecovery()
+  }, [fromDate, toDate, branchCode])
+
+  // Fetch Receipts Data
+  useEffect(() => {
+    const fetchReceipts = async () => {
+      setLoadingReceipts(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setReceipts(response.data.result)
+      } catch (error) {
+        console.error('Error fetching receipts data', error)
+      } finally {
+        setLoadingReceipts(false)
+      }
+    }
+    fetchReceipts()
+  }, [fromDate, toDate, branchCode])
+
+  // Fetch Bank Balances Data
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoadingReceipts(true)
+      try {
+        const response = await axios.get(
+          `${LOCAL_URL}/reinsurance?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        )
+        setReinsurance(response.data.result)
+      } catch (error) {
+        console.error('Error fetching reinsuranced data', error)
+      } finally {
+        setLoadingReceipts(false)
+      }
+    }
+    fetchData()
+  }, [fromDate, toDate, branchCode])
 
   function calculatePremiums(bimaData: any) {
     let nonMotorPremium = 0
@@ -466,9 +614,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
     unrenewedPolicies,
   )
 
-  const filteredLossRation = cmLossRatio.filter((claim: any) => {
-    return claim.cm_order_no === 10
-  })
   function calculateDirectClients(data: any) {
     const totalDirectClients = data.reduce(
       (acc: number, direct: any) => acc + direct.totalClients,
@@ -527,16 +672,21 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         salvages,
         recovery,
         reinsurance,
-        filteredLossRation,
-        riCession,
-        riPaidCession,
-        riCessionReport,
-        riPaidCessionReport,
-        riOutstandingCessionReport,
         totalDirectClients,
-        bankBalances,
-        loadingData,
-        fetchUWData,
+        loadingBimaData,
+        loadingClaimsData,
+        loadingRegisteredClaims,
+        loadingOutstandingClaims,
+        loadingProductionData,
+        loadingClients,
+        loadingUnrenewedPolicies,
+        loadingUndebitedPolicies,
+        loadingSalvages,
+        loadingRecovery,
+        loadingReceipts,
+        loadingCompanys,
+        loadingDirectClients,
+        loadingBankBalances,
       }}
     >
       {children}

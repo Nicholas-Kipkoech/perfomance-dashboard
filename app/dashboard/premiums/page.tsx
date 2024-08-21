@@ -33,6 +33,19 @@ const Underwriting = () => {
     commision,
     loadingData,
     fetchUWData,
+    loadingBimaData,
+    loadingClaimsData,
+    loadingRegisteredClaims,
+    loadingOutstandingClaims,
+    loadingProductionData,
+    loadingClients,
+    loadingUnrenewedPolicies,
+    loadingUndebitedPolicies,
+    loadingSalvages,
+    loadingRecovery,
+    loadingReceipts,
+    loadingCompanys,
+    loadingDirectClients,
   }: any = useContextApi()
 
   const totalReinsurance = reinsurance.reduce(
@@ -106,6 +119,7 @@ const Underwriting = () => {
     total: number
     color?: string
     link?: string
+    loadingData?: boolean
   }
 
   const CustomPremiumCard = ({
@@ -114,6 +128,7 @@ const Underwriting = () => {
     total,
     color,
     link,
+    loadingData,
   }: IPremiumCard) => {
     return (
       <Link
@@ -121,27 +136,7 @@ const Underwriting = () => {
         style={{ backgroundColor: color }}
         className={`md:h-[130px] sm:h-[130px] w-[330px] border cursor-pointer   rounded-md p-[20px]`}
       >
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-between">
-            <p className="text-[20px] font-bold flex justify-start items-start">
-              {Number(total.toFixed(2)).toLocaleString()}
-            </p>
-            <p className="text-[20px] font-bold flex justify-start items-start">
-              {Math.round((total / cummulativeTotal) * 100).toFixed(1)} %
-            </p>
-          </div>
-          <p className="text-[16px] flex justify-center ">
-            {name.toUpperCase()}
-          </p>
-        </div>
-      </Link>
-    )
-  }
-
-  if (loadingData) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="flex flex-col gap-2">
+        {loadingData ? (
           <Spin
             indicator={
               <LoadingOutlined
@@ -152,10 +147,23 @@ const Underwriting = () => {
                 spin
               />
             }
-          />{' '}
-          <p className="text-[#cb7229]">Fetching underwritting data.....</p>
-        </div>
-      </div>
+          />
+        ) : (
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between">
+              <p className="text-[20px] font-bold flex justify-start items-start">
+                {Number(total.toFixed(2)).toLocaleString()}
+              </p>
+              <p className="text-[20px] font-bold flex justify-start items-start">
+                {Math.round((total / cummulativeTotal) * 100).toFixed(1)} %
+              </p>
+            </div>
+            <p className="text-[16px] flex justify-center ">
+              {name.toUpperCase()}
+            </p>
+          </div>
+        )}
+      </Link>
     )
   }
 
@@ -207,12 +215,14 @@ const Underwriting = () => {
       </div>
       <div className="flex flex-wrap gap-3 h-auto   border-b-slate-800 p-2">
         <CustomCard
+          loadingData={loadingBimaData}
           name={'Total  Premium'}
           total={totalPremium}
           currency
           link={'/dashboard/premiums/totalPremiums'}
         />
         <CustomCard
+          loadingData={loadingBimaData}
           link={'/dashboard/premiums/directPremiums'}
           name={'Direct Premium'}
           total={directPremium}
@@ -221,6 +231,7 @@ const Underwriting = () => {
         <CustomCard
           link={'/dashboard/premiums/intermediaryPremiums'}
           name={'Intermediary Premium'}
+          loadingData={loadingBimaData}
           total={intermediaryPremium}
           currency
         />
@@ -234,10 +245,12 @@ const Underwriting = () => {
         <CustomPremiumCard
           link={'/dashboard/premiums/newBusiness'}
           name={'New Business'}
+          loadingData={loadingBimaData}
           total={totalNewBusiness}
           cummulativeTotal={totalPremium}
         />
         <CustomPremiumCard
+          loadingData={loadingBimaData}
           name={'Renewals'}
           link={'/dashboard/premiums/renewals'}
           total={totalRenewals}
@@ -245,11 +258,13 @@ const Underwriting = () => {
         />
         <CustomPremiumCard
           name={'Motor Premium'}
+          loadingData={loadingBimaData}
           link={'/dashboard/premiums/motorPremiums'}
           total={motorPremium}
           cummulativeTotal={totalPremium}
         />
         <CustomPremiumCard
+          loadingData={loadingBimaData}
           name={'Non Motor Premium'}
           link={'/dashboard/premiums/nonMotorPremiums'}
           total={nonMotorPremium}

@@ -1,23 +1,9 @@
 'use client'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useContext } from 'react'
+import React, { useState } from 'react'
 import { createContext } from 'react'
-import {
-  IBimaData,
-  IBranches,
-  IClients,
-  IProduction,
-  IReceipts,
-  IRecovery,
-  IRegisteredClaims,
-  ISalvages,
-  IUndebitedPolicies,
-  IUnrenewedPolicies,
-} from '../assets/interfaces'
+import { IBranches } from '../assets/interfaces'
 import { LOCAL_URL } from './database-connect'
-import { getDates } from '../dashboard/premiums/helpers'
-import { jwtDecode } from 'jwt-decode'
 
 export const ReinsuranceContext = createContext({})
 const ReinsuranceContextProvider = ({
