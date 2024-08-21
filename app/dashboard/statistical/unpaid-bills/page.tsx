@@ -34,6 +34,12 @@ const UnpaidBillsContent = () => {
   const router = useRouter()
   const columns = [
     {
+      title: 'Index',
+      dataIndex: 'payee_name',
+      key: 'payee_name',
+      render: (_: any, item: any, index: number) => <p>{index + 1}</p>,
+    },
+    {
       title: 'Payee Name',
       dataIndex: 'payee_name',
       key: 'payee_name',
@@ -78,6 +84,7 @@ const UnpaidBillsContent = () => {
           columns={columns}
           dataSource={loadingUnpaidBills2 ? [] : unpaidBills2}
           loading={loadingUnpaidBills2}
+          pagination={{ pageSize: 30 }}
         />
       </ConfigProvider>
     </div>
