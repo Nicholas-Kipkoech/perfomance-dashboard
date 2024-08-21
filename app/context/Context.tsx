@@ -69,7 +69,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [loadingReceipts, setLoadingReceipts] = useState(false)
   const [loadingCompanys, setLoadingCompanys] = useState(false)
   const [loadingDirectClients, setLoadingDirectClients] = useState(false)
-  const [loadingBankBalances, setLoadingBankBalances] = useState(false)
 
   // Authentication methods
   const login = async (username: any, password: any) => {
@@ -626,6 +625,11 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <Context.Provider
       value={{
+        fromDate,
+        toDate,
+        setFromDate,
+        setToDate,
+        setBranchCode,
         login,
         logout,
         isAuthenticated,
@@ -686,7 +690,6 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
         loadingReceipts,
         loadingCompanys,
         loadingDirectClients,
-        loadingBankBalances,
       }}
     >
       {children}

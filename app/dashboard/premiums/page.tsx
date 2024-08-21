@@ -11,8 +11,12 @@ import React, { useState } from 'react'
 
 const Underwriting = () => {
   const {
+    fromDate,
+    toDate,
+    setFromDate,
+    setToDate,
+    setBranchCode,
     companys,
-
     setCompany,
     totalPremium,
     totalNewBusiness,
@@ -31,20 +35,13 @@ const Underwriting = () => {
     nonMotorUndebited,
     motorUndebited,
     commision,
-    loadingData,
-    fetchUWData,
+
     loadingBimaData,
-    loadingClaimsData,
-    loadingRegisteredClaims,
-    loadingOutstandingClaims,
-    loadingProductionData,
+
     loadingClients,
     loadingUnrenewedPolicies,
     loadingUndebitedPolicies,
-    loadingSalvages,
-    loadingRecovery,
-    loadingReceipts,
-    loadingCompanys,
+
     loadingDirectClients,
   }: any = useContextApi()
 
@@ -68,7 +65,7 @@ const Underwriting = () => {
     'Nov',
     'Dec',
   ]
-  const [branchCode, setBranchCode] = useState('')
+
   const [fmDate24, setFmDate24] = useState('')
   const [toDate24, setTdDate24] = useState('')
 
@@ -109,7 +106,7 @@ const Underwriting = () => {
     if (fmDate24.length !== 11 || toDate24.length !== 11) {
       alert('Please select from date and to date')
     } else {
-      await fetchUWData(fmDate24, toDate24, branchCode)
+      setFromDate(fmDate24), setToDate(toDate24)
     }
   }
 
@@ -137,17 +134,20 @@ const Underwriting = () => {
         className={`md:h-[130px] sm:h-[130px] w-[330px] border cursor-pointer   rounded-md p-[20px]`}
       >
         {loadingData ? (
-          <Spin
-            indicator={
-              <LoadingOutlined
-                style={{
-                  fontSize: 60,
-                  color: '#cb7229',
-                }}
-                spin
-              />
-            }
-          />
+          <p className="flex flex-col justify-center items-center">
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{
+                    fontSize: 20,
+                    color: '#cb7229',
+                  }}
+                  spin
+                />
+              }
+            />
+            {name.toUpperCase()}
+          </p>
         ) : (
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
@@ -170,7 +170,7 @@ const Underwriting = () => {
   return (
     <div>
       <p className="flex justify-center font-bold">
-        Running Period [{fmDate24}] - [{toDate24}]
+        Running Period [{fromDate}] - [{toDate}]
       </p>
       <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
         <CustomSelect
@@ -274,11 +274,13 @@ const Underwriting = () => {
         <CustomCard
           name={'Total number of all clients'}
           total={allClients}
+          loadingData={loadingClients}
           link=""
         />
         <CustomCard
           name={'Total number of direct clients'}
           total={totalDirectClients}
+          loadingData={loadingDirectClients}
           link=""
         />
         <CustomCard name={'Total number of brokers'} total={broker} link="" />
@@ -289,44 +291,82 @@ const Underwriting = () => {
           className={`md:h-[130px] sm:h-[130px] w-[330px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => {}}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-[18px] font-bold flex justify-start items-start">
-              TOTAL {(motorRenewed + nonMotorUnrenewed).toLocaleString()}
-            </p>
-            <div className="flex justify-between">
-              <p>{'Motor'.toUpperCase()}</p>
-              <p>{'Non Motor'.toUpperCase()}</p>
-            </div>
-            <div className="flex justify-between">
-              <p className="font-bold">{motorRenewed.toLocaleString()}</p>
-              <p className="font-bold">{nonMotorUnrenewed.toLocaleString()}</p>
-            </div>
-            <p className="text-[14px] flex justify-center ">
+          {loadingUnrenewedPolicies ? (
+            <div className="flex flex-col">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: '#cb7229',
+                    }}
+                    spin
+                  />
+                }
+              />
               {'Unrenewed Policies'.toUpperCase()}
-            </p>
-          </div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-1">
+              <p className="text-[18px] font-bold flex justify-start items-start">
+                TOTAL {(motorRenewed + nonMotorUnrenewed).toLocaleString()}
+              </p>
+              <div className="flex justify-between">
+                <p>{'Motor'.toUpperCase()}</p>
+                <p>{'Non Motor'.toUpperCase()}</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="font-bold">{motorRenewed.toLocaleString()}</p>
+                <p className="font-bold">
+                  {nonMotorUnrenewed.toLocaleString()}
+                </p>
+              </div>
+              <p className="text-[14px] flex justify-center ">
+                {'Unrenewed Policies'.toUpperCase()}
+              </p>
+            </div>
+          )}
         </Link>
         <Link
           href={'/dashboard/premiums/undebitedPolicies'}
           className={`md:h-[130px] sm:h-[130px] w-[330px] border cursor-pointer   rounded-md p-[20px]`}
           onClick={() => {}}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-[18px] font-bold flex justify-start items-start">
-              TOTAL {(motorUndebited + nonMotorUndebited).toLocaleString()}
-            </p>
-            <div className="flex justify-between">
-              <p>{'Motor'.toUpperCase()}</p>
-              <p>{'Non Motor'.toUpperCase()}</p>
-            </div>
-            <div className="flex justify-between">
-              <p className="font-bold"> {motorUndebited.toLocaleString()}</p>
-              <p className="font-bold">{nonMotorUndebited.toLocaleString()}</p>
-            </div>
-            <p className="text-[14px] flex justify-center ">
+          {loadingUndebitedPolicies ? (
+            <div className="flex flex-col">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: '#cb7229',
+                    }}
+                    spin
+                  />
+                }
+              />
               {'Undebited Policies'.toUpperCase()}
-            </p>
-          </div>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-1">
+              <p className="text-[18px] font-bold flex justify-start items-start">
+                TOTAL {(motorUndebited + nonMotorUndebited).toLocaleString()}
+              </p>
+              <div className="flex justify-between">
+                <p>{'Motor'.toUpperCase()}</p>
+                <p>{'Non Motor'.toUpperCase()}</p>
+              </div>
+              <div className="flex justify-between">
+                <p className="font-bold"> {motorUndebited.toLocaleString()}</p>
+                <p className="font-bold">
+                  {nonMotorUndebited.toLocaleString()}
+                </p>
+              </div>
+              <p className="text-[14px] flex justify-center ">
+                {'Undebited Policies'.toUpperCase()}
+              </p>
+            </div>
+          )}
         </Link>
         <Link
           href={''}

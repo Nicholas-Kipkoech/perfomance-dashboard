@@ -70,12 +70,19 @@ const CustomCard = ({
 
 const Reinsurance = () => {
   const {
+    fromDate,
+    toDate,
+    setFromDate,
+    setToDate,
+    setBranchCode,
     riCession,
     riPaidCession,
     riOutstandingCessionReport,
-    loadingData,
-    fetchRIData,
+
     companys,
+    loadingRiCession,
+    loadingRiOutstandingCessionReport,
+    loadingRiPaidCession,
   }: any = useContext(ReinsuranceContext)
 
   const treatyPremium = riCession.reduce(
@@ -152,7 +159,6 @@ const Reinsurance = () => {
 
   const [fmDate24, setFmDate24] = useState('')
   const [toDate24, setTdDate24] = useState('')
-  const [branchCode, setBranchCode] = useState('')
 
   const formattedCompanys: [] = companys.map((company: IBranches) => {
     return {
@@ -191,33 +197,14 @@ const Reinsurance = () => {
     if (fmDate24.length !== 11 || toDate24.length !== 11) {
       alert('Please select from date and to date')
     } else {
-      await fetchRIData(fmDate24, toDate24, branchCode)
+      setFromDate(fmDate24), setToDate(toDate24)
     }
   }
-  if (loadingData) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="flex flex-col gap-2">
-          <Spin
-            indicator={
-              <LoadingOutlined
-                style={{
-                  fontSize: 60,
-                  color: '#cb7229',
-                }}
-                spin
-              />
-            }
-          />{' '}
-          <p className="text-[#cb7229]">Fetching all reinsurance data.....</p>
-        </div>
-      </div>
-    )
-  }
+
   return (
     <div>
       <p className="flex justify-center font-bold">
-        Running Period [{fmDate24}] - [{toDate24}]
+        Running Period [{fromDate}] - [{toDate}]
       </p>
       <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
         <CustomSelect
@@ -265,14 +252,31 @@ const Reinsurance = () => {
           href={'/dashboard/reinsurance/ri-cessions'}
           className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
         >
-          <div className="flex gap-2 items-center flex-col">
-            <p className="text-[14px] flex justify-center ">
+          {loadingRiCession ? (
+            <p className="flex flex-col justify-center items-center">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: '#cb7229',
+                    }}
+                    spin
+                  />
+                }
+              />
               {'Total reinsurance premium (ceeded)'.toUpperCase()}
             </p>
-            <p className="text-[18px] font-bold flex justify-start items-start">
-              KSH {(treatyPremium + facPremium).toLocaleString()}
-            </p>
-          </div>
+          ) : (
+            <div className="flex gap-2 items-center flex-col">
+              <p className="text-[14px] flex justify-center ">
+                {'Total reinsurance premium (ceeded)'.toUpperCase()}
+              </p>
+              <p className="text-[18px] font-bold flex justify-start items-start">
+                KSH {(treatyPremium + facPremium).toLocaleString()}
+              </p>
+            </div>
+          )}
         </Link>
         <CustomCard
           name1="Treaty premium"
@@ -287,14 +291,31 @@ const Reinsurance = () => {
           href={'/dashboard/reinsurance/ri-cessions'}
           className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
         >
-          <div className="flex gap-2 items-center flex-col">
-            <p className="text-[14px] flex justify-center ">
+          {loadingRiCession ? (
+            <p className="flex flex-col justify-center items-center">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: '#cb7229',
+                    }}
+                    spin
+                  />
+                }
+              />
               {'Total Reinsurance Commission (Earned)'.toUpperCase()}
             </p>
-            <p className="text-[18px] font-bold flex justify-start items-start">
-              KSH {(treatyCommission + facCommission).toLocaleString()}
-            </p>
-          </div>
+          ) : (
+            <div className="flex gap-2 items-center flex-col">
+              <p className="text-[14px] flex justify-center ">
+                {'Total Reinsurance Commission (Earned)'.toUpperCase()}
+              </p>
+              <p className="text-[18px] font-bold flex justify-start items-start">
+                KSH {(treatyCommission + facCommission).toLocaleString()}
+              </p>
+            </div>
+          )}
         </Link>
         <CustomCard
           name1="Treaty Commission"
@@ -309,14 +330,31 @@ const Reinsurance = () => {
           href={'/dashboard/reinsurance/ri-paid-cession'}
           className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
         >
-          <div className="flex gap-2 items-center flex-col">
-            <p className="text-[14px] flex justify-center ">
+          {loadingRiPaidCession ? (
+            <p className="flex flex-col justify-center items-center">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: '#cb7229',
+                    }}
+                    spin
+                  />
+                }
+              />
               {'Reinsurance Claim paid Recovery'.toUpperCase()}
             </p>
-            <p className="text-[18px] font-bold flex justify-start items-start">
-              KSH {(treatyAmt + facAmt + xolAmt).toLocaleString()}
-            </p>
-          </div>
+          ) : (
+            <div className="flex gap-2 items-center flex-col">
+              <p className="text-[14px] flex justify-center ">
+                {'Reinsurance Claim paid Recovery'.toUpperCase()}
+              </p>
+              <p className="text-[18px] font-bold flex justify-start items-start">
+                KSH {(treatyAmt + facAmt + xolAmt).toLocaleString()}
+              </p>
+            </div>
+          )}
         </Link>
 
         <CustomCard
@@ -332,14 +370,31 @@ const Reinsurance = () => {
           href={'/dashboard/reinsurance/ri-outstanding-cession'}
           className={`md:h-[130px]  sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
         >
-          <div className="flex gap-2 items-center flex-col">
-            <p className="text-[14px] flex justify-center ">
+          {loadingRiOutstandingCessionReport ? (
+            <p className="flex flex-col justify-center items-center">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: '#cb7229',
+                    }}
+                    spin
+                  />
+                }
+              />
               {'reinsurance share of claim Outstanding '.toUpperCase()}
             </p>
-            <p className="text-[18px] font-bold flex justify-start items-start">
-              KSH {totalOutstandingReinsurance.toLocaleString()}
-            </p>
-          </div>
+          ) : (
+            <div className="flex gap-2 items-center flex-col">
+              <p className="text-[14px] flex justify-center ">
+                {'reinsurance share of claim Outstanding '.toUpperCase()}
+              </p>
+              <p className="text-[18px] font-bold flex justify-start items-start">
+                KSH {totalOutstandingReinsurance.toLocaleString()}
+              </p>
+            </div>
+          )}
         </Link>
         <CustomCard
           name1="Treaty share of claim Outstanding "
