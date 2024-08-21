@@ -8,6 +8,7 @@ import CustomSelect from '@/app/UI/reusableComponents/CustomSelect'
 import { LoadingOutlined } from '@ant-design/icons'
 import { ConfigProvider, DatePicker, Spin, Table } from 'antd'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React, { useContext, useState } from 'react'
 
 interface ICustomCard {
@@ -212,7 +213,7 @@ const Statistical = () => {
     cmLossRatio,
     loadingLossRatio,
     cmPaidOuts,
-    filteredLossRation,
+    filteredLossRation2,
     unpaidBills,
     loadingUnpaidBills,
     branchCode,
@@ -382,12 +383,26 @@ const Statistical = () => {
       ),
     },
   ]
+  const router = useRouter()
 
   const columns3 = [
     {
       title: 'Category',
       dataIndex: 'category',
       key: 'category',
+      render: (_: any, item: any) => (
+        <p
+          onClick={() =>
+            router.push(
+              `dashboard/statistical/unpaid-bills?category=${
+                item.category.split('-')[0]
+              }`,
+            )
+          }
+        >
+          {item.category}
+        </p>
+      ),
     },
     {
       title: 'Totals',
@@ -417,9 +432,9 @@ const Statistical = () => {
     0,
   )
 
-  const lossRatioTotals = filteredLossRation.reduce(
+  const lossRatioTotals = filteredLossRation2.reduce(
     (acc: number, ratio: any) => {
-      return ratio.total !== null ? acc + Number(ratio.total / 100) : acc
+      return ratio.total !== null ? acc + Number(ratio.total) : acc
     },
     0,
   )
@@ -427,6 +442,25 @@ const Statistical = () => {
     (acc: any, item: any) => acc + item.amountToPay,
     0,
   )
+
+  const totalsByCategory = unpaidBills.reduce((acc: any, bill: any) => {
+    const { category, amountToPay } = bill
+
+    // If the category already exists in the accumulator, add the amount
+    if (acc[category]) {
+      acc[category] += amountToPay
+    } else {
+      // Otherwise, create a new entry for this category
+      acc[category] = amountToPay
+    }
+
+    return acc
+  }, {})
+
+  const groupedTotals = Object.keys(totalsByCategory).map((category) => ({
+    category,
+    amountToPay: totalsByCategory[category],
+  }))
 
   return (
     <div className="">
@@ -593,6 +627,7 @@ const Statistical = () => {
           <p>
             Oustanding Amount Total: {totalOutstanding2024.toLocaleString()}{' '}
           </p>
+          <p>Loss ratio overall: {lossRatioTotals}% </p>
         </div>
         <ConfigProvider
           theme={{
@@ -631,7 +666,7 @@ const Statistical = () => {
           }}
         >
           <Table
-            dataSource={unpaidBills}
+            dataSource={groupedTotals}
             columns={columns3}
             loading={loadingUnpaidBills}
           />

@@ -90,7 +90,7 @@ const ClaimsContextProvider = ({ children }: { children: React.ReactNode }) => {
         ),
 
         axios.get(
-          `${LOCAL_URL}/cm-loss-ratio?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
+          `${LOCAL_URL}/cm-loss-ratio2?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
         ),
       ])
 

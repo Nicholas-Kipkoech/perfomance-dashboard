@@ -54,10 +54,14 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const [businessSummary, setBusinessSummary] = useState([])
 
   const [cmLossRatio, setCmLossRatio] = useState([])
+  const [cmLossRatio2, setCmLossRatio2] = useState([])
   const [cmPaidOuts, setCmPaidOuts] = useState([])
   const [unpaidBills, setUnPaidBills] = useState([])
+  const [unpaidBills2, setUnPaidBills2] = useState([])
+  const [category, setCategory] = useState('')
   const [loadingLossRatio, setLoadingLossRatio] = useState(false)
   const [loadingUnpaidBills, setLoadingUnPaidBills] = useState(false)
+  const [loadingUnpaidBills2, setLoadingUnPaidBills2] = useState(false)
 
   const [loadingBusinessSummary, setLoadingBusinessSummary] = useState(false)
   const [
@@ -360,7 +364,23 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         setCmLossRatio(response.data.result)
       })
       .catch((error) => {
-        console.error('Error fetching Business summary ', error)
+        console.error('Error fetching Loss ratio', error)
+      })
+      .finally(() => {
+        setLoadingLossRatio(false)
+      })
+  }, [toDate, branchCode])
+  useEffect(() => {
+    setLoadingLossRatio(true)
+    axios
+      .get(
+        `${LOCAL_URL}/cm-loss-ratio2?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setCmLossRatio2(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching loss ratio summary ', error)
       })
       .finally(() => {
         setLoadingLossRatio(false)
@@ -396,6 +416,23 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         setLoadingUnPaidBills(false)
       })
   }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingUnPaidBills2(true)
+    axios
+      .get(
+        `${LOCAL_URL}/unpaidBills?fromDate=${fromDate}&toDate=${toDate}&category=${category}`,
+      )
+      .then((response) => {
+        setUnPaidBills2(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching unpaid bills', error)
+      })
+      .finally(() => {
+        setLoadingUnPaidBills2(false)
+      })
+  }, [fromDate, toDate, branchCode, category])
 
   function calculatePremiums(premiums: any) {
     const totalPremium = premiums.reduce((total: number, premium: any) => {
@@ -453,7 +490,9 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const filteredLossRation = cmLossRatio.filter((claim: any) => {
     return claim.cm_order_no === 10
   })
-
+  const filteredLossRation2 = cmLossRatio2.filter((claim: any) => {
+    return claim.cm_order_no === 10
+  })
   return (
     <StatisticalContext.Provider
       value={{
@@ -505,6 +544,10 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
         unpaidBills,
         loadingUnpaidBills,
         branchCode,
+        filteredLossRation2,
+        unpaidBills2,
+        loadingUnpaidBills2,
+        setCategory,
       }}
     >
       {children}
