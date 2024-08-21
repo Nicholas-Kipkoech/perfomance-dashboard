@@ -1,24 +1,17 @@
 'use client'
 import { useContextApi } from '@/app/context/Context'
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
-import { formatDate } from '@/app/utils/apiLogistics'
 import { ConfigProvider, Table } from 'antd'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import CsvDownload from 'react-csv-downloader'
-import { calculatePercentage } from '../helpers'
-import { checkEnviroment } from '../directPremiums/page'
+import { columnsKE } from '@/app/columns/premium-columns'
 
 const TotalPremiums = () => {
   const { bimaData }: any = useContextApi()
 
-  const [columns, setColumns] = useState<any>([])
-  useEffect(() => {
-    const columns = checkEnviroment()
-    setColumns(columns)
-  }, [])
-  const formattedColumns = columns.map((column: any) => {
+  const formattedColumns = columnsKE.map((column: any) => {
     return {
       id: column.dataIndex,
       displayName: column.title,
@@ -58,7 +51,7 @@ const TotalPremiums = () => {
           },
         }}
       >
-        <Table columns={columns} dataSource={bimaData} scroll={{ x: 2500 }} />
+        <Table columns={columnsKE} dataSource={bimaData} scroll={{ x: 2500 }} />
       </ConfigProvider>
     </div>
   )

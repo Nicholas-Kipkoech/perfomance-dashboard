@@ -1,4 +1,5 @@
 'use client'
+import { columnsKE } from '@/app/columns/premium-columns'
 import { useContextApi } from '@/app/context/Context'
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import { formatDate } from '@/app/utils/apiLogistics'
@@ -7,23 +8,15 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 import CsvDownload from 'react-csv-downloader'
-import { calculatePercentage } from '../helpers'
-import { checkEnviroment } from '../directPremiums/page'
 
 const MotorPremiums = () => {
   const { bimaData }: any = useContextApi()
-
-  const [columns, setColumns] = useState<any>([])
-  useEffect(() => {
-    const columns = checkEnviroment()
-    setColumns(columns)
-  }, [])
 
   const filteredMotorPremiums = bimaData.filter(
     (data: any) => data.motorCode === '070' || data.clientCode === '080',
   )
 
-  const formattedColumns = columns.map((column: any) => {
+  const formattedColumns = columnsKE.map((column: any) => {
     return {
       id: column.dataIndex,
       displayName: column.title,
@@ -63,7 +56,7 @@ const MotorPremiums = () => {
         }}
       >
         <Table
-          columns={columns}
+          columns={columnsKE}
           dataSource={filteredMotorPremiums}
           scroll={{ x: 2500 }}
         />

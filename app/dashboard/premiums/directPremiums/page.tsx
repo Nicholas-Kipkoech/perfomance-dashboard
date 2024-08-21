@@ -11,22 +11,8 @@ import { calculatePercentage } from '../helpers'
 import { ENVIROMENT } from '@/app/context/database-connect'
 import { columnsKE, columnsZambia } from '@/app/columns/premium-columns'
 
-export function checkEnviroment() {
-  if (ENVIROMENT === 'KENYA') {
-    return columnsKE
-  } else if (ENVIROMENT === 'ZAMBIA') {
-    return columnsZambia
-  }
-}
-
 const DirectPremiums = () => {
   const { bimaData }: any = useContextApi()
-
-  const [columns, setColumns] = useState<any>([])
-  useEffect(() => {
-    const columns = checkEnviroment()
-    setColumns(columns)
-  }, [])
 
   const filteredDirectPremiums = bimaData.filter(
     (data: any) => data.clientCode === '15',
@@ -34,7 +20,7 @@ const DirectPremiums = () => {
 
   const router = useRouter()
 
-  const formattedColumns = columns.map((column: any) => {
+  const formattedColumns = columnsKE.map((column: any) => {
     return {
       id: column.dataIndex,
       displayName: column.title,
@@ -73,7 +59,7 @@ const DirectPremiums = () => {
         }}
       >
         <Table
-          columns={columns}
+          columns={columnsKE}
           dataSource={filteredDirectPremiums}
           scroll={{ x: 2500 }}
         />

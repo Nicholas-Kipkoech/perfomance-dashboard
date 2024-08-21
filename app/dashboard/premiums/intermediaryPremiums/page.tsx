@@ -1,31 +1,22 @@
 'use client'
+import { columnsKE } from '@/app/columns/premium-columns'
 import { useContextApi } from '@/app/context/Context'
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
-import { formatDate } from '@/app/utils/apiLogistics'
 import { ConfigProvider, Table } from 'antd'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import CsvDownload from 'react-csv-downloader'
-import { calculatePercentage } from '../helpers'
-import { checkEnviroment } from '../directPremiums/page'
 
 const IntermediaryPremiums = () => {
   const { bimaData }: any = useContextApi()
-
-  const [columns, setColumns] = useState<any>([])
-  useEffect(() => {
-    const columns = checkEnviroment()
-
-    setColumns(columns)
-  }, [])
 
   const filteredIntermediaryPremiums = bimaData.filter(
     (data: any) => data.clientCode === '25' || data.clientCode === '70',
   )
 
   const router = useRouter()
-  const formattedColumns = columns.map((column: any) => {
+  const formattedColumns = columnsKE.map((column: any) => {
     return {
       id: column.dataIndex,
       displayName: column.title,
@@ -66,7 +57,7 @@ const IntermediaryPremiums = () => {
         }}
       >
         <Table
-          columns={columns}
+          columns={columnsKE}
           dataSource={filteredIntermediaryPremiums}
           scroll={{ x: 2500 }}
         />
