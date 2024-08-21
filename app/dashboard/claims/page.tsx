@@ -12,14 +12,21 @@ import React, { useContext, useState } from 'react'
 
 const Claims = () => {
   const {
+    fromDate,
+    toDate,
     totalClaimPaid,
+    loadingClaimsData,
     totalRegisteredClaims,
+    loadingRegisteredClaims,
     totalOutstanding,
     totalSalvages,
+    loadingSalvages,
     nonMotorRegisteredClaims,
     motorRegisteredClaims,
     filteredLossRation,
+    loadingCmLossRatio,
     motorOutstanding,
+    loadingOutstandingClaims,
     motorPaidClaims,
     nonMotorPaidClaims,
     nonMotorOutstanding,
@@ -28,7 +35,6 @@ const Claims = () => {
     companys,
 
     setCompany,
-    loadingData,
     fetchClaimsData,
   }: any = useContext(ClaimsContext)
 
@@ -62,29 +68,6 @@ const Claims = () => {
   const motorRegisteredPerc = Math.round(
     (motorRegisteredClaims / totalRegisteredClaims) * 100,
   )
-
-  if (loadingData) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="flex flex-col gap-2">
-          <Spin
-            indicator={
-              <LoadingOutlined
-                style={{
-                  fontSize: 60,
-                  color: '#cb7229',
-                }}
-                spin
-              />
-            }
-          />{' '}
-          <p className="text-[#cb7229]">
-            Fetching all claims data this might take time...
-          </p>
-        </div>
-      </div>
-    )
-  }
 
   const months = [
     'Jan',
@@ -145,7 +128,7 @@ const Claims = () => {
   return (
     <div>
       <p className="flex justify-center font-bold">
-        Running Period [{fmDate24}] - [{toDate24}]
+        Running Period [{fromDate}] - [{toDate}]
       </p>
       <div className="top-0  z-0 flex sm:flex-col md:flex-row gap-2 items-center">
         <CustomSelect
@@ -193,89 +176,147 @@ const Claims = () => {
           className={`md:h-[130px] sm:h-[130px] w-[450px] border cursor-pointer rounded-md p-[20px]`}
           onClick={() => router.push('/dashboard/claims/registeredClaims')}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-[18px] font-bold flex justify-center">
-              TOTAL {totalRegisteredClaims.toLocaleString()}
-            </p>
-            <div className="flex justify-between text-[15px]">
-              <p>{'Motor'.toUpperCase()}</p>
-              <p>{'Non Motor'.toUpperCase()}</p>
-            </div>
-            <div className="flex justify-between text-[14px]">
-              <p className="font-bold ">
-                {motorRegisteredClaims.toLocaleString()}
-              </p>
-              <p className="font-bold text-[14px]">{motorRegisteredPerc}%</p>
-              <p className="font-bold text-[14px]">
-                {nonMotorRegisteredClaims.toLocaleString()}
-              </p>
-              <p className="font-bold text-[14px]">{nonMotorRegisteredPerc}%</p>
-            </div>
-            <p className="text-[14px] flex justify-center font-bold">
+          {loadingRegisteredClaims ? (
+            <p className="flex justify-center flex-col items-center">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: '#cb7229',
+                    }}
+                    spin
+                  />
+                }
+              />
               {'Registered Claims'.toUpperCase()}
             </p>
-          </div>
+          ) : (
+            <div className="flex flex-col gap-1">
+              <p className="text-[18px] font-bold flex justify-center">
+                TOTAL {totalRegisteredClaims.toLocaleString()}
+              </p>
+              <div className="flex justify-between text-[15px]">
+                <p>{'Motor'.toUpperCase()}</p>
+                <p>{'Non Motor'.toUpperCase()}</p>
+              </div>
+              <div className="flex justify-between text-[14px]">
+                <p className="font-bold ">
+                  {motorRegisteredClaims.toLocaleString()}
+                </p>
+                <p className="font-bold text-[14px]">{motorRegisteredPerc}%</p>
+                <p className="font-bold text-[14px]">
+                  {nonMotorRegisteredClaims.toLocaleString()}
+                </p>
+                <p className="font-bold text-[14px]">
+                  {nonMotorRegisteredPerc}%
+                </p>
+              </div>
+              <p className="text-[14px] flex justify-center font-bold">
+                {'Registered Claims'.toUpperCase()}
+              </p>
+            </div>
+          )}
         </div>
         <div
           className={`md:h-[130px] sm:h-[130px] w-[450px] border cursor-pointer rounded-md p-[20px]`}
           onClick={() => router.push('/dashboard/claims/paidClaims')}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-[18px] font-bold flex justify-center items-center">
-              TOTAL {totalClaimPaid.toLocaleString()}
-            </p>
-            <div className="flex justify-between text-[15px]">
-              <p>{'Non Motor'.toUpperCase()}</p>
-              <p>{' Motor'.toUpperCase()}</p>
-            </div>
-            <div className="flex justify-between text-[14px]">
-              <p className="font-bold ">
-                {Math.floor(nonMotorPaidClaims).toLocaleString()}
-              </p>
-              <p className="font-bold text-[14px]">
-                {nonMotorAmountPercantage}%
-              </p>
-              <p className="font-bold text-[14px]">
-                {Math.floor(motorPaidClaims).toLocaleString()}
-              </p>
-              <p className="font-bold text-[14px]">{motorAmountPercantage}%</p>
-            </div>
-            <p className="text-[14px] flex justify-center font-bold ">
+          {loadingClaimsData ? (
+            <p className="flex flex-col justify-center items-center">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: '#cb7229',
+                    }}
+                    spin
+                  />
+                }
+              />
               {'Paid Claims'.toUpperCase()}
             </p>
-          </div>
+          ) : (
+            <div className="flex flex-col gap-1">
+              <p className="text-[18px] font-bold flex justify-center items-center">
+                TOTAL {totalClaimPaid.toLocaleString()}
+              </p>
+              <div className="flex justify-between text-[15px]">
+                <p>{'Non Motor'.toUpperCase()}</p>
+                <p>{' Motor'.toUpperCase()}</p>
+              </div>
+              <div className="flex justify-between text-[14px]">
+                <p className="font-bold ">
+                  {Math.floor(nonMotorPaidClaims).toLocaleString()}
+                </p>
+                <p className="font-bold text-[14px]">
+                  {nonMotorAmountPercantage}%
+                </p>
+                <p className="font-bold text-[14px]">
+                  {Math.floor(motorPaidClaims).toLocaleString()}
+                </p>
+                <p className="font-bold text-[14px]">
+                  {motorAmountPercantage}%
+                </p>
+              </div>
+              <p className="text-[14px] flex justify-center font-bold ">
+                {'Paid Claims'.toUpperCase()}
+              </p>
+            </div>
+          )}
         </div>
 
         <div
           className={`md:h-[130px] sm:h-[130px] w-[450px] border cursor-pointer  rounded-md p-[20px]`}
           onClick={() => router.push('/dashboard/claims/outstandingClaims')}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-[18px] font-bold flex justify-center">
-              TOTAL {totalOutstanding.toLocaleString()}
-            </p>
-            <div className="flex justify-between text-[15px]">
-              <p>{'Motor'.toUpperCase()}</p>
-              <p>{'Non Motor'.toUpperCase()}</p>
-            </div>
-            <div className="flex justify-between text-[14px]">
-              <p className="font-bold ">{motorOutstanding.toLocaleString()}</p>
-              <p className="font-bold text-[14px]">{motorOutstandingPerc}%</p>
-              <p className="font-bold text-[14px]">
-                {nonMotorOutstanding.toLocaleString()}
-              </p>
-              <p className="font-bold text-[14px]">
-                {nonMotorOutstandingPerc}%
-              </p>
-            </div>
-            <p className="text-[14px] flex justify-center font-bold">
+          {loadingOutstandingClaims ? (
+            <p className="flex flex-col justify-center items-center">
+              <Spin
+                indicator={
+                  <LoadingOutlined
+                    style={{
+                      fontSize: 20,
+                      color: '#cb7229',
+                    }}
+                    spin
+                  />
+                }
+              />
               {'Outstanding Claims'.toUpperCase()}
             </p>
-          </div>
+          ) : (
+            <div className="flex flex-col gap-1">
+              <p className="text-[18px] font-bold flex justify-center">
+                TOTAL {totalOutstanding.toLocaleString()}
+              </p>
+              <div className="flex justify-between text-[15px]">
+                <p>{'Motor'.toUpperCase()}</p>
+                <p>{'Non Motor'.toUpperCase()}</p>
+              </div>
+              <div className="flex justify-between text-[14px]">
+                <p className="font-bold ">
+                  {motorOutstanding.toLocaleString()}
+                </p>
+                <p className="font-bold text-[14px]">{motorOutstandingPerc}%</p>
+                <p className="font-bold text-[14px]">
+                  {nonMotorOutstanding.toLocaleString()}
+                </p>
+                <p className="font-bold text-[14px]">
+                  {nonMotorOutstandingPerc}%
+                </p>
+              </div>
+              <p className="text-[14px] flex justify-center font-bold">
+                {'Outstanding Claims'.toUpperCase()}
+              </p>
+            </div>
+          )}
         </div>
         <CustomCard
           link={'/dashboard/claims/salvages'}
           name={'Salvages'}
+          loadingData={loadingSalvages}
           totalNumber={0}
           total={totalSalvages}
           currency
@@ -284,6 +325,7 @@ const Claims = () => {
           name={'Loss Ratio'}
           totalNumber={0}
           total={totalLossRatio}
+          loadingData={loadingCmLossRatio}
           perc
           link={''}
         />

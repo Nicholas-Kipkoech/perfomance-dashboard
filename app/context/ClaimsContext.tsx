@@ -1,63 +1,123 @@
 'use client'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useContext } from 'react'
 import { createContext } from 'react'
-import {
-  IBimaData,
-  IBranches,
-  IClients,
-  IProduction,
-  IReceipts,
-  IRecovery,
-  IRegisteredClaims,
-  ISalvages,
-  IUndebitedPolicies,
-  IUnrenewedPolicies,
-} from '../assets/interfaces'
+import { IBranches, IRegisteredClaims } from '../assets/interfaces'
 import { LOCAL_URL } from './database-connect'
 import { getDates } from '../dashboard/premiums/helpers'
-import { jwtDecode } from 'jwt-decode'
-/**
- *  totalClaimPaid,
-    totalClaims,
-    totalRegisteredClaims,
-    totalOutstanding,
-    totalCount: totalOutstandingCount,
-    totalSalvages,
-    nonMotorRegisteredClaims,
-    motorRegisteredClaims,
-    filteredLossRation,
-    motorOutstanding,
-    motorPaidClaims,
-    nonMotorPaidClaims,
-    nonMotorOutstanding,
-    loadingData,
-    year: _year,
-    setFromDate,
-    toDate: _toDate,
-    setToDate,
-    companys,
-    setBranchCode,
-    setCompany,
- */
 
 export const ClaimsContext = createContext({})
 const ClaimsContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { currentYear } = getDates()
+  const { currentMonth } = getDates()
 
   const [claimsData, setClaimsData] = useState([])
+  const [loadingClaimsData, setLoadingClaimsData] = useState(false)
+  const [fromDate, setFromDate] = useState(currentMonth.startDate)
+  const [toDate, setToDate] = useState(currentMonth.endDate)
+  const [branchCode, setBranchCode] = useState('')
   const [registeredClaims, setRegisteredClaims] = useState<IRegisteredClaims[]>(
     [],
   )
+  const [loadingRegisteredClaims, setLoadingRegisteredClaims] = useState(false)
   const [outstandingClaims, setOutstandingClaims] = useState([])
+  const [loadingOutstandingClaims, setLoadingOutstandingClaims] = useState(
+    false,
+  )
+
   const [company, setCompany] = useState('INTRA')
   const [companys, setCompanys] = useState<IBranches[]>([])
 
-  const [cmLossRatio, setCmLossRatio] = useState([])
   const [salvages, setSalvages] = useState([])
+  const [loadingSalvages, setLoadingSalvages] = useState(false)
+  const [cmLossRatio, setCmLossRatio] = useState([])
+  const [loadingCmLossRatio, setLoadingCmLossRatio] = useState(false)
 
   const [loadingData, setLoadingData] = useState(false)
+
+  useEffect(() => {
+    setLoadingClaimsData(true)
+    axios
+      .get(
+        `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setClaimsData(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching claims', error)
+      })
+      .finally(() => {
+        setLoadingClaimsData(false)
+      })
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingRegisteredClaims(true)
+    axios
+      .get(
+        `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setRegisteredClaims(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching registered-claims', error)
+      })
+      .finally(() => {
+        setLoadingRegisteredClaims(false)
+      })
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingOutstandingClaims(true)
+    axios
+      .get(
+        `${LOCAL_URL}/outstanding-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setOutstandingClaims(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching outstanding-claims', error)
+      })
+      .finally(() => {
+        setLoadingOutstandingClaims(false)
+      })
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingSalvages(true)
+    axios
+      .get(
+        `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setSalvages(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching salvages', error)
+      })
+      .finally(() => {
+        setLoadingSalvages(false)
+      })
+  }, [fromDate, toDate, branchCode])
+
+  useEffect(() => {
+    setLoadingCmLossRatio(true)
+    axios
+      .get(
+        `${LOCAL_URL}/cm-loss-ratio2?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+      )
+      .then((response) => {
+        setCmLossRatio(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching loss ratio', error)
+      })
+      .finally(() => {
+        setLoadingCmLossRatio(false)
+      })
+  }, [fromDate, toDate, branchCode])
 
   const fetchClaimsData = async (
     fromDate: string,
@@ -66,43 +126,14 @@ const ClaimsContextProvider = ({ children }: { children: React.ReactNode }) => {
   ) => {
     setLoadingData(true)
     try {
-      const [
-        orgBranchesResponse,
-        claimsResponse,
-        registeredClaimsResponse,
-        outstandingClaimsResponse,
-        salvagesResponse,
-        lossRatioResponse,
-      ] = await Promise.all([
+      const [orgBranchesResponse] = await Promise.all([
         axios.get(`${LOCAL_URL}/branches`),
-        axios.get(
-          `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-        axios.get(
-          `${LOCAL_URL}/outstanding-claims?branchCode=${branchCode}&toDate=${toDate}&fromDate=${fromDate}`,
-        ),
-
-        axios.get(
-          `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-        ),
-
-        axios.get(
-          `${LOCAL_URL}/cm-loss-ratio2?fromDate=2024&toDate=2024&branchCode=${branchCode}`,
-        ),
       ])
 
       setCompanys([
         { organization_name: 'Entire Company', organization_code: '' },
         ...orgBranchesResponse.data.result,
       ])
-      setClaimsData(claimsResponse.data.result)
-      setRegisteredClaims(registeredClaimsResponse.data.result)
-      setOutstandingClaims(outstandingClaimsResponse.data.result)
-      setSalvages(salvagesResponse.data.result)
-      setCmLossRatio(lossRatioResponse.data.result)
 
       setLoadingData(false)
     } catch (error) {
@@ -214,13 +245,20 @@ const ClaimsContextProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ClaimsContext.Provider
       value={{
+        fromDate,
+        toDate,
         totalClaimPaid,
+        loadingClaimsData,
         totalRegisteredClaims,
+        loadingRegisteredClaims,
         totalOutstanding,
+        loadingOutstandingClaims,
         totalSalvages,
+        loadingSalvages,
         nonMotorRegisteredClaims,
         motorRegisteredClaims,
         filteredLossRation,
+        loadingCmLossRatio,
         motorOutstanding,
         motorPaidClaims,
         nonMotorPaidClaims,
