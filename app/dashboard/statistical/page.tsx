@@ -392,6 +392,7 @@ const Statistical = () => {
       key: 'category',
       render: (_: any, item: any) => (
         <p
+          className="cursor-pointer"
           onClick={() =>
             router.push(
               `dashboard/statistical/unpaid-bills?category=${
