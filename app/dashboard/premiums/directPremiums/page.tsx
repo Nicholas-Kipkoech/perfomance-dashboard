@@ -23,14 +23,14 @@ const DirectPremiums = () => {
   const { bimaData }: any = useContextApi()
 
   const [columns, setColumns] = useState<any>([])
-
-  const filteredDirectPremiums = bimaData.filter(
-    (data: any) => data.clientCode === '15',
-  )
   useEffect(() => {
     const columns = checkEnviroment()
     setColumns(columns)
   }, [])
+
+  const filteredDirectPremiums = bimaData.filter(
+    (data: any) => data.clientCode === '15',
+  )
 
   const router = useRouter()
 
