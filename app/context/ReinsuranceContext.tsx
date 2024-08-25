@@ -37,7 +37,7 @@ const ReinsuranceContextProvider = ({
       setLoadingRiOutstandingCessionReport(true)
       try {
         const response = await axios.get(
-          `{LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
+          `${LOCAL_URL}/ri-outstanding-cession-report?toDate=${toDate}&branchCode=${branchCode}`,
         )
         setRiOutstandingCessionReport(response.data.result)
       } catch (error) {
@@ -54,7 +54,7 @@ const ReinsuranceContextProvider = ({
       setLoadingRiPaidCession(true)
       try {
         const response = await axios.get(
-          `{LOCAL_URL}/ri-paid-cession-sum?toDate=${toDate}&branchCode=${branchCode}`,
+          `${LOCAL_URL}/ri-paid-cession-sum?toDate=${toDate}&branchCode=${branchCode}`,
         )
         setRiPaidCession(response.data.result)
       } catch (error) {
