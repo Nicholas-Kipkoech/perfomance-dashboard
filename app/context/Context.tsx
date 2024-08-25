@@ -288,7 +288,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       setLoadingSalvages(true)
       try {
         const response = await axios.get(
-          `${LOCAL_URL}/salvagesfromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
         )
         setSalvages(response.data.result)
       } catch (error) {
