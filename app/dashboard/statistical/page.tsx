@@ -217,12 +217,14 @@ const Statistical = () => {
     unpaidBills,
     loadingUnpaidBills,
     branchCode,
+    entities,
   }: any = useContext(StatisticalContext)
 
   const [fmDate23, setFmDate23] = useState('')
   const [tDate23, setTdDate23] = useState('')
   const [fmDate24, setFmDate24] = useState('')
   const [toDate24, setTdDate24] = useState('')
+  const [entCode, setEntCode] = useState('')
 
   const lossRatioMap = new Map(
     cmLossRatio.map((item: any) => [item.branchCode, item]),
@@ -288,6 +290,12 @@ const Statistical = () => {
       _setFromDate23(fmDate23), _setToDate23(tDate23)
     }
   }
+  const mappedEntities = entities.map((entity: any) => {
+    return {
+      label: entity.entityName,
+      value: entity.entityCode,
+    }
+  })
 
   const claimPaidRecovery23Report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_PAID_CESSIONS_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000013&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=PAID%20CESSION%20SUMMARY%20CLASSWISE&P_ORG_CODE=50&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}`
   const claimPaidRecovery24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_PAID_CESSIONS_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000013&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=PAID%20CESSION%20SUMMARY%20CLASSWISE&P_ORG_CODE=50&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
@@ -303,7 +311,8 @@ const Statistical = () => {
   const grossClaimPaid24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=CM_PAID_CLMS_SUMMARY&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=CM.MGR&p_org_code=50&p_menu_code=CM000032&p_grp_code=CM.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=CLAIMS%20PAID%20SUMMARY&P_ORG_CODE=50&P_BRANCH_GROUP=&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
   const grossPremComm23report = `http://192.168.1.112:8001/icon/reports?p_module_name=UW_COMP_PROD_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=UW.ADF&p_org_code=50&p_menu_code=UW000186&p_grp_code=UW.ADF&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=COMPANY%20PRODUCTION%20SUMMARY&P_ORG_CODE=50&P_BRANCH_GROUP=&P_BRANCH=${branchCode}&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}&P_COMESA=Y`
   const grossPremComm24report = `http://192.168.1.112:8001/icon/reports?p_module_name=UW_COMP_PROD_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=UW.ADF&p_org_code=50&p_menu_code=UW000186&p_grp_code=UW.ADF&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=COMPANY%20PRODUCTION%20SUMMARY&P_ORG_CODE=50&P_BRANCH_GROUP=&P_BRANCH=${branchCode}&P_FM_DT=${fromDate}&P_TO_DT=${toDate}&P_COMESA=Y`
-
+  const claimsPaidRecoveryByParticipant23 = `http://172.16.16.111:8001/icon/reports?p_module_name=RI_FAC_REGISTER&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=100&rep_doc_no=&p_role_code=RI.MGR&p_org_code=100&p_menu_code=RI000005&p_grp_code=RI.MGR&p_os_code=100&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=FACULTATIVE%20REGISTER&P_ORG_CODE=100&P_CURRENCY=&P_CATEGORY=80&P_INTERMEDIARY=${entCode}&P_CLIENT=&P_CLAIM=&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}`
+  const claimsPaidRecoveryByParticipant24 = `http://172.16.16.111:8001/icon/reports?p_module_name=RI_FAC_REGISTER&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=100&rep_doc_no=&p_role_code=RI.MGR&p_org_code=100&p_menu_code=RI000005&p_grp_code=RI.MGR&p_os_code=100&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=FACULTATIVE%20REGISTER&P_ORG_CODE=100&P_CURRENCY=&P_CATEGORY=80&P_INTERMEDIARY=${entCode}&P_CLIENT=&P_CLAIM=&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
   const columns = [
     {
       title: 'Branch Name',
@@ -592,6 +601,29 @@ const Statistical = () => {
             loading23={loadingRiOutstandingCessionReport23}
             loading24={loadingRiOutstandingCessionReport24}
           />
+          <div className="border  h-[10rem] w-[30rem] p-2">
+            <p className="flex justify-center">
+              CLAIM PAID RECOVERY BY PARTICIPANT
+            </p>
+            <CustomSelect
+              name="Select Participant"
+              options={mappedEntities}
+              className="mb-2"
+              onChange={(value: any) => setEntCode(value.value)}
+              defaultValue={{
+                label: '',
+                value: '',
+              }}
+            />
+            <div className="flex justify-between pt-2">
+              <a href={claimsPaidRecoveryByParticipant24} target="__blank">
+                Go to Report 2024
+              </a>
+              <a href={claimsPaidRecoveryByParticipant23} target="__blank">
+                Go to Report 2023
+              </a>
+            </div>
+          </div>
         </div>
         <div className="mt-2 ml-3">
           <p className="flex justify-center text-[1.5rem] font-bold">

@@ -58,6 +58,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   const [cmPaidOuts, setCmPaidOuts] = useState([])
   const [unpaidBills, setUnPaidBills] = useState([])
   const [unpaidBills2, setUnPaidBills2] = useState([])
+  const [entities, setEntities] = useState([])
   const [category, setCategory] = useState('')
   const [loadingLossRatio, setLoadingLossRatio] = useState(false)
   const [loadingUnpaidBills, setLoadingUnPaidBills] = useState(false)
@@ -434,6 +435,17 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
       })
   }, [fromDate, toDate, branchCode, category])
 
+  useEffect(() => {
+    axios
+      .get(`${LOCAL_URL}/entData`)
+      .then((response) => {
+        setEntities(response.data.result)
+      })
+      .catch((error) => {
+        console.error('Error fetching entities', error)
+      })
+  }, [])
+
   function calculatePremiums(premiums: any) {
     const totalPremium = premiums.reduce((total: number, premium: any) => {
       return total + premium.premiums + premium.earthQuake + premium.PVTPremium
@@ -496,6 +508,7 @@ const StatisticalProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <StatisticalContext.Provider
       value={{
+        entities,
         fromDate23,
         toDate23,
         fromDate,
