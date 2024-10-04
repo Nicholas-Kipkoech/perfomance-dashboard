@@ -45,6 +45,10 @@ const Sidebar = () => {
           name: 'Reinsurance',
           path: '/dashboard/reinsurance',
         },
+        {
+          name: 'IRA',
+          path: '/dashboard/IRA',
+        },
       ],
     },
   ]
