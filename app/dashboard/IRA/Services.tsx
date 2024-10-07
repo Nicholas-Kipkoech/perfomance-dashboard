@@ -27,3 +27,59 @@ export const fetchIRABusinessForce = async (
   )
   return res?.data
 }
+
+export const fetchIRACommisions = async (fromDate: string, toDate: string) => {
+  const res = await AxiosUtility.get(
+    `/ira-commisions?fromDate=${fromDate}&toDate=${toDate}`,
+  )
+  return res?.data
+}
+
+export const fetchIRAPremiumsCounty = async (
+  fromDate: string,
+  toDate: string,
+) => {
+  const res = await AxiosUtility.get(
+    `/ira-premiums-county?fromDate=${fromDate}&toDate=${toDate}`,
+  )
+  return res?.data
+}
+
+export const fetchIRAIncuredClaims = async (
+  fromDate: string,
+  toDate: string,
+) => {
+  const res = await AxiosUtility.get(
+    `/ira-incurred-claims?fromDate=${fromDate}&toDate=${toDate}`,
+  )
+  return res?.data
+}
+
+export const fetchIRAUnearnedPremiums = async (
+  fromDate: string,
+  toDate: string,
+) => {
+  const res = await AxiosUtility.get(
+    `/ira-unearned-premiums?fromDate=${fromDate}&toDate=${toDate}`,
+  )
+  return res?.data
+}
+
+export const fetchIRAReinsurancePremiums = async (
+  fromDate: string,
+  toDate: string,
+) => {
+  const res = await AxiosUtility.get(
+    `/ira-reinsurance-premiums?fromDate=${fromDate}&toDate=${toDate}`,
+  )
+  return res?.data
+}
+export const fetchIRAPremiumRegister = async (
+  fromDate: string,
+  toDate: string,
+) => {
+  const res = await AxiosUtility.get(
+    `/ira-premiums-register?fromDate=${fromDate}&toDate=${toDate}`,
+  )
+  return res?.data
+}

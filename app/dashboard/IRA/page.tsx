@@ -2,7 +2,16 @@
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import { DatePicker } from 'antd'
 import React, { useState } from 'react'
-import { fetchIRABusinessForce, fetchIRAPremiums } from './Services'
+import {
+  fetchIRABusinessForce,
+  fetchIRACommisions,
+  fetchIRAIncuredClaims,
+  fetchIRAPremiumRegister,
+  fetchIRAPremiums,
+  fetchIRAPremiumsCounty,
+  fetchIRAReinsurancePremiums,
+  fetchIRAUnearnedPremiums,
+} from './Services'
 import dayjs from 'dayjs'
 
 const IRAService = () => {
@@ -34,9 +43,10 @@ const IRAService = () => {
 
   const handleDateChange = (
     setter: React.Dispatch<React.SetStateAction<string>>,
-  ) => (date: dayjs.Dayjs, dateString: string) => {
+  ) => (date: dayjs.Dayjs, dateString: any) => {
     setter(formatDate(dateString))
   }
+  const checkDate = fromDate.split('-').join('') === 'undefinedundefined'
 
   const handleFetchData = async (
     fetchFunction: any,
@@ -44,11 +54,15 @@ const IRAService = () => {
     successMessage: string,
   ) => {
     try {
-      setMessages((prev: any) => ({ ...prev, [name]: '' }))
-      setLoading(name)
-      const data = await fetchFunction(fromDate, toDate)
-      if (data.message === 'Data written successfully') {
-        setMessages((prev: any) => ({ ...prev, [name]: successMessage }))
+      if (fromDate === '' || toDate === '') {
+        alert('Please select from date and to date')
+      } else {
+        setMessages((prev: any) => ({ ...prev, [name]: '' }))
+        setLoading(name)
+        const data = await fetchFunction(fromDate, toDate)
+        if (data.message === 'Data written successfully') {
+          setMessages((prev: any) => ({ ...prev, [name]: successMessage }))
+        }
       }
     } catch (error) {
       setLoading('')
@@ -70,9 +84,13 @@ const IRAService = () => {
 
   const CustomCard = ({ fetchFunction, name, successMessage }: IcustomCard) => {
     return (
-      <div className="flex gap-10 border w-full p-2 items-center rounded-md">
-        <span>{name}</span>
-        <span>{messages[name]}</span>
+      <div className="flex gap-10 border w-full p-2 items-center rounded-md justify-between">
+        <div className="flex gap-2 items-center">
+          <span>{name}</span>
+          <span className="text-[12px] text-green-700 italic">
+            {messages[name]}
+          </span>
+        </div>
         <CustomButton
           name={loading === name ? 'submitting' : 'Submit'}
           disabled={loading !== ''} // Disable button if any card is loading
@@ -127,6 +145,46 @@ const IRAService = () => {
           successMessage={'Business Force data written to Excel successfully!'}
           name={'Write to excel: Business Force'}
           fetchFunction={fetchIRABusinessForce}
+        />
+        <CustomCard
+          successMessage={'IRA commissions data written to Excel successfully!'}
+          name={'Write to excel: IRA-commissions'}
+          fetchFunction={fetchIRACommisions}
+        />
+        <CustomCard
+          successMessage={
+            'IRA Premiums By county data written to Excel successfully!'
+          }
+          name={'Write to excel: Premiums By Country'}
+          fetchFunction={fetchIRAPremiumsCounty}
+        />
+        <CustomCard
+          successMessage={
+            'IRA Incured claims data written to Excel successfully!'
+          }
+          name={'Write to excel: Inclured Claims'}
+          fetchFunction={fetchIRAIncuredClaims}
+        />
+        <CustomCard
+          successMessage={
+            'Unearned Premiums data written to Excel successfully!'
+          }
+          name={'Write to excel: Unearned Premiums'}
+          fetchFunction={fetchIRAUnearnedPremiums}
+        />
+        <CustomCard
+          successMessage={
+            'Reinsurance Premiums data written to Excel successfully!'
+          }
+          name={'Write to excel: Reinsurance Premiums'}
+          fetchFunction={fetchIRAReinsurancePremiums}
+        />
+        <CustomCard
+          successMessage={
+            'Premium register data written to Excel successfully!'
+          }
+          name={'Write to excel: Premium register'}
+          fetchFunction={fetchIRAPremiumRegister}
         />
       </div>
     </div>
