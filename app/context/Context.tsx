@@ -324,7 +324,7 @@ const ContextProvider = ({ children }: { children: React.ReactNode }) => {
       setLoadingReceipts(true)
       try {
         const response = await axios.get(
-          `${LOCAL_URL}/receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+          `${LOCAL_URL}/AR-receipts?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
         )
         setReceipts(response.data.result)
       } catch (error) {
