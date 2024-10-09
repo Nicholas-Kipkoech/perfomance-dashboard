@@ -1,4 +1,5 @@
 'use client'
+
 import CustomButton from '@/app/UI/reusableComponents/CustomButton'
 import { DatePicker } from 'antd'
 import React, { useState } from 'react'
@@ -13,6 +14,7 @@ import {
   fetchIRAUnearnedPremiums,
 } from './Services'
 import dayjs from 'dayjs'
+import { getDates } from '../premiums/helpers'
 
 const IRAService = () => {
   const months = [
@@ -29,11 +31,13 @@ const IRAService = () => {
     'Nov',
     'Dec',
   ]
-
-  const [fromDate, setFromDate] = useState('')
-  const [toDate, setToDate] = useState('')
-  const [loading, setLoading] = useState('')
-  const [messages, setMessages] = useState<any>({})
+  const { currentMonth } = getDates()
+  const [state, setState] = useState({
+    fromDate: currentMonth.startDate,
+    toDate: currentMonth.endDate,
+    loading: '',
+    messages: {} as { [key: string]: string },
+  })
 
   const formatDate = (dateString: string) => {
     const [day, month, year] = dateString.split('-')
@@ -41,48 +45,110 @@ const IRAService = () => {
     return `${day}-${formattedMonth}-${year}`
   }
 
-  const handleDateChange = (
-    setter: React.Dispatch<React.SetStateAction<string>>,
-  ) => (date: dayjs.Dayjs, dateString: any) => {
-    setter(formatDate(dateString))
+  const handleDateChange = (key: 'fromDate' | 'toDate') => (
+    date: dayjs.Dayjs,
+    dateString: string,
+  ) => {
+    setState((prev) => ({
+      ...prev,
+      [key]: formatDate(dateString),
+    }))
   }
-  const checkDate = fromDate.split('-').join('') === 'undefinedundefined'
 
   const handleFetchData = async (
     fetchFunction: any,
     name: string,
     successMessage: string,
   ) => {
+    const { fromDate, toDate } = state
+
+    if (!fromDate || !toDate) {
+      alert('Please select from date and to date')
+      return
+    }
+
+    setState((prev) => ({
+      ...prev,
+      loading: name,
+      messages: { ...prev.messages, [name]: '' },
+    }))
+
     try {
-      if (fromDate === '' || toDate === '') {
-        alert('Please select from date and to date')
-      } else {
-        setMessages((prev: any) => ({ ...prev, [name]: '' }))
-        setLoading(name)
-        const data = await fetchFunction(fromDate, toDate)
-        if (data.message === 'Data written successfully') {
-          setMessages((prev: any) => ({ ...prev, [name]: successMessage }))
-        }
+      const data = await fetchFunction(fromDate, toDate)
+      if (data.message === 'Data written successfully') {
+        setState((prev) => ({
+          ...prev,
+          messages: { ...prev.messages, [name]: successMessage },
+        }))
       }
     } catch (error) {
-      setLoading('')
-      setMessages((prev: any) => ({
+      setState((prev) => ({
         ...prev,
-        [name]: 'An error occurred while fetching data.',
+        messages: {
+          ...prev.messages,
+          [name]: 'An error occurred while fetching data.',
+        },
       }))
       console.error(error)
     } finally {
-      setLoading('')
+      setState((prev) => ({ ...prev, loading: '' }))
     }
   }
 
-  interface IcustomCard {
-    fetchFunction: any
-    name: string
-    successMessage: string
+  const handleSequentialFetch = async () => {
+    const apiFunctions = [
+      {
+        fetchFunction: fetchIRAPremiums,
+        name: 'Write to excel: IRA Premiums',
+        successMessage: 'IRA Premiums written to Excel successfully!',
+      },
+      {
+        fetchFunction: fetchIRABusinessForce,
+        name: 'Write to excel: Business Force',
+        successMessage: 'Business Force data written to Excel successfully!',
+      },
+      {
+        fetchFunction: fetchIRACommisions,
+        name: 'Write to excel: IRA-commissions',
+        successMessage: 'IRA commissions data written to Excel successfully!',
+      },
+      {
+        fetchFunction: fetchIRAPremiumsCounty,
+        name: 'Write to excel: Premiums By County',
+        successMessage:
+          'IRA Premiums By county data written to Excel successfully!',
+      },
+      {
+        fetchFunction: fetchIRAIncuredClaims,
+        name: 'Write to excel: Inclured Claims',
+        successMessage:
+          'IRA Incured claims data written to Excel successfully!',
+      },
+      {
+        fetchFunction: fetchIRAUnearnedPremiums,
+        name: 'Write to excel: Unearned Premiums',
+        successMessage: 'Unearned Premiums data written to Excel successfully!',
+      },
+      {
+        fetchFunction: fetchIRAReinsurancePremiums,
+        name: 'Write to excel: Reinsurance Premiums',
+        successMessage:
+          'Reinsurance Premiums data written to Excel successfully!',
+      },
+      {
+        fetchFunction: fetchIRAPremiumRegister,
+        name: 'Write to excel: Premium register',
+        successMessage: 'Premium register data written to Excel successfully!',
+      },
+    ]
+
+    for (const api of apiFunctions) {
+      await handleFetchData(api.fetchFunction, api.name, api.successMessage)
+    }
   }
 
-  const CustomCard = ({ fetchFunction, name, successMessage }: IcustomCard) => {
+  const CustomCard = ({ fetchFunction, name, successMessage }: any) => {
+    const { loading, messages } = state
     return (
       <div className="flex gap-10 border w-full p-2 items-center rounded-md justify-between">
         <div className="flex gap-2 items-center">
@@ -92,16 +158,18 @@ const IRAService = () => {
           </span>
         </div>
         <CustomButton
-          name={loading === name ? 'submitting' : 'Submit'}
-          disabled={loading !== ''} // Disable button if any card is loading
+          name={loading === name ? 'Submitting' : 'Submit to IRA'}
+          disabled={loading !== ''}
           onClick={() => handleFetchData(fetchFunction, name, successMessage)}
           className={`h-[2rem] border w-[10rem] rounded-md ${
-            loading === name ? `bg-slate-500` : `bg-[#cb7529]`
+            loading === name ? 'bg-slate-500' : 'bg-[#cb7529]'
           } text-white`}
         />
       </div>
     )
   }
+
+  const { fromDate, toDate } = state
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -109,84 +177,93 @@ const IRAService = () => {
         <p className="flex justify-center font-bold">
           Running Period [{fromDate}] - [{toDate}]
         </p>
-        <div className="top-0  z-0 flex  gap-2 items-center">
+        <div className="top-0 z-0 flex gap-2 items-center">
           <div className="flex flex-col mt-2">
             <label>From date</label>
             <DatePicker
-              format={'DD-MM-YYYY'}
-              placeholder={'DD-MM-YYYY'}
-              className={
-                'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
-              }
-              onChange={handleDateChange(setFromDate)}
+              format="DD-MM-YYYY"
+              placeholder="DD-MM-YYYY"
+              className="md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md"
+              onChange={handleDateChange('fromDate')}
             />
           </div>
           <div className="flex flex-col mt-2">
             <label>To date</label>
             <DatePicker
-              format={'DD-MM-YYYY'}
-              placeholder={'DD-MM-YYYY'}
-              className={
-                'md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md'
-              }
-              onChange={handleDateChange(setToDate)}
+              format="DD-MM-YYYY"
+              placeholder="DD-MM-YYYY"
+              className="md:w-[250px] sm:w-[20rem] h-[40px] border p-2 rounded-md"
+              onChange={handleDateChange('toDate')}
             />
           </div>
         </div>
       </div>
 
       <div className="mt-10 flex flex-col gap-2">
-        <CustomCard
-          successMessage={'IRA Premiums written to Excel successfully!'}
-          name={'Write to excel: IRA Premiums'}
-          fetchFunction={fetchIRAPremiums}
-        />
-        <CustomCard
-          successMessage={'Business Force data written to Excel successfully!'}
-          name={'Write to excel: Business Force'}
-          fetchFunction={fetchIRABusinessForce}
-        />
-        <CustomCard
-          successMessage={'IRA commissions data written to Excel successfully!'}
-          name={'Write to excel: IRA-commissions'}
-          fetchFunction={fetchIRACommisions}
-        />
-        <CustomCard
-          successMessage={
-            'IRA Premiums By county data written to Excel successfully!'
-          }
-          name={'Write to excel: Premiums By Country'}
-          fetchFunction={fetchIRAPremiumsCounty}
-        />
-        <CustomCard
-          successMessage={
-            'IRA Incured claims data written to Excel successfully!'
-          }
-          name={'Write to excel: Inclured Claims'}
-          fetchFunction={fetchIRAIncuredClaims}
-        />
-        <CustomCard
-          successMessage={
-            'Unearned Premiums data written to Excel successfully!'
-          }
-          name={'Write to excel: Unearned Premiums'}
-          fetchFunction={fetchIRAUnearnedPremiums}
-        />
-        <CustomCard
-          successMessage={
-            'Reinsurance Premiums data written to Excel successfully!'
-          }
-          name={'Write to excel: Reinsurance Premiums'}
-          fetchFunction={fetchIRAReinsurancePremiums}
-        />
-        <CustomCard
-          successMessage={
-            'Premium register data written to Excel successfully!'
-          }
-          name={'Write to excel: Premium register'}
-          fetchFunction={fetchIRAPremiumRegister}
-        />
+        {[
+          {
+            fetchFunction: fetchIRAPremiums,
+            name: 'Write to excel: IRA Premiums',
+            successMessage: 'IRA Premiums written to Excel successfully!',
+          },
+          {
+            fetchFunction: fetchIRABusinessForce,
+            name: 'Write to excel: Business Force',
+            successMessage:
+              'Business Force data written to Excel successfully!',
+          },
+          {
+            fetchFunction: fetchIRACommisions,
+            name: 'Write to excel: IRA-commissions',
+            successMessage:
+              'IRA commissions data written to Excel successfully!',
+          },
+          {
+            fetchFunction: fetchIRAPremiumsCounty,
+            name: 'Write to excel: Premiums By County',
+            successMessage:
+              'IRA Premiums By county data written to Excel successfully!',
+          },
+          {
+            fetchFunction: fetchIRAIncuredClaims,
+            name: 'Write to excel: Inclured Claims',
+            successMessage:
+              'IRA Incured claims data written to Excel successfully!',
+          },
+          {
+            fetchFunction: fetchIRAUnearnedPremiums,
+            name: 'Write to excel: Unearned Premiums',
+            successMessage:
+              'Unearned Premiums data written to Excel successfully!',
+          },
+          {
+            fetchFunction: fetchIRAReinsurancePremiums,
+            name: 'Write to excel: Reinsurance Premiums',
+            successMessage:
+              'Reinsurance Premiums data written to Excel successfully!',
+          },
+          {
+            fetchFunction: fetchIRAPremiumRegister,
+            name: 'Write to excel: Premium register',
+            successMessage:
+              'Premium register data written to Excel successfully!',
+          },
+        ].map((api) => (
+          <CustomCard
+            key={api.name}
+            fetchFunction={api.fetchFunction}
+            name={api.name}
+            successMessage={api.successMessage}
+          />
+        ))}
       </div>
+
+      <CustomButton
+        name={state.loading ? 'Running all..' : 'Run all suquentially'}
+        onClick={handleSequentialFetch}
+        disabled={state.loading !== ''}
+        className="mt-5 bg-blue-500 text-white p-2 rounded-md flex items-center mb-5"
+      />
     </div>
   )
 }
