@@ -47,7 +47,7 @@ const IRAService = () => {
 
   const handleDateChange = (key: 'fromDate' | 'toDate') => (
     date: dayjs.Dayjs,
-    dateString: string,
+    dateString: any,
   ) => {
     setState((prev) => ({
       ...prev,
@@ -95,53 +95,52 @@ const IRAService = () => {
     }
   }
 
-  const handleSequentialFetch = async () => {
-    const apiFunctions = [
-      {
-        fetchFunction: fetchIRAPremiums,
-        name: 'Write to excel: IRA Premiums',
-        successMessage: 'IRA Premiums written to Excel successfully!',
-      },
-      {
-        fetchFunction: fetchIRABusinessForce,
-        name: 'Write to excel: Business Force',
-        successMessage: 'Business Force data written to Excel successfully!',
-      },
-      {
-        fetchFunction: fetchIRACommisions,
-        name: 'Write to excel: IRA-commissions',
-        successMessage: 'IRA commissions data written to Excel successfully!',
-      },
-      {
-        fetchFunction: fetchIRAPremiumsCounty,
-        name: 'Write to excel: Premiums By County',
-        successMessage:
-          'IRA Premiums By county data written to Excel successfully!',
-      },
-      {
-        fetchFunction: fetchIRAIncuredClaims,
-        name: 'Write to excel: Inclured Claims',
-        successMessage:
-          'IRA Incured claims data written to Excel successfully!',
-      },
-      {
-        fetchFunction: fetchIRAUnearnedPremiums,
-        name: 'Write to excel: Unearned Premiums',
-        successMessage: 'Unearned Premiums data written to Excel successfully!',
-      },
-      {
-        fetchFunction: fetchIRAReinsurancePremiums,
-        name: 'Write to excel: Reinsurance Premiums',
-        successMessage:
-          'Reinsurance Premiums data written to Excel successfully!',
-      },
-      {
-        fetchFunction: fetchIRAPremiumRegister,
-        name: 'Write to excel: Premium register',
-        successMessage: 'Premium register data written to Excel successfully!',
-      },
-    ]
+  const apiFunctions = [
+    {
+      fetchFunction: fetchIRAPremiums,
+      name: 'Write to excel: IRA Premiums: [59-1B (a)]',
+      successMessage: 'IRA Premiums written to Excel successfully!',
+    },
+    {
+      fetchFunction: fetchIRABusinessForce,
+      name: 'Write to excel: Business Force: [59-11B]',
+      successMessage: 'Business Force data written to Excel successfully!',
+    },
+    {
+      fetchFunction: fetchIRACommisions,
+      name: 'Write to excel: IRA-commissions: [59-1B (d)]',
+      successMessage: 'IRA commissions data written to Excel successfully!',
+    },
+    {
+      fetchFunction: fetchIRAPremiumsCounty,
+      name: 'Write to excel: Premiums By County: [18-1F]',
+      successMessage:
+        'IRA Premiums By county data written to Excel successfully!',
+    },
+    {
+      fetchFunction: fetchIRAIncuredClaims,
+      name: 'Write to excel: Inclured Claims: [59-3B]',
+      successMessage: 'IRA Incured claims data written to Excel successfully!',
+    },
+    {
+      fetchFunction: fetchIRAUnearnedPremiums,
+      name: 'Write to excel: Unearned Premiums:[59-1B (c)]',
+      successMessage: 'Unearned Premiums data written to Excel successfully!',
+    },
+    {
+      fetchFunction: fetchIRAReinsurancePremiums,
+      name: 'Write to excel: Reinsurance Premiums: [59-1B (c)]',
+      successMessage:
+        'Reinsurance Premiums data written to Excel successfully!',
+    },
+    {
+      fetchFunction: fetchIRAPremiumRegister,
+      name: 'Write to excel: Premium register: [70-3A]',
+      successMessage: 'Premium register data written to Excel successfully!',
+    },
+  ]
 
+  const handleSequentialFetch = async () => {
     for (const api of apiFunctions) {
       await handleFetchData(api.fetchFunction, api.name, api.successMessage)
     }
@@ -200,55 +199,7 @@ const IRAService = () => {
       </div>
 
       <div className="mt-10 flex flex-col gap-2">
-        {[
-          {
-            fetchFunction: fetchIRAPremiums,
-            name: 'Write to excel: IRA Premiums: [59-1B (a)]',
-            successMessage: 'IRA Premiums written to Excel successfully!',
-          },
-          {
-            fetchFunction: fetchIRABusinessForce,
-            name: 'Write to excel: Business Force: [59-11B]',
-            successMessage:
-              'Business Force data written to Excel successfully!',
-          },
-          {
-            fetchFunction: fetchIRACommisions,
-            name: 'Write to excel: IRA-commissions: [59-1B (d)]',
-            successMessage:
-              'IRA commissions data written to Excel successfully!',
-          },
-          {
-            fetchFunction: fetchIRAPremiumsCounty,
-            name: 'Write to excel: Premiums By County: [18-1F]',
-            successMessage:
-              'IRA Premiums By county data written to Excel successfully!',
-          },
-          {
-            fetchFunction: fetchIRAIncuredClaims,
-            name: 'Write to excel: Inclured Claims: [59-3B]',
-            successMessage:
-              'IRA Incured claims data written to Excel successfully!',
-          },
-          {
-            fetchFunction: fetchIRAUnearnedPremiums,
-            name: 'Write to excel: Unearned Premiums:[59-1B (c)]',
-            successMessage:
-              'Unearned Premiums data written to Excel successfully!',
-          },
-          {
-            fetchFunction: fetchIRAReinsurancePremiums,
-            name: 'Write to excel: Reinsurance Premiums: [59-1B (c)]',
-            successMessage:
-              'Reinsurance Premiums data written to Excel successfully!',
-          },
-          {
-            fetchFunction: fetchIRAPremiumRegister,
-            name: 'Write to excel: Premium register: [70-3A]',
-            successMessage:
-              'Premium register data written to Excel successfully!',
-          },
-        ].map((api) => (
+        {apiFunctions.map((api) => (
           <CustomCard
             key={api.name}
             fetchFunction={api.fetchFunction}
