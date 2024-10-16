@@ -203,48 +203,48 @@ const IRAService = () => {
         {[
           {
             fetchFunction: fetchIRAPremiums,
-            name: 'Write to excel: IRA Premiums',
+            name: 'Write to excel: IRA Premiums: [59-1B (a)]',
             successMessage: 'IRA Premiums written to Excel successfully!',
           },
           {
             fetchFunction: fetchIRABusinessForce,
-            name: 'Write to excel: Business Force',
+            name: 'Write to excel: Business Force: [59-11B]',
             successMessage:
               'Business Force data written to Excel successfully!',
           },
           {
             fetchFunction: fetchIRACommisions,
-            name: 'Write to excel: IRA-commissions',
+            name: 'Write to excel: IRA-commissions: [59-1B (d)]',
             successMessage:
               'IRA commissions data written to Excel successfully!',
           },
           {
             fetchFunction: fetchIRAPremiumsCounty,
-            name: 'Write to excel: Premiums By County',
+            name: 'Write to excel: Premiums By County: [18-1F]',
             successMessage:
               'IRA Premiums By county data written to Excel successfully!',
           },
           {
             fetchFunction: fetchIRAIncuredClaims,
-            name: 'Write to excel: Inclured Claims',
+            name: 'Write to excel: Inclured Claims: [59-3B]',
             successMessage:
               'IRA Incured claims data written to Excel successfully!',
           },
           {
             fetchFunction: fetchIRAUnearnedPremiums,
-            name: 'Write to excel: Unearned Premiums',
+            name: 'Write to excel: Unearned Premiums:[59-1B (c)]',
             successMessage:
               'Unearned Premiums data written to Excel successfully!',
           },
           {
             fetchFunction: fetchIRAReinsurancePremiums,
-            name: 'Write to excel: Reinsurance Premiums',
+            name: 'Write to excel: Reinsurance Premiums: [59-1B (c)]',
             successMessage:
               'Reinsurance Premiums data written to Excel successfully!',
           },
           {
             fetchFunction: fetchIRAPremiumRegister,
-            name: 'Write to excel: Premium register',
+            name: 'Write to excel: Premium register: [70-3A]',
             successMessage:
               'Premium register data written to Excel successfully!',
           },
