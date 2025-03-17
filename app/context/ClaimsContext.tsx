@@ -1,246 +1,239 @@
-'use client'
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { createContext } from 'react'
-import { IBranches, IRegisteredClaims } from '../assets/interfaces'
-import { LOCAL_URL } from './database-connect'
-import { getDates } from '../dashboard/premiums/helpers'
+"use client";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { createContext } from "react";
+import { IBranches, IRegisteredClaims } from "../assets/interfaces";
+import { LOCAL_URL } from "./database-connect";
+import { getDates } from "../dashboard/premiums/helpers";
 
-export const ClaimsContext = createContext({})
+export const ClaimsContext = createContext({});
 const ClaimsContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { currentMonth } = getDates()
+  const { currentMonth } = getDates();
 
-  const [claimsData, setClaimsData] = useState([])
-  const [loadingClaimsData, setLoadingClaimsData] = useState(false)
-  const [fromDate, setFromDate] = useState(currentMonth.startDate)
-  const [toDate, setToDate] = useState(currentMonth.endDate)
-  const [branchCode, setBranchCode] = useState('')
+  const [claimsData, setClaimsData] = useState([]);
+  const [loadingClaimsData, setLoadingClaimsData] = useState(false);
+  const [fromDate, setFromDate] = useState(currentMonth.startDate);
+  const [toDate, setToDate] = useState(currentMonth.endDate);
+  const [branchCode, setBranchCode] = useState("");
   const [registeredClaims, setRegisteredClaims] = useState<IRegisteredClaims[]>(
-    [],
-  )
-  const [loadingRegisteredClaims, setLoadingRegisteredClaims] = useState(false)
-  const [outstandingClaims, setOutstandingClaims] = useState([])
-  const [loadingOutstandingClaims, setLoadingOutstandingClaims] = useState(
-    false,
-  )
+    []
+  );
+  const [loadingRegisteredClaims, setLoadingRegisteredClaims] = useState(false);
+  const [outstandingClaims, setOutstandingClaims] = useState([]);
+  const [loadingOutstandingClaims, setLoadingOutstandingClaims] =
+    useState(false);
 
-  const [company, setCompany] = useState('INTRA')
-  const [companys, setCompanys] = useState<IBranches[]>([])
+  const [company, setCompany] = useState("INTRA");
+  const [companys, setCompanys] = useState<IBranches[]>([]);
 
-  const [salvages, setSalvages] = useState([])
-  const [loadingSalvages, setLoadingSalvages] = useState(false)
-  const [cmLossRatio, setCmLossRatio] = useState([])
-  const [loadingCmLossRatio, setLoadingCmLossRatio] = useState(false)
+  const [salvages, setSalvages] = useState([]);
+  const [loadingSalvages, setLoadingSalvages] = useState(false);
+  const [cmLossRatio, setCmLossRatio] = useState([]);
+  const [loadingCmLossRatio, setLoadingCmLossRatio] = useState(false);
 
-  const [loadingData, setLoadingData] = useState(false)
-
-  useEffect(() => {
-    setLoadingClaimsData(true)
-    axios
-      .get(
-        `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
-      )
-      .then((response) => {
-        setClaimsData(response.data.result)
-      })
-      .catch((error) => {
-        console.error('Error fetching claims', error)
-      })
-      .finally(() => {
-        setLoadingClaimsData(false)
-      })
-  }, [fromDate, toDate, branchCode])
+  const [loadingData, setLoadingData] = useState(false);
 
   useEffect(() => {
-    setLoadingRegisteredClaims(true)
+    setLoadingClaimsData(true);
     axios
       .get(
-        `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       )
       .then((response) => {
-        setRegisteredClaims(response.data.result)
+        setClaimsData(response.data.result);
       })
       .catch((error) => {
-        console.error('Error fetching registered-claims', error)
+        console.error("Error fetching claims", error);
       })
       .finally(() => {
-        setLoadingRegisteredClaims(false)
-      })
-  }, [fromDate, toDate, branchCode])
+        setLoadingClaimsData(false);
+      });
+  }, [fromDate, toDate, branchCode]);
 
   useEffect(() => {
-    setLoadingOutstandingClaims(true)
+    setLoadingRegisteredClaims(true);
     axios
       .get(
-        `${LOCAL_URL}/outstanding-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/registered-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       )
       .then((response) => {
-        setOutstandingClaims(response.data.result)
+        setRegisteredClaims(response.data.result);
       })
       .catch((error) => {
-        console.error('Error fetching outstanding-claims', error)
+        console.error("Error fetching registered-claims", error);
       })
       .finally(() => {
-        setLoadingOutstandingClaims(false)
-      })
-  }, [fromDate, toDate, branchCode])
+        setLoadingRegisteredClaims(false);
+      });
+  }, [fromDate, toDate, branchCode]);
 
   useEffect(() => {
-    setLoadingSalvages(true)
+    setLoadingOutstandingClaims(true);
     axios
       .get(
-        `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/outstanding-claims?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       )
       .then((response) => {
-        setSalvages(response.data.result)
+        setOutstandingClaims(response.data.result);
       })
       .catch((error) => {
-        console.error('Error fetching salvages', error)
+        console.error("Error fetching outstanding-claims", error);
       })
       .finally(() => {
-        setLoadingSalvages(false)
-      })
-  }, [fromDate, toDate, branchCode])
+        setLoadingOutstandingClaims(false);
+      });
+  }, [fromDate, toDate, branchCode]);
 
   useEffect(() => {
-    setLoadingCmLossRatio(true)
+    setLoadingSalvages(true);
     axios
       .get(
-        `${LOCAL_URL}/cm-loss-ratio2?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`,
+        `${LOCAL_URL}/salvages?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
       )
       .then((response) => {
-        setCmLossRatio(response.data.result)
+        setSalvages(response.data.result);
       })
       .catch((error) => {
-        console.error('Error fetching loss ratio', error)
+        console.error("Error fetching salvages", error);
       })
       .finally(() => {
-        setLoadingCmLossRatio(false)
+        setLoadingSalvages(false);
+      });
+  }, [fromDate, toDate, branchCode]);
+
+  useEffect(() => {
+    setLoadingCmLossRatio(true);
+    axios
+      .get(
+        `${LOCAL_URL}/cm-loss-ratio2?fromDate=${fromDate}&toDate=${toDate}&branchCode=${branchCode}`
+      )
+      .then((response) => {
+        setCmLossRatio(response.data.result);
       })
-  }, [fromDate, toDate, branchCode])
+      .catch((error) => {
+        console.error("Error fetching loss ratio", error);
+      })
+      .finally(() => {
+        setLoadingCmLossRatio(false);
+      });
+  }, [fromDate, toDate, branchCode]);
 
   const fetchClaimsData = async (
     fromDate: string,
     toDate: string,
-    branchCode: string,
+    branchCode: string
   ) => {
-    setLoadingData(true)
+    setLoadingData(true);
     try {
       const [orgBranchesResponse] = await Promise.all([
         axios.get(`${LOCAL_URL}/branches`),
-      ])
+      ]);
 
       setCompanys([
-        { organization_name: 'Entire Company', organization_code: '' },
+        { organization_name: "Entire Company", organization_code: "" },
         ...orgBranchesResponse.data.result,
-      ])
+      ]);
 
-      setLoadingData(false)
+      setLoadingData(false);
     } catch (error) {
-      setLoadingData(false)
+      setLoadingData(false);
 
-      console.error('Error fetching data', error)
+      console.error("Error fetching data", error);
     }
-  }
+  };
 
   const calculateClaimsData = (claimsData: any) => {
-    let motorPaidClaims = 0
-    let nonMotorPaidClaims = 0
+    let motorPaidClaims = 0;
+    let nonMotorPaidClaims = 0;
 
     claimsData.forEach((claims: any) => {
-      let total = claims.paidAmount
-      if (claims.motorCode === '070' || claims.motorCode === '080') {
-        motorPaidClaims += total
+      let total = claims.paidAmount;
+      if (claims.motorCode === "070" || claims.motorCode === "080") {
+        motorPaidClaims += total;
       } else {
-        nonMotorPaidClaims += total
+        nonMotorPaidClaims += total;
       }
-    })
+    });
 
     const totalClaimPaid = claimsData.reduce(
       (total: number, claims: any) => total + claims.paidAmount,
-      0,
-    )
+      0
+    );
 
-    return { totalClaimPaid, nonMotorPaidClaims, motorPaidClaims }
-  }
+    return { totalClaimPaid, nonMotorPaidClaims, motorPaidClaims };
+  };
 
-  const {
-    totalClaimPaid,
-    motorPaidClaims,
-    nonMotorPaidClaims,
-  } = calculateClaimsData(claimsData)
+  const { totalClaimPaid, motorPaidClaims, nonMotorPaidClaims } =
+    calculateClaimsData(claimsData);
 
   const calculateRegisteredClaims = (registeredClaims: IRegisteredClaims[]) => {
-    let motorRegisteredClaims = 0
-    let nonMotorRegisteredClaims = 0
+    let motorRegisteredClaims = 0;
+    let nonMotorRegisteredClaims = 0;
     const totalRegisteredClaims = registeredClaims.reduce(
       (total: number, claims) => total + claims.totalProvision,
-      0,
-    )
+      0
+    );
 
     registeredClaims.forEach((claim: any) => {
-      let total = claim.totalProvision
-      if (claim.motorCode === '070' || claim.motorCode === '080') {
-        motorRegisteredClaims += total
+      let total = claim.totalProvision;
+      if (claim.motorCode === "070" || claim.motorCode === "080") {
+        motorRegisteredClaims += total;
       } else {
-        nonMotorRegisteredClaims += total
+        nonMotorRegisteredClaims += total;
       }
-    })
+    });
 
     return {
       totalRegisteredClaims,
       nonMotorRegisteredClaims,
       motorRegisteredClaims,
-    }
-  }
+    };
+  };
   const {
     totalRegisteredClaims,
     nonMotorRegisteredClaims,
     motorRegisteredClaims,
-  } = calculateRegisteredClaims(registeredClaims)
+  } = calculateRegisteredClaims(registeredClaims);
 
   const calculateOutstandingClaims = (outstandingClaims: any) => {
-    let motorOutstanding = 0
-    let nonMotorOutstanding = 0
+    let motorOutstanding = 0;
+    let nonMotorOutstanding = 0;
     outstandingClaims.forEach((outstanding: any) => {
-      let total = outstanding.totalProvision
-      if (outstanding.motorCode === '070' || outstanding.motorCode === '080') {
-        motorOutstanding += total
+      let total = outstanding.totalProvision;
+      if (outstanding.motorCode === "070" || outstanding.motorCode === "080") {
+        motorOutstanding += total;
       } else {
-        nonMotorOutstanding += total
+        nonMotorOutstanding += total;
       }
-    })
+    });
     const totalOutstanding = outstandingClaims.reduce(
       (total: number, outstanding: any) => total + outstanding.totalProvision,
-      0,
-    )
+      0
+    );
 
     return {
       totalOutstanding,
       motorOutstanding,
       nonMotorOutstanding,
-    }
-  }
+    };
+  };
 
   const calculateSalvages = (salvages: any) => {
     const totalSalvages = salvages.reduce(
       (total: number, salvage: any) => total + salvage.receiptAmount,
-      0,
-    )
-    return { totalSalvages }
-  }
+      0
+    );
+    return { totalSalvages };
+  };
 
-  const { totalSalvages } = calculateSalvages(salvages)
+  const { totalSalvages } = calculateSalvages(salvages);
 
-  const {
-    totalOutstanding,
-    motorOutstanding,
-    nonMotorOutstanding,
-  } = calculateOutstandingClaims(outstandingClaims)
+  const { totalOutstanding, motorOutstanding, nonMotorOutstanding } =
+    calculateOutstandingClaims(outstandingClaims);
 
   const filteredLossRation = cmLossRatio.filter((claim: any) => {
-    return claim.cm_order_no === 10
-  })
+    return claim.cm_order_no === 10;
+  });
 
   return (
     <ClaimsContext.Provider
@@ -270,11 +263,13 @@ const ClaimsContextProvider = ({ children }: { children: React.ReactNode }) => {
         claimsData,
         setCompany,
         fetchClaimsData,
+        setFromDate,
+        setToDate,
       }}
     >
       {children}
     </ClaimsContext.Provider>
-  )
-}
+  );
+};
 
-export default ClaimsContextProvider
+export default ClaimsContextProvider;

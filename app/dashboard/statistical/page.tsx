@@ -35,7 +35,7 @@ const CustomCard = ({
       <p className="flex justify-center">{name.toUpperCase()}</p>
       <div className="flex justify-evenly mt-2">
         <div className="flex flex-col justify-evenly ">
-          <p className="text-[1rem]">2024</p>
+          <p className="text-[1rem]">{new Date(Date.now()).getFullYear()}</p>
           {loading24 ? (
             <Spin
               indicator={
@@ -59,7 +59,7 @@ const CustomCard = ({
           )}
         </div>
         <div className="flex flex-col justify-evenly">
-          <p className="text-[1rem]">2023</p>
+          <p className="text-[1rem]">{new Date(Date.now()).getFullYear()-1}</p>
           {loading23 ? (
             <Spin
               indicator={
@@ -163,12 +163,12 @@ const Statistical = () => {
     (acc: any, ri: any) =>
       Number(
         acc +
-          ri.cqsAmt +
-          ri['1stSurpAmt'] +
-          ri['2ndSurpAmt'] +
-          ri.qsAmt +
-          ri.facOutAmt +
-          ri.xolAmt,
+        ri.CQS_AMNT +
+        ri.SURP1_AMNT +
+        ri.SURP2_AMNT +
+        ri.QS_AMNT +
+        ri.FACOUT_AMNT +
+        ri.XOL_AMNT
       ),
     0,
   )
@@ -177,15 +177,16 @@ const Statistical = () => {
     (acc: any, ri: any) =>
       Number(
         acc +
-          ri.cqsAmt +
-          ri['1stSurpAmt'] +
-          ri['2ndSurpAmt'] +
-          ri.qsAmt +
-          ri.facOutAmt +
-          ri.xolAmt,
+        ri.CQS_AMNT +
+        ri.SURP1_AMNT +
+        ri.SURP2_AMNT +
+        ri.QS_AMNT +
+        ri.FACOUT_AMNT +
+        ri.XOL_AMNT
       ),
     0,
   )
+ 
 
   const months = [
     'Jan',
@@ -303,8 +304,8 @@ const Statistical = () => {
   const grossFacPremium24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_CESSIONS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000012&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=RI%20CESSIONS&P_ORG_CODE=50&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
   const RIouts23report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_OUTS_CESSIONS_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000013&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=OUTSTANDING%20CLAIMS%20CESSIONS%20REPORT%20[Reconciliation]&P_ORG_CODE=50&P_CLASS=&P_SUBCLASS=&P_ASATDATE=${toDate23}`
   const RIouts24report = `http://192.168.1.112:8001/icon/reports?p_module_name=RI_OUTS_CESSIONS_SUM&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=RI.MGR&p_org_code=50&p_menu_code=RI000013&p_grp_code=RI.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=OUTSTANDING%20CLAIMS%20CESSIONS%20REPORT%20[Reconciliation]&P_ORG_CODE=50&P_CLASS=&P_SUBCLASS=&P_ASATDATE=${toDate}`
-  const ME23Report = `http://192.168.1.112:8001/icon/reports?p_module_name=GL_EXPENSE_ANALYSIS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=GL.MGR&p_org_code=50&p_menu_code=GL000040&p_grp_code=GL.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=EXPENSE%20ANALYSIS&P_ORG_CODE=50&P_CURRENCY=&P_COL_CODE=ME&P_BRANCH=${branchCode}&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}`
-  const ME24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=GL_EXPENSE_ANALYSIS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=GL.MGR&p_org_code=50&p_menu_code=GL000040&p_grp_code=GL.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=EXPENSE%20ANALYSIS&P_ORG_CODE=50&P_CURRENCY=&P_COL_CODE=ME&P_BRANCH=${branchCode}&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
+  const ME23Report=`http://192.168.1.112:8001/icon/reports?p_module_name=GL_EXPENSE_ANALYSIS_COMP&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=GL.MGR&p_org_code=50&p_menu_code=GL000040&p_grp_code=GL.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=MANAGEMENT%20EXPENSES%20COMPARISON&P_ORG_CODE=50&P_CURRENCY=&P_COL_CODE=ME&P_BRANCH=${branchCode}&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}`
+   const ME24Report=`http://192.168.1.112:8001/icon/reports?p_module_name=GL_EXPENSE_ANALYSIS_COMP&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=GL.MGR&p_org_code=50&p_menu_code=GL000040&p_grp_code=GL.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=MANAGEMENT%20EXPENSES%20COMPARISON&P_ORG_CODE=50&P_CURRENCY=&P_COL_CODE=ME&P_BRANCH=${branchCode}&P_FM_DT=${fromDate}&P_TO_DT=${toDate}`
   const grossClaimsOuts23Report = `http://192.168.1.112:8001/icon/reports?p_module_name=CM_AGNANALYS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=CM.MGR&p_org_code=50&p_menu_code=CM000030&p_grp_code=CM.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=CLAIM%20AGEING%20ANALYSIS%20REPORT&P_ORG_CODE=50&P_RPT_TYPE=S&P_ASATDATE=${toDate23}`
   const grossClaimsOuts24Report = `http://192.168.1.112:8001/icon/reports?p_module_name=CM_AGNANALYS&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=CM.MGR&p_org_code=50&p_menu_code=CM000030&p_grp_code=CM.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=CLAIM%20AGEING%20ANALYSIS%20REPORT&P_ORG_CODE=50&P_RPT_TYPE=S&P_ASATDATE=${toDate}`
   const grossClaimPaid23Report = `http://192.168.1.112:8001/icon/reports?p_module_name=CM_PAID_CLMS_SUMMARY&destype=cache&desformat=PDF&rep_param1=&rep_param2=&rep_param3=&rep_param4=&rep_param5=&rep_param6=&rep_param7=&rep_param8=&rep_param9=&rep_doc_index=&rep_doc_org=50&rep_doc_no=&p_role_code=CM.MGR&p_org_code=50&p_menu_code=CM000032&p_grp_code=CM.MGR&p_os_code=01&p_user_code=1000000&p_user_name=ICON,%20Admin%20&p_report_title=CLAIMS%20PAID%20SUMMARY&P_ORG_CODE=50&P_BRANCH_GROUP=&P_FM_DT=${fromDate23}&P_TO_DT=${toDate23}`
@@ -404,8 +405,7 @@ const Statistical = () => {
           className="cursor-pointer"
           onClick={() =>
             router.push(
-              `dashboard/statistical/unpaid-bills?category=${
-                item.category.split('-')[0]
+              `dashboard/statistical/unpaid-bills?category=${item.category.split('-')[0]
               }`,
             )
           }
